@@ -1,0 +1,43 @@
+CREATE DATABASE IF NOT EXISTS BLOGG;
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(32) NOT NULL,
+    user_name VARCHAR(32) NOT NULL UNIQUE,
+    pwd VARCHAR(255) NOT NULL,
+    email VARCHAR(64) NOT NULL UNIQUE,
+    `role` BOOLEAN DEFAULT FALSE
+
+);
+
+CREATE TABLE IF NOT EXISTS blogposts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    blogContent TEXT NOT NULL,
+    user_id INT,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+
+
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    commentContent TEXT NOT NULL,
+    user_id INT,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+
+);
+
+CREATE TABLE IF NOT EXISTS friends (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    friend_id INT,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(friend_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(user_id, friend_id)
+
+
+    
+);
+
+
