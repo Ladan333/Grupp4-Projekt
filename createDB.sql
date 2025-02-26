@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS users (
     user_name VARCHAR(32) NOT NULL UNIQUE,
     pwd VARCHAR(255) NOT NULL,
     email VARCHAR(64) NOT NULL UNIQUE,
-    `role` BOOLEAN DEFAULT FALSE
+    `role` BOOLEAN DEFAULT FALSE,
+    CreatedDate DATETIME NOT NULL DEFAULT NOW()
 
 );
 
@@ -15,8 +16,8 @@ CREATE TABLE IF NOT EXISTS blogposts (
     title VARCHAR(255) NOT NULL,
     blogContent TEXT NOT NULL,
     user_id INT,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CreatedDate DATETIME NOT NULL DEFAULT NOW()
 
 );
 
@@ -24,8 +25,10 @@ CREATE TABLE IF NOT EXISTS comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     commentContent TEXT NOT NULL,
     user_id INT,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-
+    blog_id INT,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(blog_id) REFERENCES blogposts(id) ON DELETE CASCADE,
+    CreatedDate DATETIME NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS friends (
