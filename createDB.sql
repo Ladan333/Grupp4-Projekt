@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     pwd VARCHAR(255) NOT NULL,
     email VARCHAR(64) NOT NULL UNIQUE,
     `role` BOOLEAN DEFAULT FALSE,
+    profile_text TEXT,
     CreatedDate DATETIME NOT NULL DEFAULT NOW()
 
 );
