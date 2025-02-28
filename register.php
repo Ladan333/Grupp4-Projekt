@@ -20,10 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     if (!$result){
         $stmt = $pdo->prepare("INSERT INTO users (user_name, pwd, name, email) VALUES (:username, :password, :name, :email)");
         $stmt->bindParam(":username", $username);
-        $stmt->bindParam("password", $password);
+        $hashwed_password = password_hash($password, PASSWORD_DEFAULT);
+        $stmt->bindParam("password", $hashwed_password);
         $stmt->bindParam("email", $email);
         $stmmt->bindParam("name", $name);
-    }
+
+        header("Location: idnex.php");
+        exit();
+    } else{
+        echo "User details already in use";
+    };
 }
 ?>
 
