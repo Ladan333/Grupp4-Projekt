@@ -22,8 +22,6 @@ require"PDO.php";
         $stmt->execute();
         $result_username = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // $_SESSION["username"] = $result_username["username"];
-
         if (!$result_username) {
             echo"invalid";
             # code...
