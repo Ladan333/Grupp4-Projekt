@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         <label for="email"></label>
         <input name="email" id="email" type="text" required><br><br>
 
-        <input type="submit" value="login">
+        <input type="submit" value="Register">
 
     
     </form>

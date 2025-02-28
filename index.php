@@ -21,7 +21,7 @@ require"PDO.php";
         $stmt->execute();
         $result_userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $hashwed_password = $result_userinfo['password'];
+        $hashwed_password = $result_userinfo['pwd'];
 
         if (!$result_userinfo) {
             echo"invalid";
