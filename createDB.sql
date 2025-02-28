@@ -33,16 +33,12 @@ CREATE TABLE IF NOT EXISTS comments (
     
 );
 
-CREATE TABLE IF NOT EXISTS friends (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS follows (
     user_id INT NOT NULL,
-    friend_id INT NOT NULL,
+    follow_id INT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(friend_id) REFERENCES users(id) ON DELETE CASCADE,
-    
-    UNIQUE(user_id, friend_id), /*tillåter inte 1, 1 och en till 1, 1  (men 1, 1 tillåts)*/
-    CONSTRAINT chk_not_self CHECK (user_id <> friend_id)/*1, 1 tillåts ej -- duplicering 1, 2 och 2, 1 tillåts -- tillsammans hindrar de 1, 2 och 2, 1 att finnas*/
-
+    FOREIGN KEY(follow_id) REFERENCES users(id) ON DELETE CASCADE,
+    PRIMARY KEY(user_id, follow_id);
 
 );
 
