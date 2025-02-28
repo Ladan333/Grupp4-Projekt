@@ -4,14 +4,25 @@ require"PDO.php";
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $username = $_POST["username"];
     $password = $_POST["password"];
+    $email = $_POST["email"];
+    $name = $_POST["name"];
     
     $stmt = $pdo->prepare("SELECT user_name FROM users WHERE user_name = :username");
     $stmt->bindParam(":username", $username);
     $stmt->execute();
     $result = $stmt ->fetch(PDO::FETCH_ASSOC);
 
+    $stmt = $pdo->prepare("SELECT email FROM users WHERE email = :email");
+    $stmt->bindParam(":email", $email);
+    $stmt->execute();
+    $result = $stmt ->fetch(PDO::FETCH_ASSOC);
+
     if (!$result){
-        $stmt = $pdo->prepare("INSERT INTO users (user_name, pwd) VALUES (:username, :password)");
+        $stmt = $pdo->prepare("INSERT INTO users (user_name, pwd, name, email) VALUES (:username, :password, :name, :email)");
+        $stmt->bindParam(":username", $username);
+        $stmt->bindParam("password", $password);
+        $stmt->bindParam("email", $email);
+        $stmmt->bindParam("name", $name);
     }
 }
 ?>
