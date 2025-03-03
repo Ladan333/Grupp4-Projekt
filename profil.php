@@ -1,3 +1,16 @@
+<?php
+require("PDO.php");
+
+if(isset($_GET["source"]) && $_GET["source"] == "search"){
+$stmt = $pdo->prepare("SELECT * FROM users WHERE user_name = :user");
+$stmt->bindParam(":user", $_GET[""]);
+}
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
