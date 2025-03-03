@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     <title>Document</title>
 </head>
 <body>
-
+<?php require"navbar.php"; ?>
 
     
     <form action="index.php" method="POST">
