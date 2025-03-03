@@ -38,9 +38,43 @@ CREATE TABLE IF NOT EXISTS follows (
     follow_id INT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY(follow_id) REFERENCES users(id) ON DELETE CASCADE,
-    PRIMARY KEY(user_id, follow_id);
+    PRIMARY KEY(user_id, follow_id)
 
 );
+
+--EXEMPELDATA ATT JOBBA MED
+INSERT INTO users (`name`, user_name, pwd, email, `role`, profileContent)
+VALUES
+    ('Alice Johnson', 'alicej', 'password123', 'alice@example.com', FALSE, 'Loves writing tech blogs.'),
+    ('Bob Smith', 'bobsmith', 'securepass', 'bob@example.com', TRUE, 'Web developer and blogger.'),
+    ('Charlie Brown', 'charlieb', 'mypassword', 'charlie@example.com', FALSE, 'Aspiring writer.'),
+    ('David Miller', 'davidm', '123456', 'david@example.com', FALSE, 'Writes about travel and food.'),
+    ('Eva Green', 'evag', 'eva1234', 'eva@example.com', TRUE, 'Tech enthusiast and editor.');
+
+
+INSERT INTO blogposts (title, blogContent, user_id)
+VALUES
+    ('The Future of AI', 'Artificial Intelligence is growing rapidly...', 1),
+    ('Top 10 Web Development Tips', 'Web development is evolving every day...', 2),
+    ('Why Writing is a Great Hobby', 'Writing helps to express your thoughts...', 3),
+    ('Exploring Italy: A Travel Guide', 'Italy is a beautiful country with rich history...', 4),
+    ('Understanding Cybersecurity', 'Cybersecurity is crucial in today’s world...', 5);
+
+INSERT INTO comments (commentContent, user_id, blog_id)
+VALUES
+    ('Great article on AI!', 2, 1),
+    ('Thanks for the tips, very useful.', 3, 2),
+    ('I love writing too! Thanks for sharing.', 4, 3),
+    ('Italy is my dream destination!', 5, 4),
+    ('Cybersecurity is becoming more important every day.', 1, 5);
+
+INSERT INTO follows (user_id, follow_id)
+VALUES
+    (1, 2),  -- Alice följer Bob
+    (2, 3),  -- Bob följer Charlie
+    (3, 4),  -- Charlie följer David
+    (4, 5),  -- David följer Eva
+    (5, 1);  -- Eva följer Alice
 
 /*-------------------Menar vi så här i stället?------user i f2u lagrar en referens till en tabell med vänner?-----------*/
 /*den fungerar inte... kopplat FK i mellanliggande till PK i friendsfriends  -- måste Länka båda befintliga FK till user_id och Skapa en tredje FK som kopplar till PK i friendsfriend*/
