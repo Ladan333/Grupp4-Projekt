@@ -23,10 +23,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $hashwed_password = password_hash($password, PASSWORD_DEFAULT);
         $stmt->bindParam("password", $hashwed_password);
         $stmt->bindParam("email", $email);
-        $stmmt->bindParam("name", $name);
+        $stmt->bindParam("name", $name);
+        if ($stmt->execute()){
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->bindParam(":email", $email);
+            $stmt ->execute();
+            $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        header("Location: idnex.php");
-        exit();
+            if ($userInfo){
+                $_SESSION['username'] = $userInfo['user_name'];
+                $_SESSION['name'] = $userInfo['name'];
+                $_SESSION['email'] = $userInfo['email'];
+                $_SESSION['role'] = $userInfo['role'];
+
+                header("Location: bloggwall.php");
+                exit();
+            }
+        }
+        else {
+            header("Location: register.php");
+            exit();
+        }
     } else{
         echo "User details already in use";
     };
