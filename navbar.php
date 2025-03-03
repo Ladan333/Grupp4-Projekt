@@ -19,13 +19,18 @@ if(session_status() == PHP_SESSION_NONE) {session_start();}
        <ul>
         <h2>The Wall</h2>
        </ul>
+       <ul>
+        <?php require"search.php"; ?>
+       </ul>
         <ul>
             <?php
             if (isset($_SESSION['username'])) {
                 echo '<a href="profile.php">Profile</a>';
                 echo '<a href="blogwall.php">Wall</a>';
                 echo '<a href="logout.php">Logout</a>';
-
+                if(isset($_SESSION['role']) == 1) {
+                    echo '<a href="admin.php">Admin</a>';
+                } 
             } else {
                 echo '<a href="register.php">Register</a>';
 

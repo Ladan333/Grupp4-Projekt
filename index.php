@@ -16,7 +16,7 @@ require"PDO.php";
         $username = $_POST["username"];
         $password = $_POST["password"];
         
-        $stmt = $pdo->prepare("SELECT pwd FROM users WHERE user_name = :username");
+        $stmt = $pdo->prepare("SELECT pwd, role FROM users WHERE user_name = :username");
         $stmt->bindParam(":username", $username);
         $stmt->execute();
         $result_userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -28,7 +28,8 @@ require"PDO.php";
         }
         else if (password_verify($password, $hashwed_password)){
             $_SESSION['username'] = $username;
-           
+            $_SESSION['role'] = $result_userinfo['role'];
+      
             header("Location: blogwall.php");
             exit();
         }
@@ -60,7 +61,7 @@ require"PDO.php";
         <input class="login_Input" name="username" id="username" type="text" placeholder="Input username"required>
         <br>
         <label for="password">Password</label>
-        <input class="login_Input" name="password" id="password" type="text" placeholder="Inputo password" required>
+        <input class="login_Input" name="password" id="password" type="text" placeholder="Input password" required>
 
         <button class="button" type="submit" value="login">Login</button>
         <p class="pindex">No account?</p><a href="register.php">Register here</a>
