@@ -5,8 +5,6 @@ session_start();
 
 require"PDO.php";
 
-var_dump($_SESSION);
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $username = $_POST["username"];
     $password = $_POST["password"];
