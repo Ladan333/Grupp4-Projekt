@@ -1,48 +1,62 @@
-<?php
-if(session_status() == PHP_SESSION_NONE) {session_start();}
-
-?>
+<p?php if(session_status()==PHP_SESSION_NONE) {session_start();} ?>
 
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="CSS.css">
-    <!-- <meta http-equiv="refresh" content="1"> -->
-    <title></title>
-</head>
-<body>
-    <nav>
-       <ul>
-        <h2>The Wall</h2>
-       </ul>
-       <ul>
-       <form action="search.php" method="GET" name="search">
-    <input class="searchbar" type="text" placeholder="Search user" name="search">
-    <button class="buttonsearch" type="submit">Search</button>
-</form>
-       </ul>
-        <ul>
-            <?php
-            if (isset($_SESSION['username'])) {
-                echo '<a href="profile.php">Profile</a>';
-                echo '<a href="blogwall.php">Wall</a>';
-                echo '<a href="logout.php">Logout</a>';
-                if(isset($_SESSION['role']) == 1) {
-                    echo '<a href="admin.php">Admin</a>';
-                } 
-            } else {
-                echo '<a href="register.php">Register</a>';
+    <!DOCTYPE html>
+    <html lang="en">
 
-            }?>
-        </ul>
+    <head>
+        <meta charset="UTF-8">
+        
+        <link rel="stylesheet" type="text/css" href="CSS.css">
+        <meta name="viewport" content="width=420, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <!-- <meta http-equiv="refresh" content="1"> -->
+        <title></title>
+    </head>
+
+    <body>
+        <nav>
+            <ul>
+                <h2>The Wall</h2>
+            </ul>
+            <ul>
+                <form action="search.php" method="GET" name="search">
+                    <input class="searchbar" type="text" placeholder="Search user" name="search">
+                    <!-- <button class="buttonsearch" type="submit">Search</button> -->
+                </form>
+            </ul>
+
+            <div class="burger" onclick="toggleMenu()">
+                <p>☰</p>
+            </div>
+
+            <ul class="submenu">
+                <?php if (isset($_SESSION['username'])): ?>
+                    <li><a href="profile.php">Profile</a></li>
+                    <li><a href="blogwall.php">Wall</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
+                        <li><a href="admin.php">Admin</a></li>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </ul>
 
 
-    </nav>    
+        </nav>
+        <script>
+    function toggleMenu() {
+        let menu = document.querySelector(".submenu");
 
 
-</body>
-</html>
+        if (menu) {
+            menu.classList.toggle("active");
+            console.log("Menu active state: " + menu.classList.contains("active"));
+        } else {
+            console.log("Menu not found!");
+        }
+    }
+</script>
+    </body>
+
+    </html>
