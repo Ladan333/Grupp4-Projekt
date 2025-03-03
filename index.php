@@ -44,20 +44,22 @@ require"PDO.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="refresh" content="5">
+    <link rel="stylesheet" type="text/css" href="CSS.css">
     <title>Document</title>
 </head>
 <body>
-
+<?php require"navbar.php"; ?>
 
     
-    <form action="index.php" method="POST">
-        <label for="username"></label>
-        <input name="username" id="username" type="text" required>
+    <form class="login" action="index.php" method="POST">
+        <label for="username">Username</label>
+        <input class="login_Input" name="username" id="username" type="text" placeholder="Ange angvändarnamn"required>
         <br>
-        <label for="password"></label>
-        <input name="password" id="password" type="text" required>
+        <label for="password">Password</label>
+        <input class="login_Input" name="password" id="password" type="text" placeholder="Ange lösenord" required>
 
-        <input type="submit" value="login">
+        <button type="submit" value="login">Login</button>
 
     
     </form>
