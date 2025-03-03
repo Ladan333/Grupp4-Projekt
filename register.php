@@ -43,22 +43,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 <body>
 <?php require"navbar.php"; ?>
 
-    
-    <form action="index.php" method="POST">
-        <label for="username"></label>
-        <input name="username" id="username" type="text" required><br><br>
-        <label for="password"></label>
-        <input name="password" id="password" type="text" required><br><br>
-        <label for="name"></label>
-        <input name="name" id="name" type="text" required><br><br>
-        <label for="email"></label>
-        <input name="email" id="email" type="text" required><br><br>
+<main class="index">
+    <form class="login" action="index.php" method="POST">
+        <label for="username">Username</label>
+        <input class="login_Input" name="username" id="username" type="text" placeholder="Username" required><br><br>
+        <label for="password">Password</label>
+        <input class="login_Input" name="password" id="password" type="text" placeholder="Password" required><br><br>
+        <label for="name">Name</label>
+        <input class="login_Input" name="name" id="name" type="text" placeholder="Name" required><br><br>
+        <label for="email">Email</label>
+        <input class="login_Input" name="email" id="email" type="text" placeholder="Email" required><br><br>
 
-        <input type="submit" value="Register">
-
+        <button class="button" type="submit" value="login">Register</button>
+        <a href="index.php">Back</a>
     
     </form>
-
+</main>
     
 </body>
 </html>

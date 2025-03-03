@@ -20,7 +20,7 @@
         <h2>The Wall</h2>
        </ul>
         <ul>
-            <a href="logout.php">Profile</a>
+            <a href="profile.php">Profile</a>
             <a href="blogwall.php"> Wall</a>
             <?php
             if (isset($_SESSION['username'])) {
