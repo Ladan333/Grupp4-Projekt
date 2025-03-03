@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $_SESSION['email'] = $userInfo['email'];
                 $_SESSION['role'] = $userInfo['role'];
 
-                header("Location: bloggwall.php");
+                header("Location: blogwall.php");
                 exit();
             }
         }
