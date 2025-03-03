@@ -30,7 +30,8 @@ if (isset($_GET['search']) && !empty($_GET['search'])){
     <title>Document</title>
 </head>
 <body>
-  
+    <?php require"navbar.php"; ?>
+
 
     <div>
         <?php if(!empty($result)):?>
