@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <?php require"navbar.php"; ?>
     <div class="container">
         <div class="welcome-box">
             <h2>Välkommen till vår fantastiska blogg</h2>

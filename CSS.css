@@ -1,5 +1,5 @@
 :root {
-    --backgroundcolor: #f0f0f0;
+    --backgroundcolor: #cccccc;
     --textcolor: #333;
     --bordercolor: #000000;
     --secondarycolor: #b9b9b9;
@@ -49,7 +49,7 @@
   }
   
   nav ul h2 {
-      font-family: monospace;
+     
       font-size: 3rem;
       background: linear-gradient(45deg, rgb(106, 106, 106) 0%, rgba(80, 80, 80, 0.9) 50%, rgba(106, 106, 106, 1) 100%);
       background-clip: text;
@@ -57,7 +57,7 @@
       margin-left:5rem;
       width: 20rem;
       height: 4rem;
-      font-family: 'Leche Frita', sans-serif;;
+      font-family: 'Leche Frita', sans-serif;
   
       font-weight: 700;
   
@@ -167,28 +167,140 @@
       }
   }
   
-
+  .index {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--backgroundcolor);
+    border: 1px solid var(--bordercolor);
+    
+  }
   .login
-    {
+    {   
+        margin-top: 5rem;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        height: 100vh;
-        background: var(--backgroundcolor);
+        height: 40rem;
+        background: rgba(76, 76, 76, 0.5);
+        /* border: 1px solid var(--bordercolor); */
+        border-radius: 10px;
+        width: 40rem;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+        padding-bottom: 2rem;
     }
+.login h2{
+    font-size: 3rem;
+    background: linear-gradient(45deg, rgb(0, 0, 0) 0%, rgba(80, 80, 80, 0.9) 50%, rgb(0, 0, 0) 100%);
+    background-clip: text;
+    color: transparent;
+    text-align: center;
+    /* width: 20rem;
+    height: 4rem; */
+    font-family: 'Leche Frita', sans-serif;
 
+    font-weight: 700;
+
+    border-radius: 8px;
+    
+    padding: 0 1rem;
+    box-shadow:
+        0 0px 20px rgba(228, 228, 228, 0.4)
+        ;
+}
 .login .login_Input {
     display:flex; 
+   
     width: 100%;
     max-width: 400px;
-    padding: 40px;
+    padding: 0.5rem;
     background: #fff;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    border:1px solid var(--bordercolor);
     border-radius: 10px;
     text-align: center;
     flex-direction: column;
+    height: 2rem;
+    text-align: left;
+    font-size: 1rem;
 }
+
+.login label{
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--textcolor);
+    margin: 0.5rem;
+    align-self: flex-start;
+    margin-left: 7rem;
+}
+
+.login button{
+    padding: .5rem 1rem;
+    margin: 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgb(124, 124, 124);
+    background: rgb(15, 15, 15);
+    border: 1px solid var(--bordercolor);
+    border-radius: 8px;
+    cursor: pointer;
+}
+.login button:hover{
+    background: rgb(90, 90, 90);
+    color: black;
+    border: 1px solid var(--bordercolor);
+    transform: scale(1.05);
+}
+.login a {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--textcolor);
+    text-decoration: underline;
+    margin-top: 0rem;
+}
+
+.login .label_register {
+    align-self: flex-start;
+    margin-left:7rem;
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--textcolor);
+    margin-bottom: 0.5rem;
+}
+
+
+
+.login .login_Input::placeholder {
+    align-self: flex-start;
+    color: var(--secondarycolor);
+    font-size: 1rem;
+    text-align: flex-start;
+}
+
+.login p{
+    
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--textcolor);
+    margin: 0.5rem;
+   
+   
+    margin-top:-1rem;
+}
+.login .pindex{
+    
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--textcolor);
+    margin: 0.5rem;
+   
+
+}
+
 
 
 

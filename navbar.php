@@ -1,5 +1,5 @@
 <?php
-
+if(session_status() == PHP_SESSION_NONE) {session_start();}
 
 ?>
 
@@ -20,13 +20,13 @@
         <h2>The Wall</h2>
        </ul>
         <ul>
-            <a href="logout.php">Profile</a>
+            <a href="profile.php">Profile</a>
             <a href="blogwall.php"> Wall</a>
             <?php
             if (isset($_SESSION['username'])) {
                 echo '<a href="logout.php">Logout</a>';
             } else {
-                echo '<a href="login.php">Login</a>';
+                echo '<a href="index.php">Login</a>';
             }?>
         </ul>
 
