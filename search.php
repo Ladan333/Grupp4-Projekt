@@ -31,7 +31,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 </head>
 <body>
     <form action="" method="POST" name="search">
-        <label for="search">Search useholder</label>
+        <label for="search">Search user</label>
         <input type="text" placeholder="Search user" name="search">
 
     </form>
@@ -41,7 +41,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 <ul>
         <?php foreach ($result as $row):?>
 <li>
-    <a href="profil.php" style = "text-decoration: none">    
+    <a href="profil.php ?user_name=<?php echo urlencode($row['user_name']); ?>" style = "text-decoration: none">    
         <?php echo htmlspecialchars($row["name"]) . " " . htmlspecialchars($row["user_name"]); 
         $_GET["user_name"] = $row["user_name"];
         ?>   
