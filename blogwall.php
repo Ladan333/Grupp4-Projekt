@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-<?php
-
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-var_dump($_SESSION)
-
-?>
-=======
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,4 +39,3 @@ var_dump($_SESSION)
 </body>
 
 </html>
->>>>>>> f2d6e309d67ad6313716649acb19d7c7ed4853d6
