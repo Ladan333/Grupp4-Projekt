@@ -44,7 +44,7 @@ require"PDO.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="refresh" content="1">
+        <!-- <meta http-equiv="refresh" content="20"> -->
     <link rel="stylesheet" type="text/css" href="CSS.css">
     <link preload href="./files/Leche_Frita.ttf" as="font" type="font/ttf" crossorigin>
     <title>Document</title>
