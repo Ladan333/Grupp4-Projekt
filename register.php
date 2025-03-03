@@ -1,4 +1,8 @@
 <?php
+session_start();
+session_destroy();
+session_start();
+
 require"PDO.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -23,10 +27,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $hashwed_password = password_hash($password, PASSWORD_DEFAULT);
         $stmt->bindParam("password", $hashwed_password);
         $stmt->bindParam("email", $email);
-        $stmmt->bindParam("name", $name);
+        $stmt->bindParam("name", $name);
+        if ($stmt->execute()){
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->bindParam(":email", $email);
+            $stmt ->execute();
+            $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        header("Location: idnex.php");
-        exit();
+            if ($userInfo){
+                $_SESSION['username'] = $userInfo['user_name'];
+                $_SESSION['name'] = $userInfo['name'];
+                $_SESSION['email'] = $userInfo['email'];
+                $_SESSION['role'] = $userInfo['role'];
+
+                header("Location: blogwall.php");
+                exit();
+            }
+        }
+        else {
+            header("Location: register.php");
+            exit();
+        }
     } else{
         echo "User details already in use";
     };
@@ -44,14 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
     
-    <form action="index.php" method="POST">
-        <label for="username"></label>
+    <form action="register.php" method="POST">
+        <label for="username">Username</label><br>
         <input name="username" id="username" type="text" required><br><br>
-        <label for="password"></label>
+        <label for="password">Password</label><br>
         <input name="password" id="password" type="text" required><br><br>
-        <label for="name"></label>
+        <label for="name">Name</label><br>
         <input name="name" id="name" type="text" required><br><br>
-        <label for="email"></label>
+        <label for="email">Email</label><br>
         <input name="email" id="email" type="text" required><br><br>
 
         <input type="submit" value="Register">
