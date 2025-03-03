@@ -1,14 +1,14 @@
-
-<?php 
-require"PDO.php";
+<?php
+session_start();
+require "PDO.php";
 
 $result = [];
 
-if (isset($_GET['search']) && !empty($_GET['search'])){
+if (isset($_GET['search']) && !empty($_GET['search'])) {
     $searchUser = $_GET['search'];
 
     $stmt = $pdo->prepare("SELECT `name`, user_name FROM users WHERE user_name LIKE :searchUser ");
-    $searchUser = "%".$searchUser."%";
+    $searchUser = "%" . $searchUser . "%";
     $stmt->bindParam(":searchUser", $searchUser);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -24,30 +24,35 @@ if (isset($_GET['search']) && !empty($_GET['search'])){
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <?php require"navbar.php"; ?>
+    <?php require "navbar.php"; ?>
 
+    <main class="main_search_result">
 
-    <div>
-        <?php if(!empty($result)):?>
-<ul>
-        <?php foreach ($result as $row):?>
-<li>
-    <a href="profil.php" style = "text-decoration: none">    
-        <?php echo htmlspecialchars($row["name"]) . " " . htmlspecialchars($row["user_name"]); 
-        $_GET["user_name"] = $row["user_name"];
-        ?>   
-</a>
-</li>
-            <?php endforeach; ?>
+        <?php if (!empty($result)): ?>
+            <ul>
+                <?php foreach ($result as $row): ?>
 
-</ul>
+                    <li class="searchResult">
+                        <img src="./files/no_picture.jpg" alt="Profile picture" width="50" height="50">
+                        <a href="profil.php?user_name=<?php echo urlencode($row['user_name']); ?>" class="profile-link">
+                            <span class="name"><?php echo htmlspecialchars($row["name"]); ?></span>
+                            <span class="username"><?php echo htmlspecialchars($row["user_name"]); ?></span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+
+            </ul>
         <?php endif; ?>
-    </div>
+
+    </main>
 </body>
+
 </html>
