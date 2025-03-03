@@ -1,9 +1,8 @@
 <?php
-if (session_status() !== PHP_SESSION_NONE){
-    session_start();
-} else if (session_status() == PHP_SESSION_NONE){
-    session_start();
-}
+session_start();
+session_destroy();
+session_start();
+
 require"PDO.php";
 
 var_dump($_SESSION);
@@ -68,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
     
-    <form action="index.php" method="POST">
+    <form action="register.php" method="POST">
         <label for="username">Username</label><br>
         <input name="username" id="username" type="text" required><br><br>
         <label for="password">Password</label><br>
