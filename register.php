@@ -1,16 +1,9 @@
 <?php
-
-// if (session_status() !== PHP_SESSION_NONE){
-//     session_start();
-// } else if (session_status() == PHP_SESSION_NONE){
-//     session_start();
-// }
-if (session_status() == PHP_SESSION_NONE){
+if (session_status() !== PHP_SESSION_NONE){
+    session_start();
+} else if (session_status() == PHP_SESSION_NONE){
     session_start();
 }
-
-echo "test";
-
 require"PDO.php";
 
 var_dump($_SESSION);

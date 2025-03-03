@@ -20,12 +20,13 @@ require"PDO.php";
         $stmt->bindParam(":username", $username);
         $stmt->execute();
         $result_userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
-        $hash = $result_userinfo['pwd'];
+
+        $hashwed_password = $result_userinfo['pwd'];
 
         if (!$result_userinfo) {
             echo"invalid";
         }
-        else if (password_verify($password, $hash)){
+        else if (password_verify($password, $hashwed_password)){
             $_SESSION['username'] = $username;
            
             header("Location: blogwall.php");
