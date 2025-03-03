@@ -20,7 +20,10 @@ if(session_status() == PHP_SESSION_NONE) {session_start();}
         <h2>The Wall</h2>
        </ul>
        <ul>
-        <?php require"search.php"; ?>
+       <form action="search.php" method="GET" name="search">
+    <input class="searchbar" type="text" placeholder="Search user" name="search">
+    <button class="buttonsearch" type="submit">Search</button>
+</form>
        </ul>
         <ul>
             <?php

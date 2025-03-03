@@ -36,25 +36,30 @@
     border-bottom: 1px solid var(--bordercolor);
     
     justify-content: space-between;
-    align-items: center;
+    /* align-items: center; */
     height: 6rem;
-  }
-  nav ul {
+    
+}
+nav ul {
     display: flex;
     list-style: none;
-    margin: 1rem;
-    margin-right: 3rem;
-    gap: 1rem;
-    flex: 1, 1, 30%;
+    align-items: center;
+    justify-content: space-evenly; 
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    gap:.5rem;
   }
   
   nav ul h2 {
-     
+    justify-content: center;
+     align-self: center;
       font-size: 3rem;
       background: linear-gradient(45deg, rgb(106, 106, 106) 0%, rgba(80, 80, 80, 0.9) 50%, rgba(106, 106, 106, 1) 100%);
       background-clip: text;
       color: transparent;
-      margin-left:5rem;
+      /* margin-left:5rem; */
       width: 20rem;
       height: 4rem;
       font-family: 'Leche Frita', sans-serif;
@@ -67,7 +72,39 @@
       box-shadow:
           0 0px 20px rgba(228, 228, 228, 0.4)
           ;
+          /* flex: 1;  */
+          text-align: center;
   }
+  .searchbar {
+    flex: 1; 
+    width: 20rem;
+    margin-left:4rem;
+    max-width: 50rem;  
+    height: 2rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.buttonsearch{
+    padding: .5rem 1rem;
+    margin: 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgb(124, 124, 124);
+    background: rgb(15, 15, 15);
+    border: 1px solid var(--bordercolor);
+    border-radius: 8px;
+    cursor: pointer;
+}
+.button:hover{
+    background: rgb(90, 90, 90);
+    color: black;
+    border: 1px solid var(--bordercolor);
+    transform: scale(1.05);
+}
+ 
   nav ul a {
     display: flex;
     align-items: center;
@@ -87,8 +124,9 @@
     -webkit-backdrop-filter: blur(4.8px);
     border: 1px solid rgba(123, 123, 123, 0.28);
     padding: 1rem;
-    flex: 1;
-    width: 6rem;
+    /* flex: 1; */
+    
+    width: 5rem;
     height: 1rem;
     text-align: center;
   }

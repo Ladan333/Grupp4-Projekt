@@ -4,8 +4,8 @@ require"PDO.php";
 
 $result = [];
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $searchUser = $_POST['search'];
+if (isset($_GET['search']) && !empty($_GET['search'])){
+    $searchUser = $_GET['search'];
 
     $stmt = $pdo->prepare("SELECT `name`, user_name FROM users WHERE user_name LIKE :searchUser ");
     $searchUser = "%".$searchUser."%";
@@ -30,11 +30,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="POST" name="search">
-        <label for="search">Search useholder</label>
-        <input type="text" placeholder="Search user" name="search">
+    <?php require"navbar.php"; ?>
 
-    </form>
 
     <div>
         <?php if(!empty($result)):?>
