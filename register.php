@@ -1,5 +1,11 @@
 <?php
+session_start();
+session_destroy();
+session_start();
+
 require"PDO.php";
+
+var_dump($_SESSION);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $username = $_POST["username"];
@@ -61,14 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
     
-    <form action="index.php" method="POST">
-        <label for="username"></label>
+    <form action="register.php" method="POST">
+        <label for="username">Username</label><br>
         <input name="username" id="username" type="text" required><br><br>
-        <label for="password"></label>
+        <label for="password">Password</label><br>
         <input name="password" id="password" type="text" required><br><br>
-        <label for="name"></label>
+        <label for="name">Name</label><br>
         <input name="name" id="name" type="text" required><br><br>
-        <label for="email"></label>
+        <label for="email">Email</label><br>
         <input name="email" id="email" type="text" required><br><br>
 
         <input type="submit" value="Register">
