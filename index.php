@@ -63,7 +63,7 @@ require"PDO.php";
         <input class="login_Input" name="password" id="password" type="text" placeholder="Inputo password" required>
 
         <button class="button" type="submit" value="login">Login</button>
-        <p>No account?</p><a href="register.php">Register here</a>
+        <p class="pindex">No account?</p><a href="register.php">Register here</a>
         
     
    

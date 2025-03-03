@@ -59,22 +59,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="refresh" content="5">
     <title>Document</title>
 </head>
 <body>
 <?php require"navbar.php"; ?>
 
 <main class="index">
-    <form class="login" action="index.php" method="POST">
-        <label for="username">Username</label>
+    <form class="login" action="register.php" method="POST">
+        <label class="label_register" for="username">Username:</label>
         <input class="login_Input" name="username" id="username" type="text" placeholder="Username" required><br><br>
-        <label for="password">Password</label>
+        <label class="label_register" for="password">Password:</label>
         <input class="login_Input" name="password" id="password" type="text" placeholder="Password" required><br><br>
-        <label for="name">Name</label>
+        <label class="label_register" for="name">Name:</label>
         <input class="login_Input" name="name" id="name" type="text" placeholder="Name" required><br><br>
-        <label for="email">Email</label>
+        <label class="label_register" for="email">Email:</label>
         <input class="login_Input" name="email" id="email" type="text" placeholder="Email" required><br><br>
 
+        <p>All field are required to successfully register!</p>
         <button class="button" type="submit" value="login">Register</button>
         <a href="index.php">Back</a>
     
