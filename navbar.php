@@ -20,13 +20,15 @@ if(session_status() == PHP_SESSION_NONE) {session_start();}
         <h2>The Wall</h2>
        </ul>
         <ul>
-            <a href="profile.php">Profile</a>
-            <a href="blogwall.php"> Wall</a>
             <?php
             if (isset($_SESSION['username'])) {
+                echo '<a href="profile.php">Profile</a>';
+                echo '<a href="blogwall.php">Wall</a>';
                 echo '<a href="logout.php">Logout</a>';
+
             } else {
-                echo '<a href="index.php">Login</a>';
+                echo '<a href="register.php">Register</a>';
+
             }?>
         </ul>
 

@@ -208,7 +208,8 @@
     
     padding: 0 1rem;
     box-shadow:
-        0 0px 20px rgba(228, 228, 228, 0.4)
+        0 0px 80px 40px rgba(50, 50, 50, 0.4),
+        inset 0 0 5px rgba(199, 199, 199, 0.8)
         ;
 }
 .login .login_Input {
