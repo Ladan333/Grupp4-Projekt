@@ -51,11 +51,10 @@ require"PDO.php";
 
     
     <form action="index.php" method="POST">
-        <label for="username"></label>
-        <input name="username" id="username" type="text" required>
-        <br>
-        <label for="password"></label>
-        <input name="password" id="password" type="text" required>
+        <label for="username">Username</label><br>
+        <input name="username" id="username" type="text" required><br><br>
+        <label for="password">Password</label><br>
+        <input name="password" id="password" type="text" required><br><br>
 
         <input type="submit" value="login">
 
