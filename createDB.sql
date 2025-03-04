@@ -2,15 +2,15 @@ CREATE DATABASE IF NOT EXISTS BLOGG;
 
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    `first_name` VARCHAR(32) NOT NULL,
-    'last_name' VARCHAR(32) NOT NULL,
+    first_name VARCHAR(32) NOT NULL,
+    last_name VARCHAR(32) NOT NULL,
     user_name VARCHAR(32) NOT NULL UNIQUE,
     pwd VARCHAR(255) NOT NULL,
     email VARCHAR(64) NOT NULL UNIQUE,
-    `role` BOOLEAN DEFAULT FALSE,
+    role BOOLEAN DEFAULT FALSE,
     profileContent TEXT,
     CreatedDate DATETIME NOT NULL DEFAULT NOW()
-)
+);
 
 CREATE TABLE IF NOT EXISTS blogposts (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS follows (
     follow_id INT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY(follow_id) REFERENCES users(id) ON DELETE CASCADE,
-    PRIMARY KEY(user_id, follow_id) ON DELETE CASCADE;
+    PRIMARY KEY(user_id, follow_id) 
 
 );
 
@@ -47,21 +47,14 @@ CREATE TABLE IF NOT EXISTS follows (
 --THIS USERS DATA USES HASHED PASSWORDS AND WORKS WITH THE UPDATED DATABASE
 --PASSWORDS ARE 111, 222, 333 ETC
 INSERT INTO users
-(first_name, last_name, user_name, pwd, email)
+(first_name, last_name, user_name, pwd, email, role, profileContent)
 VALUES
-('Wednes', 'day', 'Wednesday333', '$2y$10$SyZ3LVFIGOnPPYn7AChFe.ZAQAK/x1HSBCpr/xHeFliB4S6WMCol.', 'Wednesday@gmail.com'),
-('Thurs', 'day', 'Thursday444', '$2y$10$h85j9upNURTexX9jnR26guwm8Ne6HtrB6rDhOehZSwCIREhvSpTKm', 'Thursday@gmail.com'),
-('Fri', 'day', 'Friday555', '$2y$10$LC7XrgBvZkcsZgt6DJjy1OrS9b469SJohUfC6RQrrj2f9R8ZOjz0m', 'Friday@gmail.com'),
-('Satur', 'day', 'Saturday666', '$2y$10$7fipSxM0P5yMuOw6npSP4O0xRjJ5dFLFARio.U5iP0uSr4ZD74ewm', 'Saturday@gmail.com'),
-('Sun', 'day', 'Sunday777', '$2y$10$NmJxShnIatP8rQH5JBDHD.LjnPlPnKIC5LkdMRSgvmV9aa.Hp7j..', 'Sunday@gmail.com');
+('Wednes', 'day', 'Wednesday333', '$2y$10$SyZ3LVFIGOnPPYn7AChFe.ZAQAK/x1HSBCpr/xHeFliB4S6WMCol.', 'Wednesday@gmail.com',0,'I love writing about tech.'),
+('Thurs', 'day', 'Thursday444', '$2y$10$h85j9upNURTexX9jnR26guwm8Ne6HtrB6rDhOehZSwCIREhvSpTKm', 'Thursday@gmail.com',1, 'Web developer and blogger.'),
+('Fri', 'day', 'Friday555', '$2y$10$LC7XrgBvZkcsZgt6DJjy1OrS9b469SJohUfC6RQrrj2f9R8ZOjz0m', 'Friday@gmail.com',0,'Web developer and blogger.'),
+('Satur', 'day', 'Saturday666', '$2y$10$7fipSxM0P5yMuOw6npSP4O0xRjJ5dFLFARio.U5iP0uSr4ZD74ewm', 'Saturday@gmail.com',1,'Web developer and blogger.'),
+('Sun', 'day', 'Sunday777', '$2y$10$NmJxShnIatP8rQH5JBDHD.LjnPlPnKIC5LkdMRSgvmV9aa.Hp7j..', 'Sunday@gmail.com',0,'Web developer and blogger.');
 
-INSERT INTO users (`name`, user_name, pwd, email, `role`, profileContent)
-VALUES
-    ('Alice Johnson', 'alicej', 'password123', 'alice@example.com', FALSE, 'Loves writing tech blogs.'),
-    ('Bob Smith', 'bobsmith', 'securepass', 'bob@example.com', TRUE, 'Web developer and blogger.'),
-    ('Charlie Brown', 'charlieb', 'mypassword', 'charlie@example.com', FALSE, 'Aspiring writer.'),
-    ('David Miller', 'davidm', '123456', 'david@example.com', FALSE, 'Writes about travel and food.'),
-    ('Eva Green', 'evag', 'eva1234', 'eva@example.com', TRUE, 'Tech enthusiast and editor.');
 
 
 INSERT INTO blogposts (title, blogContent, user_id)

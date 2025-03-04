@@ -455,9 +455,9 @@ nav ul {
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        height: 40rem;
+        height: auto;
         background: rgba(76, 76, 76, 0.5);
-        
+        padding-top:1rem;
         border-radius: 10px;
         width: 40rem;
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
