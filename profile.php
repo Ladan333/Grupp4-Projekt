@@ -11,23 +11,27 @@ session_start();
 // }
 
 if(isset($_GET["user_name"])){
-    $stmt = $pdo->prepare("SELECT `name`, user_name, pwd, email, profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
+    $stmt = $pdo->prepare("SELECT `first_name`, 'last_name', user_name, pwd, email, profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
     $stmt->bindParam(":user", $_GET["user_name"]);
     
     $stmt->execute();
-    }
+    }else{
 
-else{
-    $stmt = $pdo->prepare("SELECT `name`, user_name, pwd, email, profileContent  FROM users WHERE user_name = :user");
-    $stmt->bindParam(":user", $_SESSION["user_name"]);
+
+    $stmt = $pdo->prepare("SELECT `first_name`, 'last_name', user_name, pwd, email, profileContent  FROM users WHERE user_name = :user");
+    $stmt->bindParam(":user", $_SESSION["username"]);
     
     $stmt->execute();
 }
 
 
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
+//     echo "<br>";
+// var_dump($_SESSION);
+//     echo "<br>";
+// echo "<br>";
 
-var_dump($result);
+// var_dump($result);
 
 ?>
 
