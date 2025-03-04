@@ -7,7 +7,7 @@
 
     <head>
         <meta charset="UTF-8">
-        
+
         <link rel="stylesheet" type="text/css" href="CSS.css">
         <meta name="viewport" content="width=420, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
@@ -18,7 +18,15 @@
     <body>
         <nav>
             <ul>
-                <h2>The Wall</h2>
+                <?php if (isset($_SESSION['username'])): ?>
+                    <a href="blogwall.php" class="wall-link"><h2>The Wall</h2></a>
+                        
+                    
+                <?php else: ?>
+                    <a href="index.php" class="wall-link"><h2>The Wall</h2> </a>
+                        
+                   
+                <?php endif; ?>
             </ul>
             <ul>
                 <form action="search.php" method="GET" name="search">
@@ -45,18 +53,18 @@
 
         </nav>
         <script>
-    function toggleMenu() {
-        let menu = document.querySelector(".submenu");
+            function toggleMenu() {
+                let menu = document.querySelector(".submenu");
 
 
-        if (menu) {
-            menu.classList.toggle("active");
-            console.log("Menu active state: " + menu.classList.contains("active"));
-        } else {
-            console.log("Menu not found!");
-        }
-    }
-</script>
+                if (menu) {
+                    menu.classList.toggle("active");
+                    console.log("Menu active state: " + menu.classList.contains("active"));
+                } else {
+                    console.log("Menu not found!");
+                }
+            }
+        </script>
     </body>
 
     </html>
