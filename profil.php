@@ -31,9 +31,11 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <ul>
 
-    <?php foreach ($result as $key): ?>
+    <?php foreach ($result as $row): ?>
     <li>
-        <?php echo $result?>
+    <?php foreach ($row as $value ):?>
+        <?php echo "$row .':'. $value"; ?>
+    <?php endforeach?>
     </li>
         <?php endforeach?>
         <?php var_dump($result)?>
