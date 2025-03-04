@@ -9,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $username = $_POST["username"];
     $password = $_POST["password"];
     $email = $_POST["email"];
-    $name = $_POST["name"];
+    $first_name = $_POST["first_name"];
+    $last_name = $_POST["last_name"];
     
     $stmt = $pdo->prepare("SELECT user_name FROM users WHERE user_name = :username");
     $stmt->bindParam(":username", $username);
@@ -22,12 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $result = $stmt ->fetch(PDO::FETCH_ASSOC);
 
     if (!$result){
-        $stmt = $pdo->prepare("INSERT INTO users (user_name, pwd, name, email) VALUES (:username, :password, :name, :email)");
+        $stmt = $pdo->prepare("INSERT INTO users (user_name, pwd, first_name, last_name, email) VALUES (:username, :password, :first_name, :last_name, :email)");
         $stmt->bindParam(":username", $username);
         $hashwed_password = password_hash($password, PASSWORD_DEFAULT);
         $stmt->bindParam("password", $hashwed_password);
         $stmt->bindParam("email", $email);
-        $stmt->bindParam("name", $name);
+        $stmt->bindParam("first_name", $first_name);
+        $stmt->bindParam("last_name", $last_name);
         if ($stmt->execute()){
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->bindParam(":email", $email);
@@ -36,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             if ($userInfo){
                 $_SESSION['username'] = $userInfo['user_name'];
-                $_SESSION['name'] = $userInfo['name'];
+                $_SESSION['first_name'] = $userInfo['first_name'];
+                $_SESSION['last_name'] = $userInfo['last_name'];
                 $_SESSION['email'] = $userInfo['email'];
                 $_SESSION['role'] = $userInfo['role'];
 
@@ -71,8 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         <input class="login_Input" name="username" id="username" type="text" placeholder="Username" required><br><br>
         <label class="label_register" for="password">Password:</label>
         <input class="login_Input" name="password" id="password" type="text" placeholder="Password" required><br><br>
-        <label class="label_register" for="name">Name:</label>
-        <input class="login_Input" name="name" id="name" type="text" placeholder="Name" required><br><br>
+        <label class="label_register" for="first_name">First name:</label>
+        <input class="login_Input" name="first_name" id="first_name" type="text" placeholder="First_name" required><br><br>
+        <label class="label_register" for="last_name">Last name:</label>
+        <input class="login_Input" name="last_name" id="last_name" type="text" placeholder="Last_name" required><br><br>
         <label class="label_register" for="email">Email:</label>
         <input class="login_Input" name="email" id="email" type="text" placeholder="Email" required><br><br>
 
