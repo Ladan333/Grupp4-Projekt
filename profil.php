@@ -2,19 +2,32 @@
 require("PDO.php");
 session_start();
 
-if(isset($_GET["source"]) && $_GET["source"] == "search"){
-$stmt = $pdo->prepare("SELECT * FROM users WHERE user_name = :user");
-$stmt->bindParam(":user", $_GET[""]);
-}
-else{
-    $stmt = $pdo->prepare("SELECT * FROM USERS WHERE user_name = :user");
-    $stmt->bindParam(":user", $_SESSION["username"]);
+
+// if(isset($_GET["source"]) && $_GET["source"] == "search"){
+// $stmt = $pdo->prepare("SELECT `name`, user_name, pwd, email, profileContent  FROM users WHERE user_name = :user");
+// $stmt->bindParam(":user", $_GET["user_name"]);
+
+// $stmt->execute();
+// }
+
+if(isset($_GET["user_name"])){
+    $stmt = $pdo->prepare("SELECT `name`, user_name, pwd, email, profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
+    $stmt->bindParam(":user", $_GET["user_name"]);
     
+    $stmt->execute();
+    }
+
+else{
+    $stmt = $pdo->prepare("SELECT `name`, user_name, pwd, email, profileContent  FROM users WHERE user_name = :user");
+    $stmt->bindParam(":user", $_SESSION["user_name"]);
+    
+    $stmt->execute();
 }
 
-$stmt->execute();
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+var_dump($result);
 
 ?>
 
@@ -31,14 +44,16 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <ul>
 
-    <?php foreach ($result as $row): ?>
+   
+    <?php foreach ($result as $key => $value): ?>
     <li>
-    <?php foreach ($row as $value ):?>
-        <?php echo "$row .':'. $value"; ?>
-    <?php endforeach?>
+
+        <?php echo "$key:  $value"; ?>
+
     </li>
-        <?php endforeach?>
-        <?php var_dump($result)?>
+    <?php endforeach?>
+      
+       
 
     </ul>
     
