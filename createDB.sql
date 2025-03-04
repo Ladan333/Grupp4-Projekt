@@ -2,15 +2,15 @@ CREATE DATABASE IF NOT EXISTS BLOGG;
 
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(32) NOT NULL,
+    `first_name` VARCHAR(32) NOT NULL,
+    'last_name' VARCHAR(32) NOT NULL,
     user_name VARCHAR(32) NOT NULL UNIQUE,
     pwd VARCHAR(255) NOT NULL,
     email VARCHAR(64) NOT NULL UNIQUE,
     `role` BOOLEAN DEFAULT FALSE,
     profileContent TEXT,
     CreatedDate DATETIME NOT NULL DEFAULT NOW()
-
-);
+)
 
 CREATE TABLE IF NOT EXISTS blogposts (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -38,11 +38,23 @@ CREATE TABLE IF NOT EXISTS follows (
     follow_id INT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY(follow_id) REFERENCES users(id) ON DELETE CASCADE,
-    PRIMARY KEY(user_id, follow_id)
+    PRIMARY KEY(user_id, follow_id) ON DELETE CASCADE;
 
 );
 
 --EXEMPELDATA ATT JOBBA MED
+
+--THIS USERS DATA USES HASHED PASSWORDS AND WORKS WITH THE UPDATED DATABASE
+--PASSWORDS ARE 111, 222, 333 ETC
+INSERT INTO users
+(first_name, last_name, user_name, pwd, email)
+VALUES
+('Wednes', 'day', 'Wednesday333', '$2y$10$SyZ3LVFIGOnPPYn7AChFe.ZAQAK/x1HSBCpr/xHeFliB4S6WMCol.', 'Wednesday@gmail.com'),
+('Thurs', 'day', 'Thursday444', '$2y$10$h85j9upNURTexX9jnR26guwm8Ne6HtrB6rDhOehZSwCIREhvSpTKm', 'Thursday@gmail.com'),
+('Fri', 'day', 'Friday555', '$2y$10$LC7XrgBvZkcsZgt6DJjy1OrS9b469SJohUfC6RQrrj2f9R8ZOjz0m', 'Friday@gmail.com'),
+('Satur', 'day', 'Saturday666', '$2y$10$7fipSxM0P5yMuOw6npSP4O0xRjJ5dFLFARio.U5iP0uSr4ZD74ewm', 'Saturday@gmail.com'),
+('Sun', 'day', 'Sunday777', '$2y$10$NmJxShnIatP8rQH5JBDHD.LjnPlPnKIC5LkdMRSgvmV9aa.Hp7j..', 'Sunday@gmail.com');
+
 INSERT INTO users (`name`, user_name, pwd, email, `role`, profileContent)
 VALUES
     ('Alice Johnson', 'alicej', 'password123', 'alice@example.com', FALSE, 'Loves writing tech blogs.'),
