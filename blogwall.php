@@ -22,6 +22,7 @@ $isAdmin = $_SESSION["role"] ?? false;
             <h2>Välkommen till vår fantastiska blogg</h2>
         </div>
 
+        
         <div class="posts">
             <div class="post">
                 <p class="username"><ion-icon name="person-circle"></ion-icon><?php echo htmlspecialchars($username); ?></p>
