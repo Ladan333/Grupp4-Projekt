@@ -16,13 +16,14 @@ require"PDO.php";
         $username = $_POST["username"];
         $password = $_POST["password"];
         
-        $stmt = $pdo->prepare("SELECT pwd, role FROM users WHERE user_name = :username");
+        $stmt = $pdo->prepare("SELECT id, pwd, role FROM users WHERE user_name = :username");
         $stmt->bindParam(":username", $username);
         $stmt->execute();
         $result_userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $hashwed_password = $result_userinfo['pwd'];
-
+        
+       
         if (!$result_userinfo) {
             echo"invalid";
         }
@@ -30,8 +31,8 @@ require"PDO.php";
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $result_userinfo['role'];
             $_SESSION['id'] = $result_userinfo['id'];
-      
-            header("Location: blogwall.php");
+            var_dump($_SESSION);
+            // header("Location: blogwall.php");
             exit();
         }
     }
