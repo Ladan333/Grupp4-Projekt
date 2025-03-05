@@ -197,3 +197,4 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </body>
 
 </html>
+ta bort/ redigera användare
