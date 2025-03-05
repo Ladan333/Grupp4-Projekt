@@ -31,8 +31,8 @@ require"PDO.php";
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $result_userinfo['role'];
             $_SESSION['id'] = $result_userinfo['id'];
-            var_dump($_SESSION);
-            // header("Location: blogwall.php");
+          
+            header("Location: blogwall.php");
             exit();
         }
     }
