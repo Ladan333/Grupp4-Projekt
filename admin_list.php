@@ -38,7 +38,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <td><?= htmlspecialchars($user['email']) ?></td>
             <td><?= $user['role'] ?></td>
             <td>
-                <!-- Knappar för att hantera användarens inlägg -->
+                <!-- Knappar för att hantera användarens inlägg /Implementera användare istället för kommentarer koppla till blogwall / redigera användarnamn-->
                 <a href="edit_posts.php?user_id=<?= $user['id'] ?>">Redigera inlägg</a> |
                 <a href="delete_posts.php?user_id=<?= $user['id'] ?>" onclick="return confirm('Är du säker på att du vill ta bort ALLA inlägg för denna användare?')">Ta bort alla inlägg</a>
             </td>

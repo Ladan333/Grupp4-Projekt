@@ -215,3 +215,4 @@ $isAdmin = $_SESSION["role"] ?? false;
 </body>
 
 </html>
+ta bort/ redigera användare
