@@ -71,7 +71,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <ion-icon name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
                     </p>
                     <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
-                    <img src="<?php echo $post['image_base64'] ? 'data:image/png;base64,' . $post['image_base64'] : 'https://th.bing.com/th/id/OIP.shzeL1wiYB7Xigzm-vH0AgHaDt?rs=1&pid=ImgDetMain'; ?>" alt="Blog image" class="post-img">
+                    <img src="<?php echo $post['image_base64'] ? 'data:image/png;base64,' . $post['image_base64'] : ''; ?>" alt="" class="post-img">
                     <p class="content short">
                         <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                     </p>
