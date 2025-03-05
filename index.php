@@ -29,6 +29,7 @@ require"PDO.php";
         else if (password_verify($password, $hashwed_password)){
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $result_userinfo['role'];
+            $_SESSION['id'] = $result_userinfo['id'];
       
             header("Location: blogwall.php");
             exit();
