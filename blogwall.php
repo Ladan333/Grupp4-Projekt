@@ -2,6 +2,11 @@
 session_start();
 require 'PDO.php'; 
 
+if ($_SESSION['id'] == null) {
+    header("Location: index.php");
+    exit();
+}
+
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
 
