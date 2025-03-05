@@ -22,7 +22,6 @@ body {
 
 nav {
   display: flex;
-  /* margin-top: 2rem;  */
   background: linear-gradient(
       -10deg,
       rgba(0, 0, 0, 0.7) 500%,
@@ -32,12 +31,9 @@ nav {
 
   background-size: cover;
   color: var(--textcolor);
-  /* padding: 10px 0; */
   text-align: center;
   border-bottom: 1px solid var(--bordercolor);
-
   justify-content: space-between;
-  /* align-items: center; */
   height: 6rem;
 }
 nav ul {
@@ -68,14 +64,11 @@ nav ul {
   width: 20rem;
   height: 4rem;
   font-family: "Leche Frita", sans-serif;
-
   font-weight: 700;
-
   border-radius: 8px;
   cursor: pointer;
   padding: 0 1rem;
   box-shadow: 0 0px 20px rgba(228, 228, 228, 0.4);
-
   text-align: center;
   text-decoration: none;
 }
@@ -132,8 +125,6 @@ nav ul a {
   -webkit-backdrop-filter: blur(4.8px);
   border: 1px solid rgba(123, 123, 123, 0.28);
   padding: 1rem;
-  /* flex: 1; */
-
   width: 5rem;
   height: 1rem;
   text-align: center;
@@ -158,9 +149,7 @@ nav ul a {
   position: absolute;
   top: 96px;
   right: 0;
-  display: none; /* Initially hidden */
-  /* background-color: var(--main-color); */
-  /* box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15); */
+  display: none; 
   padding-right: 1rem;
 }
 
@@ -175,7 +164,6 @@ nav ul a {
   display: block;
   padding: 10px;
   color: black;
-  /* border-bottom: 1px solid #7d7d7d85; */
   text-decoration: none;
   border-radius: 0px;
 }
@@ -185,7 +173,6 @@ nav ul a {
   color: white;
   border-radius: 0px;
   transition: 0.3s;
-  /* border-bottom: 1px solid #7d7d7d85; */
   text-decoration: none;
 }
 
@@ -435,13 +422,9 @@ nav ul a {
   background-clip: text;
   color: transparent;
   text-align: center;
-
   font-family: "Leche Frita", sans-serif;
-
   font-weight: 700;
-
   border-radius: 8px;
-
   padding: 0 1rem;
   text-shadow: 0 0px 20px rgba(52, 52, 52, 0.5);
 }
@@ -518,7 +501,6 @@ nav ul a {
   font-weight: 500;
   color: var(--textcolor);
   margin: 0.5rem;
-
   margin-top: -1rem;
 }
 .login .pindex {
@@ -531,7 +513,6 @@ nav ul a {
 .main_search_result {
   display: flex;
   flex-direction: column;
-
   width: 80%;
   height: auto;
   margin: 1rem auto;
@@ -543,7 +524,6 @@ nav ul a {
   flex-direction: column;
   width: 100%;
   height: 6rem;
-
   padding: 0;
   margin: 0;
   list-style: none;
@@ -618,28 +598,25 @@ nav ul a {
   min-height: 300px;
   right: 0;
   list-style: none;
-  /* border: 1px solid black; */
   padding: 15px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   overflow: hidden;
   word-wrap: break-word;
   overflow-wrap: break-word;
-
 }
 .profile-info {
   width: 100%;
   text-align: left;
-  /* padding: 10px; */
   margin-top: 4rem;
   display: flex;
   flex-direction: column;
-  align-items: center
+  align-items: center;
 }
 .profile-info ul {
-    padding: 0;
-    margin: 0;
-    width: 100%;
+  padding: 0;
+  margin: 0;
+  width: 100%;
 }
 
 .profile-info li {
@@ -647,40 +624,39 @@ nav ul a {
   width: 100%;
   font-size: 14px;
   padding: 1rem 0;
-
-    /* border: 1px solid rgba(0, 0, 0, 0.1); */
-  /* border-bottom: 2px solid rgba(79, 79, 79, 0.2); */
   white-space: normal;
   word-wrap: break-word;
-  position: relative; 
+  position: relative;
   padding-bottom: 1rem;
 }
-.profile-info li::after{
-    content: '';
-    display: block;
-    width: 100%; 
-    height: 1px; 
-    background: linear-gradient(to right, transparent 0%, rgba(79, 79, 79, 0.2) 25%,rgba(0,0,0,0.5), rgba(79, 79, 79, 0.2) 75%, transparent 100%);
-    position: absolute;
-    bottom: 0; 
-    left: 0;
-    border-radius: 8px;
-
+.profile-info li::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(79, 79, 79, 0.2) 25%,
+    rgba(0, 0, 0, 0.5),
+    rgba(79, 79, 79, 0.2) 75%,
+    transparent 100%
+  );
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-radius: 8px;
 }
 
-
-
 .profile-info li:last-child {
-  /* border-bottom: none; */
   height: auto;
 }
 
 .profile-picture {
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    width: 100%; 
-    
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 .profile-picture img {
   width: 200px;
@@ -692,22 +668,22 @@ nav ul a {
   display: block;
 }
 .info-label {
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #333; 
-    display: block; 
-    margin-bottom: 5px;
-    margin-left:5px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+  margin-left: 5px;
 }
 
 .profile-content {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 1rem;
-    text-align: center;
-    font-style: bold;
-    color: #454545; 
-    display: block; 
-    padding-left: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  font-style: bold;
+  color: #454545;
+  display: block;
+  padding-left: 10px;
 }
 .edit-profile button {
   display: flex;
@@ -716,15 +692,167 @@ nav ul a {
   gap: 1rem;
   margin-top: 1rem;
   background-color: rgba(255, 255, 255, 0.8);
-  border:1px solid rgba(0, 0, 0, 0.3);
-  border-radius:8px
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
 }
 .edit-profile button:hover {
   background-color: rgba(225, 225, 225, 0.9);
-  border:1px solid rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   transform: scale(1.05);
 }
-.edit-profile a{
-    text-decoration: none;
-    color: black;
+.edit-profile a {
+  text-decoration: none;
+  color: black;
+}
+
+/* Admin_List */
+
+.main-admin_list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin: 1rem auto;
+  margin-top:3rem; 
+  width: 70%;
+  height: auto;
+  background: var(--secondarycolor);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  overflow: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.main-admin_list h1{
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--textcolor);
+  margin: 0.5rem;
+  margin-top: 1rem;
+
+  padding:.5rem;
+  background: rgba(158, 158, 158, 0.8);
+  border-radius: 8px;
+}
+table {
+  
+  border-collapse: collapse;
+  width: 100%;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(158, 158, 158, 0.8);
+  border-radius: 10px;
+  overflow: hidden; 
+}
+.table-header {
+  font-size: 1.5rem;
+ 
+}
+.table-header th{
+  background: rgba(28, 28, 28, 0.8);
+}
+th {
+  background-color: rgba(98, 98, 98, 0.8); 
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--textcolor);
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+
+.table-header th {
+  background-color: #666; 
+}
+.table-header td
+ {
+  
+  padding: .5rem;
+  text-align: center;
+  font-weight: bold;
+  color: var(--textcolor);
+  background: rgba(158, 158, 158, 0.8);
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+.searchbar-admin{
+  flex: 1;
+  width: 20rem;
+  max-width: 50rem;
+  height: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom:.5rem;
+}
+.btn-search-admin{
+  gap: 1rem;
+  margin-top: 1rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+.edit_user{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: colomn;
+  width: 6rem;
+  text-decoration: none;
+  color: var(--textcolor);
+  background-color: rgba(98, 98, 98, 0.8);
+  border-radius: 5px;
+}
+.delete_user{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 6rem;
+  text-decoration: none;
+  color: var(--textcolor);
+  margin-top: .2rem;
+  background-color: rgba(255, 0, 0, 0.7);
+  border-radius: 5px;
+}
+.link_to_blogwall{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--textcolor);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  margin-top: .2rem;
+  background: rgba(158, 158, 158, 0.8);
+  padding: .5rem;
+  border-radius: 8px;
+}
+
+.edit-buttons {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 5px; 
+}
+
+.main-admin_list p {  
+  font-size: 1rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--textcolor);
+  margin: 0.5rem;
+  margin-top: 1rem;
 }
