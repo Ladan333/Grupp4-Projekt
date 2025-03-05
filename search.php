@@ -7,7 +7,7 @@ $result = [];
 if (isset($_GET['search']) && !empty($_GET['search'])) {
     $searchUser = $_GET['search'];
 
-    $stmt = $pdo->prepare("SELECT `name`, user_name FROM users WHERE user_name LIKE :searchUser ");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE user_name LIKE :searchUser ");
     $searchUser = "%" . $searchUser . "%";
     $stmt->bindParam(":searchUser", $searchUser);
     $stmt->execute();
@@ -42,11 +42,14 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 
                     <li class="searchResult">
                         <img src="./files/no_picture.jpg" alt="Profile picture" width="50" height="50">
-                        <a href="profil.php?user_name=<?php echo urlencode($row['user_name']); ?>" class="profile-link">
-                            <span class="name"><?php echo htmlspecialchars($row["name"]); ?></span>
-                            <span class="username"><?php echo htmlspecialchars($row["user_name"]); ?></span>
+                        <a href="profile.php?user_name=<?php echo urlencode($row['user_name']) ; ?>" class="profile-link">
+                            
+                            <span class="name"><?php echo  htmlspecialchars($row["first_name"]) . " ". htmlspecialchars($row["last_name"]); ?></span>
+
+                            <span class="username-search"><?php echo htmlspecialchars($row["user_name"]); ?></span>
                         </a>
                     </li>
+                    <!-- <?php var_dump($row);?> -->
                 <?php endforeach; ?>
 
             </ul>
@@ -56,3 +59,4 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 </body>
 
 </html>
+
