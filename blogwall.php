@@ -1,8 +1,21 @@
 <?php
 session_start();
+require 'PDO.php'; 
+
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
+
+
+
+$sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
+        FROM blogposts bp
+        JOIN users u ON bp.user_id = u.id
+        ORDER BY bp.CreatedDate DESC";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +45,9 @@ $isAdmin = $_SESSION["role"] ?? false;
                 <span class="close-btn">&times;</span>
                 <h2>Add a new post</h2>
                 <form class="add-post-form" action="add_post.php" method="POST" enctype="multipart/form-data">
+                    <label for="add-post-title">Title:</label>
+                    <input type="text" id="add-post-title" name="title" required placeholder="Amazing blogwall...">
+
                     <label for="postContent">Post text:</label>
                     <textarea id="postContent" name="content" rows="4" required placeholder="Skriv ditt inlägg här..."></textarea>
 
@@ -42,9 +58,6 @@ $isAdmin = $_SESSION["role"] ?? false;
                     </label>
                     <input type="file" id="postImage" name="image" accept="image/*">
 
-                    <!-- Hidden input to store Base64-encoded image -->
-                    <input type="hidden" name="image_base64" id="imageBase64">
-
                     <button type="submit" class="submit-btn">Publish</button>
                 </form>
             </div>
@@ -52,103 +65,56 @@ $isAdmin = $_SESSION["role"] ?? false;
 
 
         <div class="posts">
-            <div class="post">
-                <p class="post-username"><ion-icon name="person-circle"></ion-icon><?php echo htmlspecialchars($username); ?></p>
-                <img src="https://th.bing.com/th/id/OIP.shzeL1wiYB7Xigzm-vH0AgHaDt?rs=1&pid=ImgDetMain" alt="Blog image" class="post-img">
-                <p class="content short">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                </p>
-                <button class="toggle-btn">Visa mer</button>
-                <!-- Comment Section -->
-                <div class="comments-section">
-                    <h4>Comments:</h4>
-                    <div class="comment">
-                        <span id="user">
-                            <ion-icon name="person-circle"></ion-icon><strong> Alice:</strong>
-                        </span>
-                        Wow, detta var en intressant läsning!
+            <?php foreach ($posts as $post): ?>
+                <div class="post">
+                    <p class="post-username">
+                        <ion-icon name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
+                    </p>
+                    <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
+                    <img src="<?php echo $post['image_base64'] ? 'data:image/png;base64,' . $post['image_base64'] : 'https://th.bing.com/th/id/OIP.shzeL1wiYB7Xigzm-vH0AgHaDt?rs=1&pid=ImgDetMain'; ?>" alt="Blog image" class="post-img">
+                    <p class="content short">
+                        <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
+                    </p>
+                    <button class="toggle-btn">Visa mer</button>
+                    <!-- Comment Section -->
+                    <div class="comments-section">
+                        <h4>Comments:</h4>
+                        <?php
+                        
+                        $commentSql = "SELECT c.commentContent, u.user_name
+                                   FROM comments c
+                                   JOIN users u ON c.user_id = u.id
+                                   WHERE c.blog_id = :blog_id
+                                   ORDER BY c.CreatedDate DESC";
+                        $commentStmt = $pdo->prepare($commentSql);
+                        $commentStmt->bindParam(':blog_id', $post['id'], PDO::PARAM_INT);
+                        $commentStmt->execute();
+                        $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
+
+                        foreach ($comments as $comment): ?>
+                            <div class="comment">
+                                <span id="user">
+                                    <ion-icon name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name']))); ?>:</strong>
+                                </span>
+                                <?php echo htmlspecialchars($comment['commentContent']); ?>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                    <div class="comment">
-                        <span id="user">
-                            <ion-icon name="person-circle"></ion-icon><strong>Bob:</strong>
-                        </span>
-                        Håller med, jag gillade verkligen detta inlägg.
-                    </div>
-                    <div class="comment">
-                        <span id="user">
-                            <ion-icon name="person-circle"></ion-icon><strong>Christer:</strong>
-                        </span>
-                        Bra jobbat! Ser fram emot fler inlägg.
-                    </div>
+
+                    <button class="comment-btn">Comment</button>
+                    <button class="update-btn">Edit post</button>
+
+                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
+                        <!-- Only allow the user who created the post or admins to delete -->
+                        <form action="delete_post.php" method="POST" style="display: inline;">
+                            <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                            <button type="submit" class="delete-btn">Delete post</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
-
-                <button class="comment-btn">Comment</button>
-                <button class="update-btn">Edit post</button>
-
-                <?php if ($isAdmin): ?>
-                    <button class="delete-btn">Delete post</button>
-                <?php endif; ?>
-            </div>
-
-            <div class="post">
-                <p class="post-username"><ion-icon name="person-circle"></ion-icon><?php echo htmlspecialchars($username); ?></p>
-                <img src="https://th.bing.com/th/id/OIP.shzeL1wiYB7Xigzm-vH0AgHaDt?rs=1&pid=ImgDetMain" alt="Blog image" class="post-img">
-                <p class="content short">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, eius aspernatur!
-                    Sequi fuga doloremque soluta dolorem, expedita velit officia.
-                </p>
-                <button class="toggle-btn">Visa mer</button>
-
-                <!-- Comment Section -->
-                <div class="comments-section">
-                    <h4>Comments:</h4>
-                    <div class="comment">
-                        <span id="user">
-                            <ion-icon name="person-circle"></ion-icon><strong>David:</strong>
-                        </span>
-                        Mycket bra skrivet, ser fram emot nästa inlägg!
-                    </div>
-                    <div class="comment">
-                        <span id="user">
-                            <ion-icon name="person-circle"></ion-icon><strong>Eve:</strong>
-                        </span>
-                        Jag älskar hur du skriver!
-                    </div>
-                    <div class="comment">
-                        <span id="user">
-                            <ion-icon name="person-circle"></ion-icon><strong>Frank:</strong>
-                        </span>
-                        Håller med! Väldigt inspirerande.
-                    </div>
-                </div>
-
-                <button class="comment-btn">Comment</button>
-                <button class="update-btn">Edit post</button>
-
-                <?php if ($isAdmin): ?>
-                    <button class="delete-btn">Delete post</button>
-                <?php endif; ?>
-            </div>
+            <?php endforeach; ?>
         </div>
+                            
     </div>
 
 
@@ -161,11 +127,11 @@ $isAdmin = $_SESSION["role"] ?? false;
                 let content = post.querySelector(".content");
                 let button = post.querySelector(".toggle-btn");
 
-                // Check if content is longer than 4 lines
+                
                 let isOverflowing = content.scrollHeight > content.clientHeight;
 
                 if (!isOverflowing) {
-                    button.style.display = "none"; // Hide the button if content is short
+                    button.style.display = "none"; 
                 }
 
                 button.addEventListener("click", function() {
@@ -177,19 +143,35 @@ $isAdmin = $_SESSION["role"] ?? false;
                         this.textContent = "Visa mer";
                     }
                 });
+                
+        const deleteBtn = post.querySelector(".delete-btn");
+        if (deleteBtn) {
+            deleteBtn.addEventListener("click", function(event) {
+                
+                event.preventDefault();
+
+                
+                const confirmed = confirm("Are you sure you want to delete this post?");
+                
+                
+                if (confirmed) {
+                    
+                    const form = post.querySelector("form");
+                    if (form) {
+                        form.submit(); 
+                    }
+                }
+            });
+        }
             });
             document.getElementById("postImage").addEventListener("change", function(event) {
-                const file = event.target.files[0];
-                const imageNames = document.getElementById("image-names");
+                const fileInput = event.target;
+                const fileNameDisplay = document.getElementById("image-names");
 
-                if (file) {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-
-                    reader.onload = function() {
-                        document.getElementById("imageBase64").value = reader.result;
-                        imageNames.textContent = file.name;
-                    };
+                if (fileInput.files.length > 0) {
+                    fileNameDisplay.textContent = fileInput.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = "Upload Image"; 
                 }
             });
             const modal = document.getElementById("postModal");
@@ -215,3 +197,4 @@ $isAdmin = $_SESSION["role"] ?? false;
 </body>
 
 </html>
+ta bort/ redigera användare
