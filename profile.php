@@ -12,14 +12,14 @@ require("PDO.php");
 // }
 
 if (isset($_GET["user_name"])) {
-    $stmt = $pdo->prepare("SELECT 'id', `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
+    $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
     $stmt->bindParam(":user", $_GET["user_name"]);
 
     $stmt->execute();
 } else {
 
 
-    $stmt = $pdo->prepare("SELECT 'id', `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user");
+    $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user");
     $stmt->bindParam(":user", $_SESSION["username"]);
 
     $stmt->execute();
@@ -27,12 +27,11 @@ if (isset($_GET["user_name"])) {
 
 
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
+$_SESSION['follow_id'] = $result['id'];
 //     echo "<br>";
 // var_dump($_SESSION);
 //     echo "<br>";
 // echo "<br>";
-
-// var_dump($result);
 
 ?>
 
