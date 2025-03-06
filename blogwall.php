@@ -113,7 +113,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <h4>comment</h4>
                         <?php
                         
-                        $commentSql = "SELECT c.commentContent, u.user_name
+                        $commentSql = "SELECT c.commentContent, c.CreatedDate , u.user_name
                                    FROM comments c
                                    JOIN users u ON c.user_id = u.id
                                    WHERE c.blog_id = :blog_id
@@ -123,11 +123,11 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         $commentStmt->execute();
                         $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
                         $comments = array_reverse($comments);
-                         
+
                         foreach ($comments as $comment): ?>
                             <div class="comment">
                                 <span id="user">
-                                    <ion-icon name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name']))); ?>:</strong>
+                                    <ion-icon name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name'])))?> </strong> <?php echo "&nbsp;"  . htmlspecialchars($comment["CreatedDate"]); ?>
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
                             </div>
