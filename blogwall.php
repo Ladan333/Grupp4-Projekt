@@ -122,7 +122,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         $commentStmt->bindParam(':blog_id', $post['id'], PDO::PARAM_INT);
                         $commentStmt->execute();
                         $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
-
+                        $comments = array_reverse($comments);
+                         
                         foreach ($comments as $comment): ?>
                             <div class="comment">
                                 <span id="user">
