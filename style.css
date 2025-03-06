@@ -209,11 +209,16 @@ input[type=file] {
 
 .post-img {
     width: 100%;
-    height: auto;
-    border-radius: 5px;
+    height: 250px; /* Set a fixed height */
+    object-fit:contain; /* Ensures the image fills the space without distortion */
     margin-top: 10px;
+    cursor: pointer; /* Makes it clear the image is clickable */
+    transition: transform 0.3s ease;
 }
-
+.post-img:hover {
+    transform: scale(2.05); /* Slight zoom effect on hover */
+    background-color: rgba(0, 0, 0, 0.5);
+}
 .content {
     margin: 10px 0;
     display: -webkit-box;
