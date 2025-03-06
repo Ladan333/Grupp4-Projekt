@@ -588,12 +588,12 @@ nav ul a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
-  margin-right: 8rem;
+  margin-top: 0rem;
+  margin-right: 9rem;
   background: var(--secondarycolor);
   text-align: center;
-  width: 20%;
-  max-width: 400px;
+  width: 40%;
+  max-width: 500px;
   height: 100vw;
   min-height: 300px;
   right: 0;
@@ -855,4 +855,11 @@ th {
   color: var(--textcolor);
   margin: 0.5rem;
   margin-top: 1rem;
+}
+
+.profile-main{
+
+  width: 50%;
+  margin-left: 7rem; 
+  margin-top: 3rem;
 }
