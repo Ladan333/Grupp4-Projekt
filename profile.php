@@ -28,6 +28,7 @@ if (isset($_GET["user_name"])) {
 
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
 $_SESSION['follow_id'] = $result['id'];
+$_SESSION['follow_username'] = $result['user_name'];
 //     echo "<br>";
 // var_dump($_SESSION);
 //     echo "<br>";

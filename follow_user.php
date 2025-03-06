@@ -31,7 +31,9 @@ if (isset($_SESSION['follow_id'])) {
     }
 }
 
-header("Location: profile.php");
+$location = "Location: profile.php?user_name=" . $_SESSION['follow_username'];
+
+header($location);
 exit();
 
 ?>
