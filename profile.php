@@ -59,13 +59,25 @@ $_SESSION['follow_username'] = $result['user_name'];
 
             </div>
             <div class="edit-profile">
-            <?php if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>                
+            <?php 
+            
+            $stmt = $pdo->prepare("SELECT * FROM follows WHERE user_id = :user_id AND follow_id = :follow_id");
+            $stmt->bindParam(":user_id", $_SESSION['id']);
+            $stmt->bindParam(':follow_id', $_SESSION['follow_id']);
+            $stmt->execute();
+            $follow_result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>                
                 <button><a href="edituser.php">Edit profile</a></button>
                 <?php }
-                else { ?>
+                else if (!$follow_result){ ?>
                      <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                      <button type="submit" name="id" value="<?php echo $result['id']; ?>">Follow</button>
-                <?php } ?>
+                <?php } else if ($follow_result) { ?>
+                    <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
+                    <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
+                <?php } ?> 
+                
             </div>
             <div class="profile-info">
 
