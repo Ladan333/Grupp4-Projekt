@@ -12,14 +12,14 @@ require("PDO.php");
 // }
 
 if (isset($_GET["user_name"])) {
-    $stmt = $pdo->prepare("SELECT `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
+    $stmt = $pdo->prepare("SELECT 'id', `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
     $stmt->bindParam(":user", $_GET["user_name"]);
 
     $stmt->execute();
 } else {
 
 
-    $stmt = $pdo->prepare("SELECT `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user");
+    $stmt = $pdo->prepare("SELECT 'id', `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user");
     $stmt->bindParam(":user", $_SESSION["username"]);
 
     $stmt->execute();
@@ -61,6 +61,10 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="edit-profile">
             <?php if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>                
                 <button><a href="edituser.php">Edit profile</a></button>
+                <?php }
+                else { ?>
+                     <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
+                     <button type="submit" name="id" value="<?php echo $result['id']; ?>">Follow</button>
                 <?php } ?>
             </div>
             <div class="profile-info">
