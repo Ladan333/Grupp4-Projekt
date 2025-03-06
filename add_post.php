@@ -14,10 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['title'] ?? 'Untitled';
     $imageBase64 = null;
 
-    
+    $source = $_POST['source'] ?? 'blogwall.php';
+        
     if (empty($content)) {
         $_SESSION['error'] = 'Content cannot be empty.';
-        header("Location: blogwall.php");
+        header("Location: $source");
         exit();
     }
     
@@ -33,13 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         
         $_SESSION['success'] = 'Post added successfully!';
-        header("Location: blogwall.php");
+        header("Location: $source");
         exit();
 
     } catch (PDOException $e) {
         
         $_SESSION['error'] = 'Error: ' . $e->getMessage();
-        header("Location: blogwall.php");
+        header("Location: $source");
         exit();
     }
 }
