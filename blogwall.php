@@ -20,6 +20,33 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+   <?php 
+                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comment_input']) && !empty($_POST['comment_input'])){
+                        if($_POST['comment_input'] != '')
+                        {
+                        $comment = $_POST["comment_input"];
+                        $userid = $_SESSION["id"];
+                        $blog_id = $_POST["blog_id"];
+
+
+                        $stmt = $pdo->prepare( "INSERT INTO comments(commentContent, user_id, blog_id)
+                                                       VALUES(:commentsContent, :userid, :blog_id) ");
+                        
+                        $stmt->bindParam(":commentsContent" , $comment);
+                        $stmt->bindParam(":userid", $userid) ;
+                        $stmt->bindParam(":blog_id", $blog_id, PDO::PARAM_INT);
+
+                        $stmt->execute();
+
+                        // urlencode($comment);
+                        header("Location: " . $_SERVER["PHP_SELF"] . "?id=" . $blog_id);
+                        exit();
+                        };
+                        
+                     
+
+                    }
+                    ?>
 
 
 <!DOCTYPE html>
@@ -76,14 +103,14 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <ion-icon name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
                     </p>
                     <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
-                    <img src="<?php echo $post['image_base64'] ? 'data:image/png;base64,' . $post['image_base64'] : 'https://th.bing.com/th/id/OIP.shzeL1wiYB7Xigzm-vH0AgHaDt?rs=1&pid=ImgDetMain'; ?>" alt="Blog image" class="post-img">
+                    <img src="<?php echo $post['image_base64'] ? 'data:image/png;base64,' . $post['image_base64'] : ''; ?>" alt="" class="post-img">
                     <p class="content short">
                         <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                     </p>
                     <button class="toggle-btn">Visa mer</button>
                     <!-- Comment Section -->
                     <div class="comments-section">
-                        <h4>Comments:</h4>
+                        <h4>comment</h4>
                         <?php
                         
                         $commentSql = "SELECT c.commentContent, u.user_name
@@ -106,7 +133,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php endforeach; ?>
                     </div>
 
-                    <button class="comment-btn">Comment</button>
+                    <form action="" method="post">
+                        <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>" >
+                        <input type="text" name="comment_input" placeholder="comment">
+                        <button class="comment-btn" type="submit">Comment</button>
+                    </form>
+
                     <button class="update-btn">Edit post</button>
 
                     <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
@@ -118,6 +150,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php endif; ?>
                 </div>
             <?php endforeach; ?>
+
+                 
         </div>
                             
     </div>

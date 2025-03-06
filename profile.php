@@ -59,7 +59,7 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             </div>
             <div class="edit-profile">
-           <?php if (isset($_SESSION["username"]) && $_SESSION["username"] === $profile_username) { ?>
+            <?php if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>                
                 <button><a href="edituser.php">Edit profile</a></button>
                 <?php }
                 else { ?>
