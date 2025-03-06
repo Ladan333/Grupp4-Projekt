@@ -26,7 +26,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="sv">
 
 <head>
-    <meta http-equiv="refresh" content="2">
+    <!-- <meta http-equiv="refresh" content="2"> -->
     <title>Adminpanel - Hantera användare och deras inlägg</title>
 </head>
 
@@ -62,7 +62,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($user['role']) ?></td>
                     <td>
                         <div class="edit-buttons">
-                            <a class="edit_user" href="edit_user.php?id=<?= $user['id'] ?>">Redigera</a>
+                            <a class="edit_user" href="edituser.php?id=<?= $user['id'] ?>">Redigera</a>
                             <a class="delete_user" href="delete_user.php?id=<?= $user['id'] ?>"
                                 onclick="return confirm('Är du säker på att du vill ta bort denna användare?')">Ta bort</a>
                         </div>
