@@ -10,15 +10,44 @@ if ($_SESSION['id'] == null) {
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
 
+// blogflow 1 = all posts, blogflow 2 = followed users posts
+if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null){
+    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
+    FROM blogposts bp
+    JOIN users u ON bp.user_id = u.id
+    ORDER BY bp.CreatedDate DESC";
 
 
-$sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
-        FROM blogposts bp
-        JOIN users u ON bp.user_id = u.id
-        ORDER BY bp.CreatedDate DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} else if ($_SESSION["blogflow"] == 2){
+    $stmt = $pdo->prepare("SELECT follow_id FROM follows WHERE user_id = :user_id");
+    $stmt->bindParam(":user_id", $_SESSION['id']);
+    $stmt->execute();
+    $followed_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $followed_users = [];
+    foreach ($followed_results as $result) {
+        array_push($followed_users, $result["follow_id"]);
+    }
+
+    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
+    FROM blogposts bp
+    JOIN users u ON bp.user_id = u.id
+    ORDER BY bp.CreatedDate DESC";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// if post does not have a followed user ID it will be removed from the blogflow
+foreach ($posts as $post) {
+    if (!in_array($post["user_id"], $followed_users)) {
+        $key = array_search($post, $posts);
+        unset($posts[$key]);
+}
+}
+}
 ?>
   
                  
@@ -70,6 +99,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 
+        <form action="change_blogflow.php" method="POST">
+            <button type="submit" class="change-blogflow-btn">Change blogflow</button>
 
         <div class="posts">
             <?php foreach ($posts as $post): ?>
