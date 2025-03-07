@@ -10,15 +10,44 @@ if ($_SESSION['id'] == null) {
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
 
+// blogflow 
+if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null){
+    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
+    FROM blogposts bp
+    JOIN users u ON bp.user_id = u.id
+    ORDER BY bp.CreatedDate DESC";
 
 
-$sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
-        FROM blogposts bp
-        JOIN users u ON bp.user_id = u.id
-        ORDER BY bp.CreatedDate DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else if ($_SESSION["blogflow"] == 2){
+    $stmt = $pdo->prepare("SELECT follow_id FROM follows WHERE user_id = :user_id");
+    $stmt->bindParam(":user_id", $_SESSION['id']);
+    $stmt->execute();
+    $followed_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $followed_users = [];
+    foreach ($followed_results as $result) {
+        array_push($followed_users, $result["follow_id"]);
+    }
+
+foreach ($followed_users as $user) {
+    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
+    FROM blogposts bp
+    JOIN users u ON bp.user_id = u.id
+    WHERE bp.user_id = :user_id
+    ORDER BY bp.CreatedDate DESC";
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(":user_id", $user);
+$stmt->execute();
+$posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$posts = [];
+foreach ($posts_result as $result) {
+    array_push($posts, $result);
+}
+var_dump($posts);
+}
+}
 ?>
    <?php 
                     if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comment_input']) && !empty($_POST['comment_input'])){
@@ -95,6 +124,8 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
 
+        <form action="change_blogflow.php" method="POST">
+            <button type="submit" class="change-blogflow-btn">Change blogflow</button>
 
         <div class="posts">
             <?php foreach ($posts as $post): ?>
