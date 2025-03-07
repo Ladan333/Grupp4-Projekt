@@ -101,11 +101,12 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 </form>
             </div>
         </div>
-
+         
         <form action="change_blogflow.php" method="POST">
             <input type="hidden" name="change_view" value="1";>
             <button type="submit" class="change-blogflow-btn">Change Blogflow</button>
         </form>
+
         <div class="posts">
             <?php foreach ($posts as $post): ?>
                 <div class="post">
@@ -162,10 +163,12 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     </div>
 
                     <form action="AddComments.php" method="POST">
+
                         <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
                         <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 
                         <input class="comment-input" type="text" name="comment_input" placeholder="comment" required>
+
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
 
@@ -282,3 +285,4 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 </body>
 
 </html>
+
