@@ -74,13 +74,14 @@ $_SESSION['follow_username'] = $result['user_name'];
                     <button><a href="edituser.php">Edit profile</a></button>
                 <?php } else if (!$follow_result) { ?>
                         <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
-                            <button type="submit" name="id" value="<?php echo $result['id']; ?>">Follow</button>
+                          <button type="submit"  value="<?php echo $result['id']; ?>">Follow</button>
+                       </form>
                     <?php } else if ($follow_result) { ?>
                                 <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                     <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
-                        <?php } ?>
-
-            </div>
+                        <?php } ?></form>
+                        
+                    </div>
             <div class="profile-info">
 
 
@@ -201,10 +202,12 @@ $_SESSION['follow_username'] = $result['user_name'];
                         </div>
 
                         <form action="Addcomments.php" method="post">
+
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
+                            <?php var_dump($post['id']); ?>
                             <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 
-                            <input class="comment-input" type="text" name="comment_input" placeholder="Comment">
+                            <input class="comment-input" type="text" name="comment_input" placeholder="Comment" required>
                             <button class="comment-btn" type="submit">Comment</button>
                         </form>
 
