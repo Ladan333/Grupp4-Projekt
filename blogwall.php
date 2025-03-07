@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'PDO.php'; 
+require 'PDO.php';
 
 if ($_SESSION['id'] == null) {
     header("Location: index.php");
@@ -11,18 +11,18 @@ $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
 
 // blogflow 1 = all posts, blogflow 2 = followed users posts
-if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null){
+if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
     $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
     FROM blogposts bp
     JOIN users u ON bp.user_id = u.id
     ORDER BY bp.CreatedDate DESC";
 
 
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-} else if ($_SESSION["blogflow"] == 2){
+} else if ($_SESSION["blogflow"] == 2) {
     $stmt = $pdo->prepare("SELECT follow_id FROM follows WHERE user_id = :user_id");
     $stmt->bindParam(":user_id", $_SESSION['id']);
     $stmt->execute();
@@ -36,21 +36,21 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     FROM blogposts bp
     JOIN users u ON bp.user_id = u.id
     ORDER BY bp.CreatedDate DESC";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// if post does not have a followed user ID it will be removed from the blogflow
-foreach ($posts as $post) {
-    if (!in_array($post["user_id"], $followed_users)) {
-        $key = array_search($post, $posts);
-        unset($posts[$key]);
-}
-}
+    // if post does not have a followed user ID it will be removed from the blogflow
+    foreach ($posts as $post) {
+        if (!in_array($post["user_id"], $followed_users)) {
+            $key = array_search($post, $posts);
+            unset($posts[$key]);
+        }
+    }
 }
 ?>
-  
-                 
+
+
 
 
 <!DOCTYPE html>
@@ -60,7 +60,7 @@ foreach ($posts as $post) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    
+
     <title>Home Page</title>
 </head>
 
@@ -86,7 +86,8 @@ foreach ($posts as $post) {
                     <input type="text" id="add-post-title" name="title" required placeholder="Amazing blogwall...">
 
                     <label for="postContent">Post text:</label>
-                    <textarea id="postContent" name="content" rows="4" required placeholder="Skriv ditt inlägg här..."></textarea>
+                    <textarea id="postContent" name="content" rows="4" required
+                        placeholder="Skriv ditt inlägg här..."></textarea>
 
                     <label id="post-text">Upload image:</label>
                     <label for="postImage" class="postImage">
@@ -101,13 +102,15 @@ foreach ($posts as $post) {
         </div>
 
         <form action="change_blogflow.php" method="POST">
-            <button type="submit" class="change-blogflow-btn">Change blogflow</button>
-
+            <input type="hidden" name="change_view" value="1";>
+            <button type="submit" class="change-blogflow-btn">Change Blogflow</button>
+        </form>
         <div class="posts">
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <p class="post-username">
-                        <ion-icon name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
+                        <ion-icon
+                            name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
                     </p>
                     <div class="postDate">
                         <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
@@ -125,7 +128,7 @@ foreach ($posts as $post) {
                     <div class="comments-section">
                         <h4>comment</h4>
                         <?php
-                        
+
 
                         $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name
 
@@ -144,20 +147,22 @@ foreach ($posts as $post) {
                         foreach ($comments as $comment): ?>
                             <div class="comment">
                                 <span id="user">
-                                    <ion-icon name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name'])))?> </strong> <?php echo "&nbsp;"  . htmlspecialchars($comment["CreatedDate"]); ?>
+                                    <ion-icon
+                                        name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+                                    </strong> <?php echo "&nbsp;" . htmlspecialchars($comment["CreatedDate"]); ?>
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
                                 <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
                             </div>
-                            
-                            
+
+
 
                         <?php endforeach; ?>
                     </div>
 
                     <form action="AddComments.php" method="POST">
-                        <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>" >
-                        <input class="comment-input"type="text" name="comment_input" placeholder="comment">
+                        <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
+                        <input class="comment-input" type="text" name="comment_input" placeholder="comment" required>
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
 
@@ -171,14 +176,14 @@ foreach ($posts as $post) {
                         </form>
                         <?php var_dump($_POST); ?>
                     <?php endif; ?>
-                    
+
 
                 </div>
             <?php endforeach; ?>
 
-                 
+
         </div>
-                            
+
     </div>
     <div id="overlay"></div>
 
@@ -186,19 +191,19 @@ foreach ($posts as $post) {
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".post").forEach(post => {
                 let content = post.querySelector(".content");
                 let button = post.querySelector(".toggle-btn");
 
-                
+
                 let isOverflowing = content.scrollHeight > content.clientHeight;
 
                 if (!isOverflowing) {
-                    button.style.display = "none"; 
+                    button.style.display = "none";
                 }
 
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     if (content.classList.contains("short")) {
                         content.classList.remove("short");
                         this.textContent = "Visa mindre";
@@ -207,35 +212,35 @@ foreach ($posts as $post) {
                         this.textContent = "Visa mer";
                     }
                 });
-                
-        // const deleteBtn = post.querySelector(".delete-btn");
-        // if (deleteBtn) {
-        //     deleteBtn.addEventListener("click", function(event) {
-                
-        //         event.preventDefault();
 
-                
-        //         const confirmed = confirm("Are you sure you want to delete this post?");
-                
-                
-        //         if (confirmed) {
-                    
-        //             const form = post.querySelector("form");
-        //             if (form) {
-        //                 form.submit(); 
-        //             }
-        //         }
-        //     });
-        // }
+                // const deleteBtn = post.querySelector(".delete-btn");
+                // if (deleteBtn) {
+                //     deleteBtn.addEventListener("click", function(event) {
+
+                //         event.preventDefault();
+
+
+                //         const confirmed = confirm("Are you sure you want to delete this post?");
+
+
+                //         if (confirmed) {
+
+                //             const form = post.querySelector("form");
+                //             if (form) {
+                //                 form.submit(); 
+                //             }
+                //         }
+                //     });
+                // }
             });
-            document.getElementById("postImage").addEventListener("change", function(event) {
+            document.getElementById("postImage").addEventListener("change", function (event) {
                 const fileInput = event.target;
                 const fileNameDisplay = document.getElementById("image-names");
 
                 if (fileInput.files.length > 0) {
                     fileNameDisplay.textContent = fileInput.files[0].name;
                 } else {
-                    fileNameDisplay.textContent = "Upload Image"; 
+                    fileNameDisplay.textContent = "Upload Image";
                 }
             });
             const modal = document.getElementById("postModal");
@@ -255,23 +260,22 @@ foreach ($posts as $post) {
                     modal.style.display = "none";
                 }
             });
-        const images = document.querySelectorAll(".post-img");
-        const overlay = document.getElementById("overlay");
-        images.forEach(img => {
-        img.addEventListener("mouseenter", () => {
-            overlay.style.visibility = "visible";  // Show the overlay
-            overlay.style.opacity = "1";           // Make it visible
-        });
+            const images = document.querySelectorAll(".post-img");
+            const overlay = document.getElementById("overlay");
+            images.forEach(img => {
+                img.addEventListener("mouseenter", () => {
+                    overlay.style.visibility = "visible";  // Show the overlay
+                    overlay.style.opacity = "1";           // Make it visible
+                });
 
-        img.addEventListener("mouseleave", () => {
-            overlay.style.visibility = "hidden";  // Hide the overlay
-            overlay.style.opacity = "0";           // Fade it out
+                img.addEventListener("mouseleave", () => {
+                    overlay.style.visibility = "hidden";  // Hide the overlay
+                    overlay.style.opacity = "0";           // Fade it out
+                });
+            });
         });
-    });
-    });
     </script>
 
 </body>
 
 </html>
-ta bort/ redigera användare

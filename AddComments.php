@@ -1,5 +1,5 @@
 <?php     
-require"PDO.php";
+require "PDO.php";
 session_start();
 //Kommentarer till inlägg
                     if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comment_input']) && !empty($_POST['comment_input'])){
