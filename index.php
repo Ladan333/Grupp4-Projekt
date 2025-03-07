@@ -3,7 +3,7 @@ session_start();
 require"PDO.php";
 
 
-
+$_SESSION['blogflow'] = 1;
 
 
     if (isset($_SESSION["username"])) {
