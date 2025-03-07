@@ -46,6 +46,7 @@ $_SESSION['follow_username'] = $result['user_name'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="CSS.css">
 
     <!-- <meta http-equiv="refresh" content="2"> -->
     <title>Document</title>
@@ -164,8 +165,9 @@ $_SESSION['follow_username'] = $result['user_name'];
                                 name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
                         </p>
                         <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
-                        <img src="<?php echo $post['image_base64'] ? 'data:image/png;base64,' . $post['image_base64'] : ''; ?>"
-                            alt="" class="post-img">
+                        <?php if (!empty($post['image_base64'])): ?>
+                        <img src="data:image/png;base64,<?php echo $post['image_base64']; ?>" alt="" class="post-img">
+                    <?php endif; ?>
                         <p class="content short">
                             <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                         </p>
@@ -198,9 +200,11 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <?php endforeach; ?>
                         </div>
 
-                        <form action="" method="post">
+                        <form action="Addcomments.php" method="post">
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
-                            <input type="text" name="comment_input" placeholder="comment">
+                            <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+
+                            <input class="comment-input" type="text" name="comment_input" placeholder="Comment">
                             <button class="comment-btn" type="submit">Comment</button>
                         </form>
 
@@ -224,6 +228,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
     </ul>
     </div>
+    <div id="overlay"></div>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
@@ -250,25 +255,25 @@ $_SESSION['follow_username'] = $result['user_name'];
                     }
                 });
 
-                const deleteBtn = post.querySelector(".delete-btn");
-                if (deleteBtn) {
-                    deleteBtn.addEventListener("click", function (event) {
+                // const deleteBtn = post.querySelector(".delete-btn");
+                // if (deleteBtn) {
+                //     deleteBtn.addEventListener("click", function(event) {
 
-                        event.preventDefault();
-
-
-                        const confirmed = confirm("Are you sure you want to delete this post?");
+                //         event.preventDefault();
 
 
-                        if (confirmed) {
+                //         const confirmed = confirm("Are you sure you want to delete this post?");
 
-                            const form = post.querySelector("form");
-                            if (form) {
-                                form.submit();
-                            }
-                        }
-                    });
-                }
+
+                //         if (confirmed) {
+
+                //             const form = post.querySelector("form");
+                //             if (form) {
+                //                 form.submit(); 
+                //             }
+                //         }
+                //     });
+                // }
             });
             document.getElementById("postImage").addEventListener("change", function (event) {
                 const fileInput = event.target;
@@ -297,8 +302,22 @@ $_SESSION['follow_username'] = $result['user_name'];
                     modal.style.display = "none";
                 }
             });
+            const images = document.querySelectorAll(".post-img");
+            const overlay = document.getElementById("overlay");
+            images.forEach(img => {
+                img.addEventListener("mouseenter", () => {
+                    overlay.style.visibility = "visible";  // Show the overlay
+                    overlay.style.opacity = "1";           // Make it visible
+                });
+
+                img.addEventListener("mouseleave", () => {
+                    overlay.style.visibility = "hidden";  // Hide the overlay
+                    overlay.style.opacity = "0";           // Fade it out
+                });
+            });
         });
     </script>
+
 </body>
 
 </html>

@@ -60,6 +60,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="CSS.css">
 
     <title>Home Page</title>
 </head>
@@ -149,7 +150,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                 <span id="user">
                                     <ion-icon
                                         name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
-                                    </strong> <?php echo "&nbsp;" . htmlspecialchars($comment["CreatedDate"]); ?>
+                                    </strong>
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
                                 <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
@@ -162,6 +163,8 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                     <form action="AddComments.php" method="POST">
                         <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
+                        <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+
                         <input class="comment-input" type="text" name="comment_input" placeholder="comment" required>
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
