@@ -33,11 +33,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <?php require "navbar.php"; ?>
     <main class="main-admin_list">
-        <h1>Adminpanel - Hantera användare och deras inlägg</h1>
+        <h1>Edit page</h1>
 
         <!-- Sökfält för att hitta användare baserat på namn eller email -->
         <form method="GET">
-            <input class="searchbar-admin" type="text" name="search" placeholder="Sök efter namn eller email"
+            <input class="searchbar-admin" type="text" name="search" placeholder="Search for a name or email"
                 value="<?= htmlspecialchars($search) ?>">
             <!-- <button class="btn-search-admin" type="submit">Sök</button> -->
         </form>
@@ -46,11 +46,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <table >
             <tr class="table-header">
                 <th>ID</th>
-                <th>Förnamn</th>
-                <th>Efternamn</th>
+                <th>First name</th>
+                <th>Lastname</th>
                 <th>Email</th>
                 <th>Admin*</th>
-                <th>Redigera</th>
+                <th>Edit</th>
             </tr>
 
             <?php foreach ($users as $user): ?>
@@ -62,17 +62,17 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($user['role']) ?></td>
                     <td>
                         <div class="edit-buttons">
-                            <a class="edit_user" href="edituser.php?id=<?= $user['id'] ?>">Redigera</a>
+                            <a class="edit_user" href="edituser.php?id=<?= $user['id'] ?>">Edit</a>
                             <a class="delete_user" href="delete_user.php?id=<?= $user['id'] ?>"
-                                onclick="return confirm('Är du säker på att du vill ta bort denna användare?')">Ta bort</a>
+                                onclick="return confirm('Är du säker på att du vill ta bort denna användare?')">Delete</a>
                         </div>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </table>
-                <p>* 1 = Admin, 0 = Användare</p>
+                <p>* 1 = Admin, 0 = User</p>
         <!-- Länk till en separat sida för att hantera alla inlägg -->
-        <a class="link_to_blogwall" href="posts.php">Gå till inläggshantering</a>
+        <a class="link_to_blogwall" href="posts.php">To posts</a>
 
         <!-- Länk för att skapa ny användare om admin vill -->
         <br><br>

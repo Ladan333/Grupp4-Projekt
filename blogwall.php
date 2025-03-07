@@ -49,33 +49,8 @@ foreach ($posts as $post) {
 }
 }
 ?>
-   <?php 
-                    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comment_input']) && !empty($_POST['comment_input'])){
-                        if($_POST['comment_input'] != '')
-                        {
-                        $comment = $_POST["comment_input"];
-                        $userid = $_SESSION["id"];
-                        $blog_id = $_POST["blog_id"];
-
-
-                        $stmt = $pdo->prepare( "INSERT INTO comments(commentContent, user_id, blog_id)
-                                                       VALUES(:commentsContent, :userid, :blog_id) ");
-                        
-                        $stmt->bindParam(":commentsContent" , $comment);
-                        $stmt->bindParam(":userid", $userid) ;
-                        $stmt->bindParam(":blog_id", $blog_id, PDO::PARAM_INT);
-
-                        $stmt->execute();
-
-                        // urlencode($comment);
-                        header("Location: " . $_SERVER["PHP_SELF"] . "?id=" . $blog_id);
-                        exit();
-                        };
-                        
-                     
-
-                    }
-                    ?>
+  
+                 
 
 
 <!DOCTYPE html>
@@ -150,7 +125,11 @@ foreach ($posts as $post) {
                         <h4>comment</h4>
                         <?php
                         
-                        $commentSql = "SELECT c.commentContent, c.CreatedDate , u.user_name
+
+                        $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name
+
+                       
+
                                    FROM comments c
                                    JOIN users u ON c.user_id = u.id
                                    WHERE c.blog_id = :blog_id
@@ -167,11 +146,15 @@ foreach ($posts as $post) {
                                     <ion-icon name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name'])))?> </strong> <?php echo "&nbsp;"  . htmlspecialchars($comment["CreatedDate"]); ?>
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
+                                <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
                             </div>
+                            
+                            
+
                         <?php endforeach; ?>
                     </div>
 
-                    <form action="" method="post">
+                    <form action="AddComments.php" method="POST">
                         <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>" >
                         <input type="text" name="comment_input" placeholder="comment">
                         <button class="comment-btn" type="submit">Comment</button>
@@ -185,7 +168,10 @@ foreach ($posts as $post) {
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <button type="submit" class="delete-btn">Delete post</button>
                         </form>
+                        <?php var_dump($_POST); ?>
                     <?php endif; ?>
+                    
+
                 </div>
             <?php endforeach; ?>
 
@@ -221,25 +207,25 @@ foreach ($posts as $post) {
                     }
                 });
                 
-        const deleteBtn = post.querySelector(".delete-btn");
-        if (deleteBtn) {
-            deleteBtn.addEventListener("click", function(event) {
+        // const deleteBtn = post.querySelector(".delete-btn");
+        // if (deleteBtn) {
+        //     deleteBtn.addEventListener("click", function(event) {
                 
-                event.preventDefault();
+        //         event.preventDefault();
 
                 
-                const confirmed = confirm("Are you sure you want to delete this post?");
+        //         const confirmed = confirm("Are you sure you want to delete this post?");
                 
                 
-                if (confirmed) {
+        //         if (confirmed) {
                     
-                    const form = post.querySelector("form");
-                    if (form) {
-                        form.submit(); 
-                    }
-                }
-            });
-        }
+        //             const form = post.querySelector("form");
+        //             if (form) {
+        //                 form.submit(); 
+        //             }
+        //         }
+        //     });
+        // }
             });
             document.getElementById("postImage").addEventListener("change", function(event) {
                 const fileInput = event.target;
