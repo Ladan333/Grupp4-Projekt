@@ -98,9 +98,11 @@ foreach ($posts as $post) {
                 </form>
             </div>
         </div>
-
+         
         <form action="change_blogflow.php" method="POST">
-            <button type="submit" class="change-blogflow-btn">Change blogflow</button>
+            <input type="hidden" name="change_view" value="1";>
+            <button type="submit" class="change-blogflow-btn">Change Blogflow</button>
+        </form>
 
         <div class="posts">
             <?php foreach ($posts as $post): ?>
@@ -156,7 +158,7 @@ foreach ($posts as $post) {
 
                     <form action="AddComments.php" method="POST">
                         <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>" >
-                        <input type="text" name="comment_input" placeholder="comment">
+                        <input type="text" name="comment_input" placeholder="comment" required>
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
 
@@ -273,4 +275,3 @@ foreach ($posts as $post) {
 </body>
 
 </html>
-ta bort/ redigera användare
