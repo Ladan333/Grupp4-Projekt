@@ -72,7 +72,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </table>
                 <p>* 1 = Admin, 0 = User</p>
         <!-- Länk till en separat sida för att hantera alla inlägg -->
-        <a class="link_to_blogwall" href="posts.php">To posts</a>
+        <a class="link_to_blogwall" href="blogwall.php">To posts</a>
 
         <!-- Länk för att skapa ny användare om admin vill -->
         <br><br>

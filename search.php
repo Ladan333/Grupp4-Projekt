@@ -15,6 +15,7 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 }
 
 
+
 ?>
 
 
@@ -36,9 +37,9 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 
     <main class="main_search_result">
 
-        <?php if (!empty($result)): ?>
+        <?php if (!empty($result)) { ?>
             <ul>
-                <?php foreach ($result as $row): ?>
+                <?php foreach ($result as $row):  ?>
 
                     <li class="searchResult">
                         <img src="./files/no_picture.jpg" alt="Profile picture" width="50" height="50">
@@ -53,7 +54,11 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
                 <?php endforeach; ?>
 
             </ul>
-        <?php endif; ?>
+            <?php } else { ?>
+                <p class="felmeddelande">Försök igen! Du sökte inte efter en existerande användare.</p>
+                <p class="felmeddelande">Sök efter Namn eller Användarnamn</p>
+                <?php } ?> 
+           
 
     </main>
 </body>
