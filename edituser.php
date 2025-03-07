@@ -2,7 +2,7 @@
 // Startar session för att veta vilken användare som är inloggad
 session_start();
 
-require "PDO.php";// Kopplar till databasen
+require "PDO.php"; // Kopplar till databasen
 
 // Kollar om användaren är inloggad, skickas till login
 if (!isset($_SESSION['id'])) {
@@ -16,7 +16,7 @@ $user_id = isset($_GET['id']) ? $_GET['id'] : $_SESSION['id'];
 
 //Gör SQL-fråga för att hämta inloggad användare
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :user_id");
-$stmt->execute([':user_id' => $user_id]); 
+$stmt->execute([':user_id' => $user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 //var_dump($user);
 // Om formuläret har skickats (POST), uppdatera användarinfo
@@ -56,20 +56,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     // HTML och formulär för redigering börjar här
-}?>
+} ?>
 <!DOCTYPE html>
 <html lang="sv">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css" />
+
     <style>
         body {
             background-color: #121212;
             color: #f8f9fa;
             font-family: 'Arial', sans-serif;
         }
+
+        /* Position the help icon at the bottom right */
+        .help-icon {
+            position: fixed;
+            display: flex;
+            align-items: center;
+            bottom: 20px;
+            right: 20px;
+            font-size: 40px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            padding: 10px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .help-icon::before {
+            content: "Show Tour";
+            position: absolute;
+            top: 50%;
+            right: 60px;
+            /* Positioning tooltip to the left */
+            transform: translateY(-50%);
+            background-color: black;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        /* Show tooltip on hover */
+        .help-icon:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .help-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: 0.3s ease-in-out;
+
+        }
+
+        ion-icon:hover {
+            color: rgb(0, 0, 0);
+            transition: 0.3s ease-in-out;
+
+        }
+
         .container {
             max-width: 600px;
             margin-top: 30px;
@@ -78,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 12px;
             box-shadow: 0px 0px 15px rgba(82, 0, 0, 0.1);
         }
+
         .profile-img {
             width: 150px;
             height: 150px;
@@ -85,14 +144,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 50%;
             border: 3px solid rgb(91, 91, 91);
         }
-        .form-control, .btn {
+
+        .form-control,
+        .btn {
             border-radius: 8px;
         }
+
         .form-label {
             font-weight: bold;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2 class="text-center mb-4">Edit Profile</h2>
@@ -126,6 +189,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
     </div>
+    <!-- Help Icon -->
+    <div class="help-icon" id="start-tour">
+        <ion-icon name="help-circle"></ion-icon>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const driver = window.driver.js.driver;
+
+            const driverObj = driver({
+                showProgress: true,
+                steps: [{
+                        element: ".container",
+                        popover: {
+                            title: "Edit Profile",
+                            description: "Here you can edit your profile details.",
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: "#user_name",
+                        popover: {
+                            title: "Username",
+                            description: "Update your unique username here.",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: "#first_name",
+                        popover: {
+                            title: "First Name",
+                            description: "Update your first name.",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: "#last_name",
+                        popover: {
+                            title: "Last Name",
+                            description: "Update your last name.",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: "#profileContent",
+                        popover: {
+                            title: "Bio",
+                            description: "Write something about yourself.",
+                            side: "top",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: "#profile_image",
+                        popover: {
+                            title: "Profile Picture",
+                            description: "Upload a new profile image.",
+                            side: "top",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".btn-primary",
+                        popover: {
+                            title: "Save Changes",
+                            description: "Click here to save your updated profile.",
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".btn-secondary",
+                        popover: {
+                            title: "Cancel",
+                            description: "Click here to return to the profile page.",
+                            side: "right",
+                            align: 'start'
+                        }
+                    },
+                ]
+            });
+
+            // Start the tour when the help icon is clicked
+            document.getElementById("start-tour").addEventListener("click", function() {
+                driverObj.drive();
+            });
+        });
+    </script>
+
 </body>
+
 </html>
