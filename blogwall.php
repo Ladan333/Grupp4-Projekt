@@ -56,6 +56,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    
     <title>Home Page</title>
 </head>
 
@@ -142,7 +143,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <form action="" method="post">
                         <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>" >
-                        <input type="text" name="comment_input" placeholder="comment">
+                        <input class="comment-input"type="text" name="comment_input" placeholder="comment">
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
 
