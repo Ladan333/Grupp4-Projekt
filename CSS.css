@@ -863,3 +863,15 @@ th {
   margin-left: 7rem; 
   margin-top: 3rem;
 }
+
+.comment-input{
+  flex: 1;
+  width: 20rem;
+  max-width: 50rem;
+  height: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom:.5rem;
+}
