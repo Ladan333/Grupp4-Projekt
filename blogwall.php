@@ -10,7 +10,7 @@ if ($_SESSION['id'] == null) {
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
 
-// blogflow 
+// blogflow 1 = all posts, blogflow 2 = followed users posts
 if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null){
     $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
     FROM blogposts bp
@@ -21,6 +21,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null){
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 } else if ($_SESSION["blogflow"] == 2){
     $stmt = $pdo->prepare("SELECT follow_id FROM follows WHERE user_id = :user_id");
     $stmt->bindParam(":user_id", $_SESSION['id']);
@@ -31,21 +32,20 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         array_push($followed_users, $result["follow_id"]);
     }
 
-foreach ($followed_users as $user) {
     $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
     FROM blogposts bp
     JOIN users u ON bp.user_id = u.id
-    WHERE bp.user_id = :user_id
     ORDER BY bp.CreatedDate DESC";
 $stmt = $pdo->prepare($sql);
-$stmt->bindParam(":user_id", $user);
 $stmt->execute();
-$posts_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$posts = [];
-foreach ($posts_result as $result) {
-    array_push($posts, $result);
+$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// if post does not have a followed user ID it will be removed from the blogflow
+foreach ($posts as $post) {
+    if (!in_array($post["user_id"], $followed_users)) {
+        $key = array_search($post, $posts);
+        unset($posts[$key]);
 }
-var_dump($posts);
 }
 }
 ?>
