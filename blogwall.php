@@ -158,8 +158,9 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                     <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
                                     <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
                                         style="border-radius:50%;"><strong><a
-                                        href="profile.php?user_name=<?= urlencode($post['user_name']) ?>" class="profile-link">
-                                        <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($post['user_name']))) ?>
+                                        href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
+                                        <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+
                                     </a></strong>
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
