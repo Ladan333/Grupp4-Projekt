@@ -104,7 +104,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
          
         <form action="change_blogflow.php" method="POST">
             <input type="hidden" name="change_view" value="1";>
-            <button type="submit" class="change-blogflow-btn">Change Blogflow</button>
+            <button class="comment-btn" type="submit">Change Blogflow</button>
         </form>
 
         <div class="posts">
@@ -180,7 +180,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <button type="submit" class="delete-btn">Delete post</button>
                         </form>
-                        <?php var_dump($_POST); ?>
+                       
                     <?php endif; ?>
 
 
