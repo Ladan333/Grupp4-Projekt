@@ -32,48 +32,36 @@ if (!$user) {
     die(" Error: User not found.");
 }
 //var_dump($user);
-// Om formuläret har skickats (POST), uppdatera användarinfo
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_name = $_POST['user_name'] ?? '';
+    require 'PDO.php'; 
+
+    $user_id = $_GET['id'] ?? $_SESSION['id'];
     $first_name = $_POST['first_name'] ?? '';
     $last_name = $_POST['last_name'] ?? '';
     $profileContent = $_POST['profileContent'] ?? '';
 
+    
+    if (!empty($_FILES['profile_image']['tmp_name'])) {
+        $imageData = file_get_contents($_FILES['profile_image']['tmp_name']); 
+        $imageBase64 = base64_encode($imageData); 
 
-    // Hantera uppladdning av ny profilbild om användaren har valt fil
-    if (!empty($_FILES['profile_image']['name'])) {
-        $targetDir = "uploads/";
-        $fileName = basename($_FILES['profile_image']['name']);
-        $targetFilePath = $targetDir . $fileName;
-        $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
-        // Kolla om det är en giltig bildfil
-        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
-        if (in_array(strtolower($fileType), $allowedTypes)) {
-            // Flytta filen till uploads-mappen
-            move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFilePath);
-
-            // Uppdatera databasen med den nya bildfilens namn
-            $stmt = $pdo->prepare("UPDATE users SET name = ?, profileContent = ?, profile_image = ? WHERE id = ?");
-            $stmt->execute([$name, $profileContent, $fileName, $user_id]);
-        } else {
-            echo "Fel: Endast JPG, JPEG, PNG eller GIF tillåtet.";
-            exit;
-        }
+        
+        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, profileContent = ?, profile_image = ? WHERE id = ?");
+        $stmt->execute([$first_name, $last_name, $profileContent, $imageBase64, $user_id]);
     } else {
-        // Uppdatera bara textinfo
-        $stmt = $pdo->prepare("UPDATE users SET  first_name = ?, last_name = ?, profileContent = ? WHERE id = ?");
+       
+        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, profileContent = ? WHERE id = ?");
         $stmt->execute([$first_name, $last_name, $profileContent, $user_id]);
     }
 
-
+   
     if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != $_SESSION['id']) {
-        header("Location: admin_list.php");
-    } else if (!isset($_GET['id']) || $_GET['id'] == $_SESSION['id']) {
-
-        header("Location: profile.php");
+        header("Location: admin_list.php"); 
+    } else {
+        header("Location: profile.php"); 
     }
-    exit;
+    exit;;
 
 
     // HTML och formulär för redigering börjar här
