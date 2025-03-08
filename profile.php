@@ -160,7 +160,7 @@ $_SESSION['follow_username'] = $result['user_name'];
             <div class="posts">
                 <?php
 
-                $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
+                $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id, u.profile_image
                  FROM blogposts bp
                  JOIN users u ON bp.user_id = u.id
                  ORDER BY bp.CreatedDate DESC";
@@ -174,9 +174,13 @@ $_SESSION['follow_username'] = $result['user_name'];
                     } ?>
                     <div class="post">
                         <p class="post-username">
-                            <ion-icon
-                                name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
-                        </p>
+                            <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "./files/no_picture.jpg"; ?>
+
+                            <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
+                                style="border-radius:50%;"><strong><a
+                                    href="profile.php?user_name=<?= urlencode($post['user_name']) ?>" class="profile-link">
+                                    <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($post['user_name']))) ?>
+                                </a></strong>
                         <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
                         <?php if (!empty($post['image_base64'])): ?>
                             <img src="data:image/png;base64,<?php echo $post['image_base64']; ?>" alt="" class="post-img">
@@ -190,7 +194,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <h4>comment</h4>
                             <?php
 
-                            $commentSql = "SELECT c.commentContent, c.CreatedDate , u.user_name
+                            $commentSql = "SELECT c.commentContent, c.CreatedDate , u.user_name, u.profile_image
                                        FROM comments c
                                        JOIN users u ON c.user_id = u.id
                                        WHERE c.blog_id = :blog_id
@@ -204,9 +208,13 @@ $_SESSION['follow_username'] = $result['user_name'];
                             foreach ($comments as $comment): ?>
                                 <div class="comment">
                                     <span id="user">
-                                        <ion-icon
-                                            name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
-                                        </strong> <?php echo "&nbsp;" . htmlspecialchars($comment["CreatedDate"]); ?>
+                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
+                                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                        style="border-radius:50%;"><strong><a
+                                                href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>"
+                                                class="profile-link">
+                                                <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+                                            </a></strong> <?php echo "&nbsp;" . htmlspecialchars($comment["CreatedDate"]); ?>
                                     </span>
                                     <?php echo htmlspecialchars($comment['commentContent']); ?>
                                 </div>
@@ -216,7 +224,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                         <form action="Addcomments.php" method="post">
 
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
-                            <?php var_dump($post['id']); ?>
+
                             <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 
                             <input class="comment-input" type="text" name="comment_input" placeholder="Comment" required>
