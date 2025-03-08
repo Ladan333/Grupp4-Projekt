@@ -1,8 +1,10 @@
 <?php
 // Startar session för att veta vilken användare som är inloggad
 session_start();
+// Get the user ID from URL or default to logged-in user
 
-require "PDO.php"; // Kopplar till databasen
+
+require 'PDO.php'; // Kopplar till databasen
 
 // Kollar om användaren är inloggad, skickas till login
 if (!isset($_SESSION['id'])) {
@@ -15,14 +17,28 @@ if (!isset($_SESSION['id'])) {
 $user_id = isset($_GET['id']) ? $_GET['id'] : $_SESSION['id'];
 
 //Gör SQL-fråga för att hämta inloggad användare
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = :user_id");
-$stmt->execute([':user_id' => $user_id]);
+// if (!isset($_GET['id']) || empty($_GET['id'])) {
+//     die("❌ Error: No user ID specified.");
+// }
+
+// $user_id = $_GET['id']; // Use ID from URL
+
+// Check if the user exists
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    die(" Error: User not found.");
+}
 //var_dump($user);
 // Om formuläret har skickats (POST), uppdatera användarinfo
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['name'];
-    $profileContent = $_POST['profileContent'];
+    $user_name = $_POST['user_name'] ?? '';
+    $first_name = $_POST['first_name'] ?? '';
+    $last_name = $_POST['last_name'] ?? '';
+    $profileContent = $_POST['profileContent'] ?? '';
+
 
     // Hantera uppladdning av ny profilbild om användaren har valt fil
     if (!empty($_FILES['profile_image']['name'])) {
@@ -46,15 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         // Uppdatera bara textinfo
-        $stmt = $pdo->prepare("UPDATE users SET name = ?, profileContent = ? WHERE id = ?");
-        $stmt->execute([$name, $profileContent, $user_id]);
+        $stmt = $pdo->prepare("UPDATE users SET  first_name = ?, last_name = ?, profileContent = ? WHERE id = ?");
+        $stmt->execute([$first_name, $last_name, $profileContent, $user_id]);
     }
 
-    // Vid "spara" - tillbaka till profil
-    if (isset($_POST['save'])) {
+
+    if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != $_SESSION['id']) {
+        header("Location: admin_list.php");
+    } else if (!isset($_GET['id']) || $_GET['id'] == $_SESSION['id']) {
+
         header("Location: profile.php");
-        exit;
     }
+    exit;
+
+
     // HTML och formulär för redigering börjar här
 } ?>
 <!DOCTYPE html>
@@ -159,25 +180,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <h2 class="text-center mb-4">Edit Profile</h2>
-        <form action="edituser.php" method="post" enctype="multipart/form-data">
+        <form action="edituser.php?id=<?= $user_id ?>" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+
             <div class="text-center mb-3">
                 <img src="./files/no_picture.jpg" alt="Profile picture" class="profile-img">
             </div>
             <div class="mb-3">
                 <label for="user_name" class="form-label">Username</label>
-                <input type="text" id="user_name" name="user_name" class="form-control bg-dark text-light" required>
+                <input type="text" id="user_name" name="user_name" class="form-control bg-dark text-light"
+                    value="<?= htmlspecialchars($user['user_name'] ?? '') ?>" readonly>
             </div>
             <div class="mb-3">
                 <label for="first_name" class="form-label">First Name</label>
-                <input type="text" id="first_name" name="first_name" class="form-control bg-dark text-light" required>
+                <input type="text" id="first_name" name="first_name" class="form-control bg-dark text-light"
+                    value="<?= htmlspecialchars($user['first_name'] ?? '') ?>">
             </div>
             <div class="mb-3">
                 <label for="last_name" class="form-label">Last Name</label>
-                <input type="text" id="last_name" name="last_name" class="form-control bg-dark text-light" required>
+                <input type="text" id="last_name" name="last_name" class="form-control bg-dark text-light"
+                    value="<?= htmlspecialchars($user['last_name'] ?? '') ?>">
             </div>
             <div class="mb-3">
                 <label for="profileContent" class="form-label">Bio</label>
-                <textarea id="profileContent" name="profileContent" class="form-control bg-dark text-light" rows="4" required></textarea>
+                <textarea id="profileContent" name="profileContent" class="form-control bg-dark text-light"
+                    rows="4"><?= htmlspecialchars($user['profileContent'] ?? '') ?></textarea>
             </div>
             <div class="mb-3">
                 <label for="profile_image" class="form-label">Profile Image</label>
@@ -189,6 +216,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
     </div>
+
+
     <!-- Help Icon -->
     <div class="help-icon" id="start-tour">
         <ion-icon name="help-circle"></ion-icon>
@@ -198,88 +227,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const driver = window.driver.js.driver;
 
             const driverObj = driver({
                 showProgress: true,
                 steps: [{
-                        element: ".container",
-                        popover: {
-                            title: "Edit Profile",
-                            description: "Here you can edit your profile details.",
-                            side: "left",
-                            align: 'start'
-                        }
-                    },
-                    {
-                        element: "#user_name",
-                        popover: {
-                            title: "Username",
-                            description: "Update your unique username here.",
-                            side: "bottom",
-                            align: 'start'
-                        }
-                    },
-                    {
-                        element: "#first_name",
-                        popover: {
-                            title: "First Name",
-                            description: "Update your first name.",
-                            side: "bottom",
-                            align: 'start'
-                        }
-                    },
-                    {
-                        element: "#last_name",
-                        popover: {
-                            title: "Last Name",
-                            description: "Update your last name.",
-                            side: "bottom",
-                            align: 'start'
-                        }
-                    },
-                    {
-                        element: "#profileContent",
-                        popover: {
-                            title: "Bio",
-                            description: "Write something about yourself.",
-                            side: "top",
-                            align: 'start'
-                        }
-                    },
-                    {
-                        element: "#profile_image",
-                        popover: {
-                            title: "Profile Picture",
-                            description: "Upload a new profile image.",
-                            side: "top",
-                            align: 'start'
-                        }
-                    },
-                    {
-                        element: ".btn-primary",
-                        popover: {
-                            title: "Save Changes",
-                            description: "Click here to save your updated profile.",
-                            side: "left",
-                            align: 'start'
-                        }
-                    },
-                    {
-                        element: ".btn-secondary",
-                        popover: {
-                            title: "Cancel",
-                            description: "Click here to return to the profile page.",
-                            side: "right",
-                            align: 'start'
-                        }
-                    },
+                    element: ".container",
+                    popover: {
+                        title: "Edit Profile",
+                        description: "Here you can edit your profile details.",
+                        side: "left",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: "#user_name",
+                    popover: {
+                        title: "Username",
+                        description: "Update your unique username here.",
+                        side: "bottom",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: "#first_name",
+                    popover: {
+                        title: "First Name",
+                        description: "Update your first name.",
+                        side: "bottom",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: "#last_name",
+                    popover: {
+                        title: "Last Name",
+                        description: "Update your last name.",
+                        side: "bottom",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: "#profileContent",
+                    popover: {
+                        title: "Bio",
+                        description: "Write something about yourself.",
+                        side: "top",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: "#profile_image",
+                    popover: {
+                        title: "Profile Picture",
+                        description: "Upload a new profile image.",
+                        side: "top",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: ".btn-primary",
+                    popover: {
+                        title: "Save Changes",
+                        description: "Click here to save your updated profile.",
+                        side: "left",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: ".btn-secondary",
+                    popover: {
+                        title: "Cancel",
+                        description: "Click here to return to the profile page.",
+                        side: "right",
+                        align: 'start'
+                    }
+                },
                 ]
             });
 
             // Start the tour when the help icon is clicked
-            document.getElementById("start-tour").addEventListener("click", function() {
+            document.getElementById("start-tour").addEventListener("click", function () {
                 driverObj.drive();
             });
         });
