@@ -1,9 +1,11 @@
 <?php
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 // Starta session för att kunna kolla vem som är inloggad
 session_start();
 
 // Inkluderar databaskopplingen
-require "PDO.php";
+require 'PDO.php';
 
 // Kolla om användaren är inloggad och har rollen "admin"
 if (!isset($_SESSION['role']) || $_SESSION['role'] != '1') {
@@ -14,12 +16,15 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != '1') {
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // SQL-fråga för att hämta användare (filtrerar om vi söker på något)
-$query = "SELECT * FROM users WHERE first_name LIKE :search OR last_name LIKE :search OR email LIKE :search";
+$query = "SELECT * FROM users WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ?";
 $stmt = $pdo->prepare($query);
-$stmt->execute(['search' => "%$search%"]);
+$stmt->execute(["%$search%", "%$search%", "%$search%"]);
 
 // Hämtar en lista av användare
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 ?>
 
 <!DOCTYPE html>
