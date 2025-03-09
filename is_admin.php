@@ -2,6 +2,10 @@
 session_start(); 
 require 'PDO.php';
 
+if ($_SESSION['role'] != 1) {  
+    die("Unauthorized access!");
+}
+
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $user_id = $_GET['id'];
 
