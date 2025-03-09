@@ -48,7 +48,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </form>
 
         <!-- Tabell där vi listar alla användare med information -->
-        <table >
+        <table>
             <tr class="table-header">
                 <th>ID</th>
                 <th>First name</th>
@@ -64,7 +64,16 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($user['first_name']) ?></td>
                     <td><?= htmlspecialchars($user['last_name']) ?></td>
                     <td><?= htmlspecialchars($user['email']) ?></td>
-                    <td><?= htmlspecialchars($user['role']) ?></td>
+                    <td><div class="edit-buttons">
+                        <?php if ($user['role'] == 0)  { ?>
+                            <a class="edit_user_admin" href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Make admin</a>
+
+                        <?php } else { ?>
+                            <a class="delete_user" href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Delete admin</a>
+
+                            <?php } ?>
+                            </div>
+                    </td>
                     <td>
                         <div class="edit-buttons">
                             <a class="edit_user" href="edituser.php?id=<?= $user['id'] ?>">Edit</a>
@@ -75,7 +84,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             <?php endforeach; ?>
         </table>
-                <p>* 1 = Admin, 0 = User</p>
+       
         <!-- Länk till en separat sida för att hantera alla inlägg -->
         <a class="link_to_blogwall" href="blogwall.php">To posts</a>
 
