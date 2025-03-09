@@ -54,7 +54,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>First name</th>
                 <th>Lastname</th>
                 <th>Email</th>
-                <th>Admin*</th>
+                <th>Admin</th>
                 <th>Edit</th>
             </tr>
 
