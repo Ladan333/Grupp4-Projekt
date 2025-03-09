@@ -84,7 +84,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             <?php endforeach; ?>
         </table>
-        <p>* 1 = Admin, 0 = User</p>
+       
         <!-- Länk till en separat sida för att hantera alla inlägg -->
         <a class="link_to_blogwall" href="blogwall.php">To posts</a>
 
