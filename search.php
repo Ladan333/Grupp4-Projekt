@@ -63,7 +63,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
 
     <form action="change_search_results.php" method="POST">
             <input type="hidden" name="change_view" value="1" ;>
-            <button class="comment-btn" type="submit">Change search results</button>
+            <button class="comment-btn" type="submit"><u>Switch between users and blog content!</u></button>
     </form>
 
     <main class="main_search_result">

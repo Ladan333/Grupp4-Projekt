@@ -30,7 +30,7 @@
             </ul>
             <ul>
                 <form action="search.php" method="GET" name="search">
-                    <input class="searchbar" type="text" placeholder="Search user" name="search">
+                    <input class="searchbar" type="text" placeholder="Search for user or post content" name="search">
                     <!-- <button class="buttonsearch" type="submit">Search</button> -->
                 </form>
             </ul>
