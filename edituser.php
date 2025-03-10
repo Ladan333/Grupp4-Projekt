@@ -199,6 +199,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="file" id="profile_image" name="profile_image" class="form-control bg-dark text-light">
             </div>
             <div class="text-center">
+            
+                <form action="delete_post.php" method="POST" name="delete">
+                    <button type="submit" name="delete">Delete profile</button>
+                </form>
+               
                 <button type="submit" name="save" class="btn btn-primary">Save Changes</button>
                 <a href="profile.php" class="btn btn-secondary">Cancel</a>
             </div>

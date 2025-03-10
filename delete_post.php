@@ -22,6 +22,18 @@ else{
     exit();
 }
 
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['delete'])){
+    $stmt = $pdo->prepare("DELETE FROM users WHERE id = :delete-user");
+    $stmt->bindParam(':delete-user', $_POST['id']);
+    $stmt->execute();
+
+
+    header('Location: index.php');
+}
+else{
+    $_SESSION[.error]
+}
+
 
 
 

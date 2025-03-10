@@ -97,6 +97,8 @@ $_SESSION['follow_username'] = $result['user_name'];
                                 <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
                     <?php } ?>
                 </form>
+              
+
 
             </div>
             <div class="profile-info">
