@@ -5,11 +5,6 @@
 session_start();
 require "PDO.php";
 
-
-$_SESSION['blogflow'] = 1;
-$_SESSION['search_sort'] = 1;
-
-
     if (isset($_SESSION["username"])) {
         header("Location: blogwall.php");
         exit();

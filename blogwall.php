@@ -7,15 +7,39 @@ if ($_SESSION['id'] == null) {
     exit();
 }
 
+if (!$_SESSION['blogflow']) {
+    $_SESSION['blogflow'] = 1;
+}
+
+if (!$_SESSION['sorting']) {
+    $_SESSION['sorting'] = 1;
+}
+
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
 
 // blogflow 1 = all posts, blogflow 2 = followed users posts
 if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
+    
+    if ($_SESSION['sorting'] == 1){
     $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id
     FROM blogposts bp
     JOIN users u ON bp.user_id = u.id
     ORDER BY bp.CreatedDate DESC";
+    } else if ($_SESSION['sorting'] == 2){
+        $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
+        FROM blogposts bp
+        JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
+        GROUP BY c.blog_id
+        ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
+    } else if ($_SESSION["sorting"] == 3){
+        $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
+        FROM blogposts bp
+        JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
+        WHERE c.CreatedDate >= NOW() - INTERVAL 1 DAY
+        GROUP BY c.blog_id
+        ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
+    }
 
 
     $stmt = $pdo->prepare($sql);
@@ -31,10 +55,27 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
         array_push($followed_users, $result["follow_id"]);
     }
 
-    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate, bp.image_base64, bp.user_id
-    FROM blogposts bp
-    JOIN users u ON bp.user_id = u.id
-    ORDER BY bp.CreatedDate DESC";
+    if ($_SESSION['sorting'] == 1){
+        $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id
+        FROM blogposts bp
+        JOIN users u ON bp.user_id = u.id
+        ORDER BY bp.CreatedDate DESC";
+        } else if ($_SESSION['sorting'] == 2){
+            $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
+            FROM blogposts bp
+            JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
+            GROUP BY c.blog_id
+            ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
+        } else if ($_SESSION["sorting"] == 3){
+            $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
+            FROM blogposts bp
+            JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
+            WHERE c.CreatedDate >= NOW() - INTERVAL 1 DAY
+            GROUP BY c.blog_id
+            ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
+        }
+
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -164,6 +205,21 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
         <form action="change_blogflow.php" method="POST">
             <input type="hidden" name="change_view" value="1" ;>
             <button class="comment-btn blogflow" type="submit">Change Blogflow</button>
+        </form>
+
+        <form action="sort_blogwall.php" method="POST">
+            <input type="hidden" name="sort_recent" value="2" ;>
+            <button class="comment-btn blogflow" type="submit">Sort by recent posts</button>
+        </form>
+
+        <form action="sort_blogwall.php" method="POST">
+            <input type="hidden" name="sort_comment_count" value="3" ;>
+            <button class="comment-btn blogflow" type="submit">Sort by most comments</button>
+        </form>
+
+        <form action="sort_blogwall.php" method="POST">
+            <input type="hidden" name="sort_activity" value="4" ;>
+            <button class="comment-btn blogflow" type="submit">Sort by recent activity</button>
         </form>
 
 
