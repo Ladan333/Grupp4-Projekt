@@ -3,40 +3,60 @@ session_start();
 session_destroy();
 session_start();
 
-require"PDO.php";
+$cookie_name = "user_session";
+$cookie_value = session_id(); 
+$cookie_time = time() + 3600; 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
+
+
+require "PDO.php";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $recaptcha_secret = "6LdPze8qAAAAAD8w9IMR2K8rnET4AdxIyviyy3z-"; 
+    $recaptcha_response = $_POST['g-recaptcha-response'];
+
+    
+    $verify_url = "https://www.google.com/recaptcha/api/siteverify";
+    $response = file_get_contents($verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
+    $response_data = json_decode($response);
+    if (!$response_data->success) {
+        echo "reCAPTCHA verification failed. Please try again.<br>";
+        echo "<a href='register.php'>Back to page</a>";
+        exit(); 
+    }
+    
     $username = $_POST["username"];
     $password = $_POST["password"];
     $email = $_POST["email"];
     $first_name = $_POST["first_name"];
     $last_name = $_POST["last_name"];
-    
-    $stmt = $pdo->prepare("SELECT user_name FROM users WHERE user_name = :username");
-    $stmt->bindParam(":username", $username);
-    $stmt->execute();
-    $result = $stmt ->fetch(PDO::FETCH_ASSOC);
 
-    $stmt = $pdo->prepare("SELECT email FROM users WHERE email = :email");
+    require "PDO.php";
+
+    $stmt = $pdo->prepare("SELECT user_name FROM users WHERE user_name = :username OR email = :email");
+    $stmt->bindParam(":username", $username);
     $stmt->bindParam(":email", $email);
     $stmt->execute();
-    $result = $stmt ->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$result){
+    if (!$result) {
         $stmt = $pdo->prepare("INSERT INTO users (user_name, pwd, first_name, last_name, email) VALUES (:username, :password, :first_name, :last_name, :email)");
         $stmt->bindParam(":username", $username);
-        $hashwed_password = password_hash($password, PASSWORD_DEFAULT);
-        $stmt->bindParam("password", $hashwed_password);
-        $stmt->bindParam("email", $email);
-        $stmt->bindParam("first_name", $first_name);
-        $stmt->bindParam("last_name", $last_name);
-        if ($stmt->execute()){
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $stmt->bindParam(":password", $hashed_password);
+        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":first_name", $first_name);
+        $stmt->bindParam(":last_name", $last_name);
+
+        if ($stmt->execute()) {
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->bindParam(":email", $email);
-            $stmt ->execute();
+            $stmt->execute();
             $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($userInfo){
+            if ($userInfo) {
+                $_SESSION['id'] = $userInfo['id'];
                 $_SESSION['username'] = $userInfo['user_name'];
                 $_SESSION['first_name'] = $userInfo['first_name'];
                 $_SESSION['last_name'] = $userInfo['last_name'];
@@ -46,15 +66,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 header("Location: blogwall.php");
                 exit();
             }
-        }
-        else {
+        } else {
             header("Location: register.php");
             exit();
         }
-    } else{
+    } else {
         echo "User details already in use";
-    };
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +102,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         <input class="login_Input" name="email" id="email" type="text" placeholder="Email" required><br><br>
 
         <p>All field are required to successfully register!</p>
-        <button class="button" type="submit" value="login">Register</button>
+        <div class="g-recaptcha" data-sitekey="6LdPze8qAAAAACHaleZLBJzS1bXV-oWHmIdfSf9I"></div>
+<br>
+<button class="button" type="submit" value="login">Register</button>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
         <a href="index.php">Back</a>
     
 
