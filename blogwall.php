@@ -216,10 +216,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 </form>
             </div>
         </div>
-
+        <div class="sorting">
         <form action="change_blogflow.php" method="POST">
             <input type="hidden" name="change_view" value="1" ;>
-            <button class="comment-btn blogflow" type="submit">Change Blogflow</button>
+            <button class="comment-btn blogflow" type="submit">Sort by folowers</button>
         </form>
 
         <form action="sort_blogwall.php" method="POST">
@@ -234,8 +234,9 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
         <form action="sort_blogwall.php" method="POST">
             <input type="hidden" name="sort_activity" value="4" ;>
-            <button class="comment-btn blogflow" type="submit">Sort by recent activity</button>
+            <button class="comment-btn blogflow" type="submit">Sort by most recent activity</button>
         </form>
+        </div>
 
 
         <div class="posts">

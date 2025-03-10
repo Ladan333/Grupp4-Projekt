@@ -893,3 +893,10 @@ th {
   font-size: 1rem;
   
 }
+
+.sorting{
+  display:flex; 
+  flex-direction: row;
+  justify-content: center;
+  padding-top:.5rem;
+}
