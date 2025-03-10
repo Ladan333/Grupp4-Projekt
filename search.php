@@ -6,6 +6,10 @@ if ($_SESSION['id'] == null) {
     exit();
 }
 
+if (!$_SESSION['search_sort']) {
+    $_SESSION['search_sort'] = 1;
+}
+
 $result = [];
 
 if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'] == 1) {
