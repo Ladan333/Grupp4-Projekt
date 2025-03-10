@@ -6,6 +6,21 @@ if ($_SESSION['id'] == null) {
     header("Location: index.php");
     exit();
 }
+// Sessioncookie för auto-utloggnuing efter en timme. 
+if (isset($_SESSION['login_time'])) {
+    $session_lifetime = 3600; 
+
+    if (time() - $_SESSION['login_time'] > $session_lifetime) {
+        
+        session_destroy();
+        header("Location: index.php"); 
+        exit();
+    }
+} else {
+    
+    header("Location: index.php");
+    exit();
+}
 
 if (!$_SESSION['blogflow']) {
     $_SESSION['blogflow'] = 1;

@@ -581,7 +581,7 @@ nav ul a {
   padding-left: 1rem;
 }
 
-/* PROFILE.PHP */
+/* PROFILE sidebar */
 
 .profile-sidebar {
   position: absolute;
@@ -868,12 +868,14 @@ th {
   margin-top: 1rem;
 }
 
+
 .profile-main{
 
   width: 50%;
   margin-left: 7rem; 
   margin-top: 3rem;
 }
+
 
 .comment-input{
   flex: 1;
@@ -885,4 +887,9 @@ th {
   border-radius: 5px;
   font-size: 1rem;
   margin-bottom:.5rem;
+}
+
+.login .forgotpass{
+  font-size: 1rem;
+  
 }
