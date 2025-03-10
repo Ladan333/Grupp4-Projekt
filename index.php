@@ -69,6 +69,8 @@ $_SESSION['blogflow'] = 1;
         <input class="login_Input" name="password" id="password" type="password" placeholder="Input password" required>
 
         <button class="button" type="submit" value="login">Login</button>
+        <a class="forgotpass" href="forgotpassword.php">Forgot password?</a>
+        <br>
         <p class="pindex">No account?</p><a href="register.php">Register here</a>
         
     
