@@ -1,6 +1,7 @@
 <?php     
-require"PDO.php";
-session_start();
+require "PDO.php";
+session_start(); 
+
 //Kommentarer till inlägg
                     if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comment_input']) && !empty($_POST['comment_input'])){
                         if($_POST['comment_input'] != '')
@@ -8,7 +9,12 @@ session_start();
                         $comment = $_POST["comment_input"];
                         $userid = $_SESSION["id"];
                         $blog_id = $_POST["blog_id"];
+                        $source = $_POST['source'] ?? 'blogwall.php';
 
+                        if ($source == 'profile.php' && isset($_SESSION['follow_username'])) {
+                            $source = 'profile.php?user_name=' . urlencode($_SESSION['follow_username']);
+                        }
+                        
 
                         $stmt = $pdo->prepare( "INSERT INTO comments(commentContent, user_id, blog_id)
                                                        VALUES(:commentsContent, :userid, :blog_id) ");
@@ -20,7 +26,7 @@ session_start();
                         $stmt->execute();
 
                         // urlencode($comment);
-                        header("Location: blogwall.php ");
+                        header("Location: $source");
                         exit();
                         };
                         

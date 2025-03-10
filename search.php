@@ -1,6 +1,10 @@
 <?php
 session_start();
 require "PDO.php";
+if ($_SESSION['id'] == null) {
+    header("Location: index.php");
+    exit();
+}
 
 $result = [];
 
@@ -13,6 +17,12 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+// Fetch profile image from the database
+
+
+// Set profile image (Base64 or default)
+
+
 
 
 ?>
@@ -36,28 +46,32 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 
     <main class="main_search_result">
 
-        <?php if (!empty($result)): ?>
+        <?php if (!empty($result)) { ?>
             <ul>
                 <?php foreach ($result as $row): ?>
-
+                    <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "./files/no_picture.jpg"; ?>
                     <li class="searchResult">
-                        <img src="./files/no_picture.jpg" alt="Profile picture" width="50" height="50">
-                        <a href="profile.php?user_name=<?php echo urlencode($row['user_name']) ; ?>" class="profile-link">
-                            
-                            <span class="name"><?php echo  htmlspecialchars($row["first_name"]) . " ". htmlspecialchars($row["last_name"]); ?></span>
+                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
+                        <a href="profile.php?user_name=<?php echo urlencode($row['user_name']); ?>" class="profile-link">
+
+                            <span
+                                class="name"><?php echo htmlspecialchars($row["first_name"]) . " " . htmlspecialchars($row["last_name"]); ?></span>
 
                             <span class="username-search"><?php echo htmlspecialchars($row["user_name"]); ?></span>
                         </a>
                     </li>
-                    <!-- <?php var_dump($row);?> -->
+                    <!-- <?php var_dump($row); ?> -->
                 <?php endforeach; ?>
             
 
             </ul>
-        <?php endif; ?>
+        <?php } else { ?>
+            <p class="felmeddelande">Försök igen! Du sökte inte efter en existerande användare.</p>
+            <p class="felmeddelande">Sök efter Namn eller Användarnamn</p>
+        <?php } ?>
+
 
     </main>
 </body>
 
 </html>
-

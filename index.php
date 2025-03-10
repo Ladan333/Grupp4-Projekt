@@ -1,9 +1,12 @@
 <?php
+
+
+
 session_start();
-require"PDO.php";
+require "PDO.php";
 
 
-
+$_SESSION['blogflow'] = 1;
 
 
     if (isset($_SESSION["username"])) {
@@ -63,7 +66,7 @@ require"PDO.php";
         <input class="login_Input" name="username" id="username" type="text" placeholder="Input username"required>
         <br>
         <label for="password">Password</label>
-        <input class="login_Input" name="password" id="password" type="text" placeholder="Input password" required>
+        <input class="login_Input" name="password" id="password" type="password" placeholder="Input password" required>
 
         <button class="button" type="submit" value="login">Login</button>
         <p class="pindex">No account?</p><a href="register.php">Register here</a>

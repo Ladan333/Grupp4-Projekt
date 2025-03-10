@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'PDO.php'; 
+require 'PDO.php';
 
 if ($_SESSION['id'] == null) {
     header("Location: index.php");
@@ -19,31 +19,30 @@ $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
   
-  
-  
-  
-  <!DOCTYPE html>
+                 
+
+
+<!DOCTYPE html>
 <html lang="en">
-    
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css">
-        <title>Home Page</title>
-    </head>
-    
-    <body>
-        <?php require "navbar.php"; ?>
-        
-        <div class="container">
-            <div class="welcome-box">
-                <h2>Welcome to our fantastic blog</h2>
-                <!-- Add Post Button -->
-                <button id="openModalBtn" class="add-post-btn"><ion-icon name="add-circle"></ion-icon> Add Post</button>
-            </div>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Home Page</title>
+</head>
+
+<body>
+    <?php require "navbar.php"; ?>
+
+    <div class="container">
+        <div class="welcome-box">
+            <h2>Welcome to our fantastic blog</h2>
+            <!-- Add Post Button -->
+            <button id="openModalBtn" class="add-post-btn"><ion-icon name="add-circle"></ion-icon> Add Post</button>
+        </div>
 
             
             
@@ -58,32 +57,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     
                     <label for="postContent">Post text:</label>
                     <textarea id="postContent" name="content" rows="4" required placeholder="Skriv ditt inlägg här..."></textarea>
-                    
-                    <label id="post-text">Upload image:</label>
-                    <label for="postImage" class="postImage">
-                        <ion-icon name="cloud-upload-sharp"></ion-icon>
-                        <p id="image-names">Upload image</p>
-                    </label>
-                    <input type="file" id="postImage" name="image" accept="image/*">
-                    
-                    <button type="submit" class="submit-btn">Publish</button>
-                </form>
-            </div>
-          </div>
-                <!-- Edit Post Modal-->
-         <div id="postModal_II" class="modal">
-            <div id="editPostModal" class="modal-content">
-                <span class="close-btn">&times;</span>
-                <h2>Add a new post</h2>
-                <form class="add-post-form" action="edit_post.php" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="edit-user-id" name="edit-id">
-                    <label for="edit-post-title">Title:</label>
-                    <input type="text" id="edit-post-title" name="title" >
-                    <?php echo var_dump($_POST); ?>
-            
-                    <label for="postContent">Post text:</label>
-                    <textarea id="edit-postContent" name="content" rows="4" ></textarea>
-            
+
                     <label id="post-text">Upload image:</label>
                     <label for="postImage" class="postImage">
                         <ion-icon name="cloud-upload-sharp"></ion-icon>
@@ -95,13 +69,19 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </form>
             </div>
         </div>
-        
-        
+
+
         <div class="posts">
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <p class="post-username">
-                        <ion-icon name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
+                        <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "./files/no_picture.jpg"; ?>
+
+                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
+                            style="border-radius:50%;"> <a href="profile.php?user_name=<?= urlencode($post['user_name']) ?>"
+                            class="profile-link">
+                            <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($post['user_name']))) ?>
+                        </a>
                     </p>
                     <div class="postDate">
                         <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
@@ -119,9 +99,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="comments-section">
                         <h4>comment</h4>
                         <?php
-                        
 
-                        $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name
+
+                        $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name, u.profile_image
 
                        
 
@@ -138,20 +118,30 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         foreach ($comments as $comment): ?>
                             <div class="comment">
                                 <span id="user">
-                                    <ion-icon name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name'])))?> </strong> <?php echo "&nbsp;"  . htmlspecialchars($comment["CreatedDate"]); ?>
+                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
+                                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                        style="border-radius:50%;"><strong><a
+                                        href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
+                                        <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+
+                                    </a></strong>
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
                                 <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
                             </div>
-                            
-                            
+
+
 
                         <?php endforeach; ?>
                     </div>
 
                     <form action="AddComments.php" method="POST">
-                        <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>" >
-                        <input type="text" name="comment_input" placeholder="comment">
+
+                        <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
+                        <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+
+                        <input class="comment-input" type="text" name="comment_input" placeholder="comment" required>
+
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
                         <!-- start --->
@@ -181,19 +171,16 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <button type="submit" class="delete-btn">Delete post</button>
                         </form>
-                        <?php var_dump($_POST); ?>
+
                     <?php endif; ?>
-
-
-
                     
 
                 </div>
             <?php endforeach; ?>
 
-                 
+
         </div>
-                            
+
     </div>
     <div id="overlay"></div>
 
@@ -201,19 +188,19 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".post").forEach(post => {
                 let content = post.querySelector(".content");
                 let button = post.querySelector(".toggle-btn");
 
-                
+
                 let isOverflowing = content.scrollHeight > content.clientHeight;
 
                 if (!isOverflowing) {
-                    button.style.display = "none"; 
+                    button.style.display = "none";
                 }
 
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     if (content.classList.contains("short")) {
                         content.classList.remove("short");
                         this.textContent = "Visa mindre";
@@ -222,35 +209,35 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         this.textContent = "Visa mer";
                     }
                 });
-                
-        // const deleteBtn = post.querySelector(".delete-btn");
-        // if (deleteBtn) {
-        //     deleteBtn.addEventListener("click", function(event) {
-                
-        //         event.preventDefault();
 
-                
-        //         const confirmed = confirm("Are you sure you want to delete this post?");
-                
-                
-        //         if (confirmed) {
-                    
-        //             const form = post.querySelector("form");
-        //             if (form) {
-        //                 form.submit(); 
-        //             }
-        //         }
-        //     });
-        // }
+                // const deleteBtn = post.querySelector(".delete-btn");
+                // if (deleteBtn) {
+                //     deleteBtn.addEventListener("click", function(event) {
+
+                //         event.preventDefault();
+
+
+                //         const confirmed = confirm("Are you sure you want to delete this post?");
+
+
+                //         if (confirmed) {
+
+                //             const form = post.querySelector("form");
+                //             if (form) {
+                //                 form.submit(); 
+                //             }
+                //         }
+                //     });
+                // }
             });
-            document.getElementById("postImage").addEventListener("change", function(event) {
+            document.getElementById("postImage").addEventListener("change", function (event) {
                 const fileInput = event.target;
                 const fileNameDisplay = document.getElementById("image-names");
 
                 if (fileInput.files.length > 0) {
                     fileNameDisplay.textContent = fileInput.files[0].name;
                 } else {
-                    fileNameDisplay.textContent = "Upload Image"; 
+                    fileNameDisplay.textContent = "Upload Image";
                 }
             });
             const modal = document.getElementById("postModal");
@@ -270,96 +257,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     modal.style.display = "none";
                 }
             });
-<<<<<<< HEAD
-            //edit button
-          
-
-
-            const modalII = document.getElementById("postModal_II");
-            // const bt = document.getElementById("update_btn");
-
-            // bt.addEventListener("click", function(event) {
-            //     event.preventDefault();
-            //     debugger;
-            //     modalII.style.opacity = "1";
-            //     modalII.style.visibility = "visible";
-            //     modalII.style.display = "flex";
-            // });
-            
-        
-            document.querySelectorAll(".update_btn").forEach(button => {
-                button.addEventListener("click", function(event) {
-                    //Stoppar submit från att skicka POST, skickas via javascript istället
-                    event.preventDefault();
-                    let form = button.closest("form");
-                    let title = form.querySelector("#edit-title").value;
-                    let content = form.querySelector("#edit-content").value;
-                    let id = form.querySelector("#edit-id").value;
-                    
-                    let addPostTitleInput = document.querySelector("#edit-post-title");
-                    if (addPostTitleInput) {
-                        addPostTitleInput.value = title;
-                    }
-                    let editTextAreaInput = document.querySelector("#edit-postContent");
-                    if (editTextAreaInput) {
-                        editTextAreaInput.value = content;
-                    }
-                    let editUserInput = document.querySelector("edit-user-id");
-                    if(editUserInput) {
-                        editUserInput.value = id;
-                    }
-
-                    modalII.style.opacity = "1";
-                    modalII.style.visibility = "visible";
-                    modalII.style.display = "flex";
-                });
-            });
-            
-        
-        
-        
-        // Stäng modal vid klick på close-knappen
-        const closeBtnII = document.querySelector("#postModal_II .close-btn");
-        
-        if (closeBtnII) {
-        closeBtnII.addEventListener("click", function() {
-        modalII.style.display = "none";
-        
-    
-        });
-        
-        
-        }
-        });
-
-    // Hanterar visning av Edit Post-modal
-  
-           
-
-
-    
-
-        // document.addEventListener("DOMContentLoaded", function(){
-
-        //     const modal_II = document.getElementById("postModal_II");
-        //     const update_btn = document.getElementById("update_btn");
-        //     const closeBtn_II = document.querySelector(".close-btn");
-
-        //     update_btn.addEventListener("click", () => {
-        //         modal_II.style.display = "flex";
-        //     });
-
-        //     closeBtn_II.addEventListener("click", () => {
-        //         modal_II.style.display = "none";
-        //     });
-
-        //     window.addEventListener("click", (e) => {
-        //         if (e.target === modal) {
-        //             modal.style.display = "none";
-        //         }
-        //     });
-        // }
-=======
         const images = document.querySelectorAll(".post-img");
         const overlay = document.getElementById("overlay");
         images.forEach(img => {
@@ -374,7 +271,6 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
     });
     });
->>>>>>> 845daf25c965fcab9b2a122ca832e8f70d5f0687
     </script>
 
 </body>

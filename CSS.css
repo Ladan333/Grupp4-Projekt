@@ -812,6 +812,17 @@ th {
   background-color: rgba(98, 98, 98, 0.8);
   border-radius: 5px;
 }
+.edit_user_admin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: colomn;
+  width: 6rem;
+  text-decoration: none;
+  color: var(--textcolor);
+  background-color: rgba(0, 128, 255, 0.8);
+  border-radius: 5px;
+}
 .delete_user{
   display: flex;
   justify-content: center;
@@ -862,4 +873,16 @@ th {
   width: 50%;
   margin-left: 7rem; 
   margin-top: 3rem;
+}
+
+.comment-input{
+  flex: 1;
+  width: 20rem;
+  max-width: 50rem;
+  height: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom:.5rem;
 }

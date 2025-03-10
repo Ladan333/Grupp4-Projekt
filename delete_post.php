@@ -1,6 +1,6 @@
 <?php
 session_start();
-require'PDO.php';
+require 'PDO.php';
 
 
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
