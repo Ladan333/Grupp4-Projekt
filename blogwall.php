@@ -22,11 +22,11 @@ if (isset($_SESSION['login_time'])) {
     exit();
 }
 
-if (!$_SESSION['blogflow']) {
+if (!$_SESSION['blogflow'] == null) {
     $_SESSION['blogflow'] = 1;
 }
 
-if (!$_SESSION['sorting']) {
+if (!$_SESSION['sorting'] == null) {
     $_SESSION['sorting'] = 1;
 }
 
