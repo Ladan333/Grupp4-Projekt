@@ -19,58 +19,84 @@ $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
   
-                 
-
-
-<!DOCTYPE html>
+  
+  
+  
+  <!DOCTYPE html>
 <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <title>Home Page</title>
+    </head>
+    
+    <body>
+        <?php require "navbar.php"; ?>
+        
+        <div class="container">
+            <div class="welcome-box">
+                <h2>Welcome to our fantastic blog</h2>
+                <!-- Add Post Button -->
+                <button id="openModalBtn" class="add-post-btn"><ion-icon name="add-circle"></ion-icon> Add Post</button>
+            </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Home Page</title>
-</head>
-
-<body>
-    <?php require "navbar.php"; ?>
-
-    <div class="container">
-        <div class="welcome-box">
-            <h2>Welcome to our fantastic blog</h2>
-            <!-- Add Post Button -->
-            <button id="openModalBtn" class="add-post-btn"><ion-icon name="add-circle"></ion-icon> Add Post</button>
-        </div>
-
-
-
-        <!-- Add Post Modal -->
-        <div id="postModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn">&times;</span>
+            
+            
+                <!-- Add Post Modal -->
+            <div id="postModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn">&times;</span>
                 <h2>Add a new post</h2>
                 <form class="add-post-form" action="add_post.php" method="POST" enctype="multipart/form-data">
                     <label for="add-post-title">Title:</label>
                     <input type="text" id="add-post-title" name="title" required placeholder="Amazing blogwall...">
-
+                    
                     <label for="postContent">Post text:</label>
                     <textarea id="postContent" name="content" rows="4" required placeholder="Skriv ditt inlägg här..."></textarea>
-
+                    
                     <label id="post-text">Upload image:</label>
                     <label for="postImage" class="postImage">
                         <ion-icon name="cloud-upload-sharp"></ion-icon>
                         <p id="image-names">Upload image</p>
                     </label>
                     <input type="file" id="postImage" name="image" accept="image/*">
-
+                    
+                    <button type="submit" class="submit-btn">Publish</button>
+                </form>
+            </div>
+          </div>
+                <!-- Edit Post Modal-->
+         <div id="postModal_II" class="modal">
+            <div id="editPostModal" class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Add a new post</h2>
+                <form class="add-post-form" action="edit_post.php" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="edit-user-id" name="edit-id">
+                    <label for="edit-post-title">Title:</label>
+                    <input type="text" id="edit-post-title" name="title" >
+                    <?php echo var_dump($_POST); ?>
+            
+                    <label for="postContent">Post text:</label>
+                    <textarea id="edit-postContent" name="content" rows="4" ></textarea>
+            
+                    <label id="post-text">Upload image:</label>
+                    <label for="postImage" class="postImage">
+                        <ion-icon name="cloud-upload-sharp"></ion-icon>
+                        <p id="image-names">Upload image</p>
+                    </label>
+                    <input type="file" id="postImage" name="image" accept="image/*">
+            
                     <button type="submit" class="submit-btn">Publish</button>
                 </form>
             </div>
         </div>
-
-
+        
+        
         <div class="posts">
             <?php foreach ($posts as $post): ?>
                 <div class="post">
@@ -118,8 +144,26 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <input type="text" name="comment_input" placeholder="comment">
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
+                        <!-- start --->
 
-                    <button class="update-btn">Edit post</button>
+                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
+                        <form action="" method="POST">
+                        <input type="hidden" id="edit-id" name="id" value="<?php echo $post['id']; ?>">
+                        <input type="hidden" id="edit-title" name="title" value="<?php echo $post['title']; ?>">
+                        <input type="hidden" id="edit-content" name="edit_content" value="<?php echo $post['blogContent']; ?>">
+                        <button class="update_btn" id="update_btn" type="submit">Edit post</button>
+                        </form> 
+                        
+                    <?php endif; ?>
+
+
+
+                    
+
+
+
+
+                       <!-- end upd-btn-->
 
                     <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
@@ -129,6 +173,9 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </form>
                         <?php var_dump($_POST); ?>
                     <?php endif; ?>
+
+
+
                     
 
                 </div>
@@ -213,10 +260,96 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     modal.style.display = "none";
                 }
             });
+            //edit button
+          
+
+
+            const modalII = document.getElementById("postModal_II");
+            // const bt = document.getElementById("update_btn");
+
+            // bt.addEventListener("click", function(event) {
+            //     event.preventDefault();
+            //     debugger;
+            //     modalII.style.opacity = "1";
+            //     modalII.style.visibility = "visible";
+            //     modalII.style.display = "flex";
+            // });
+            
+        
+            document.querySelectorAll(".update_btn").forEach(button => {
+                button.addEventListener("click", function(event) {
+                    //Stoppar submit från att skicka POST, skickas via javascript istället
+                    event.preventDefault();
+                    let form = button.closest("form");
+                    let title = form.querySelector("#edit-title").value;
+                    let content = form.querySelector("#edit-content").value;
+                    let id = form.querySelector("#edit-id").value;
+                    
+                    let addPostTitleInput = document.querySelector("#edit-post-title");
+                    if (addPostTitleInput) {
+                        addPostTitleInput.value = title;
+                    }
+                    let editTextAreaInput = document.querySelector("#edit-postContent");
+                    if (editTextAreaInput) {
+                        editTextAreaInput.value = content;
+                    }
+                    let editUserInput = document.querySelector("edit-user-id");
+                    if(editUserInput) {
+                        editUserInput.value = id;
+                    }
+
+                    modalII.style.opacity = "1";
+                    modalII.style.visibility = "visible";
+                    modalII.style.display = "flex";
+                });
+            });
+            
+        
+        
+        
+        // Stäng modal vid klick på close-knappen
+        const closeBtnII = document.querySelector("#postModal_II .close-btn");
+        
+        if (closeBtnII) {
+        closeBtnII.addEventListener("click", function() {
+        modalII.style.display = "none";
+        
+    
         });
+        
+        
+        }
+        });
+
+    // Hanterar visning av Edit Post-modal
+  
+           
+
+
+    
+
+        // document.addEventListener("DOMContentLoaded", function(){
+
+        //     const modal_II = document.getElementById("postModal_II");
+        //     const update_btn = document.getElementById("update_btn");
+        //     const closeBtn_II = document.querySelector(".close-btn");
+
+        //     update_btn.addEventListener("click", () => {
+        //         modal_II.style.display = "flex";
+        //     });
+
+        //     closeBtn_II.addEventListener("click", () => {
+        //         modal_II.style.display = "none";
+        //     });
+
+        //     window.addEventListener("click", (e) => {
+        //         if (e.target === modal) {
+        //             modal.style.display = "none";
+        //         }
+        //     });
+        // }
     </script>
 
 </body>
 
 </html>
-ta bort/ redigera användare

@@ -51,6 +51,7 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
                     </li>
                     <!-- <?php var_dump($row);?> -->
                 <?php endforeach; ?>
+            
 
             </ul>
         <?php endif; ?>

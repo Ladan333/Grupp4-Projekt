@@ -2,8 +2,7 @@
 session_start();
 require'PDO.php';
 
-var_dump($_POST);
-var_dump($_SESSION);
+
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
     $post_id = $_POST['post_id'];
 
@@ -11,10 +10,19 @@ $stmt = $pdo->prepare("DELETE FROM blogposts WHERE id = :post_id ");
 $stmt->bindParam(':post_id', $post_id);
 
 $stmt->execute();
+$_SESSION['success'] = 'Post deleted successfully!';
 header("Location: blogwall.php ");
 exit();
+
 }
-?>
+
+else{
+    $_SESSION['error'] = "You dont have permission to delete this post";
+    header("Location: blogwall.php");
+    exit();
+}
+
+
 
 
 
