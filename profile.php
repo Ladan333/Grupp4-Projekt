@@ -3,6 +3,11 @@ session_start();
 $profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["username"];
 require("PDO.php");
 
+if ($_SESSION['id'] == null) {
+    header("Location: index.php");
+    exit();
+}
+
 
 // if(isset($_GET["source"]) && $_GET["source"] == "search"){
 // $stmt = $pdo->prepare("SELECT `name`, user_name, pwd, email, profileContent  FROM users WHERE user_name = :user");

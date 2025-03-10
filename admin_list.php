@@ -9,7 +9,7 @@ require 'PDO.php';
 
 // Kolla om användaren är inloggad och har rollen "admin"
 if (!isset($_SESSION['role']) || $_SESSION['role'] != '1') {
-    die("Du måste vara admin för att se denna sida."); // Enkel säkerhet
+    header("Location: index.php"); // Enkel säkerhet
 }
 
 // Kollar om en sökning har gjorts (via URL)
