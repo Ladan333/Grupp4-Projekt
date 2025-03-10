@@ -6,6 +6,21 @@ if ($_SESSION['id'] == null) {
     header("Location: index.php");
     exit();
 }
+// Sessioncookie för auto-utloggnuing efter en timme. 
+if (isset($_SESSION['login_time'])) {
+    $session_lifetime = 3600; 
+
+    if (time() - $_SESSION['login_time'] > $session_lifetime) {
+        
+        session_destroy();
+        header("Location: index.php"); 
+        exit();
+    }
+} else {
+    
+    header("Location: index.php");
+    exit();
+}
 
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
@@ -182,9 +197,9 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
 
+                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
                     <button class="update-btn">Edit post</button>
 
-                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
                         <form action="delete_post.php" method="POST" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">

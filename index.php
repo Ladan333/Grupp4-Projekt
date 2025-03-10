@@ -1,4 +1,9 @@
 <?php
+$cookie_name = "user_session";
+$cookie_value = session_id(); 
+$cookie_time = time() + 3600; 
+
+setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true); 
 
 
 
@@ -34,7 +39,7 @@ $_SESSION['blogflow'] = 1;
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $result_userinfo['role'];
             $_SESSION['id'] = $result_userinfo['id'];
-          
+            $_SESSION['login_time'] = time();
             header("Location: blogwall.php");
             exit();
         }
