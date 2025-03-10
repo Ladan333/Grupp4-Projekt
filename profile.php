@@ -12,14 +12,14 @@ require("PDO.php");
 // }
 
 if (isset($_GET["user_name"])) {
-    $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
+    $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name, profile_image,  profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
     $stmt->bindParam(":user", $_GET["user_name"]);
 
     $stmt->execute();
 } else {
 
 
-    $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name,   profileContent  FROM users WHERE user_name = :user");
+    $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name, profile_image,  profileContent  FROM users WHERE user_name = :user");
     $stmt->bindParam(":user", $_SESSION["username"]);
 
     $stmt->execute();
@@ -57,10 +57,21 @@ $_SESSION['follow_username'] = $result['user_name'];
     <ul>
 
         <div class="profile-sidebar">
-            <div class="profile-picture">
-                <img src="./files/no_picture.jpg" alt="Profile picture">
+            <?php
 
+            $stmt = $pdo->prepare("SELECT profile_image FROM users WHERE user_name = :user");
+            $stmt->bindParam(":user", $profile_username);
+            $stmt->execute();
+            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+            $profile_img = !empty($userData['profile_image']) ? "data:image/png;base64," . htmlspecialchars($userData['profile_image']) : "./files/no_picture.jpg";
+            ?>
+            <div class="profile-picture">
+                <img src="<?= $profile_img ?>" alt="Profile picture">
             </div>
+
+
             <div class="edit-profile">
                 <?php
 
@@ -74,11 +85,13 @@ $_SESSION['follow_username'] = $result['user_name'];
                     <button><a href="edituser.php">Edit profile</a></button>
                 <?php } else if (!$follow_result) { ?>
                         <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
-                            <button type="submit" name="id" value="<?php echo $result['id']; ?>">Follow</button>
-                    <?php } else if ($follow_result) { ?>
-                                <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
-                                    <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
-                        <?php } ?>
+                            <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
+                        </form>
+                <?php } else if ($follow_result) { ?>
+                            <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
+                                <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
+                    <?php } ?>
+                </form>
 
             </div>
             <div class="profile-info">
@@ -121,7 +134,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                         <h2>Add a new post</h2>
 
                         <form class="add-post-form" action="add_post.php" method="POST" enctype="multipart/form-data">
-                           
+
                             <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 
                             <label for="add-post-title">Title:</label>
@@ -147,7 +160,7 @@ $_SESSION['follow_username'] = $result['user_name'];
             <div class="posts">
                 <?php
 
-                $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
+                $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id, u.profile_image
                  FROM blogposts bp
                  JOIN users u ON bp.user_id = u.id
                  ORDER BY bp.CreatedDate DESC";
@@ -160,14 +173,19 @@ $_SESSION['follow_username'] = $result['user_name'];
                         continue;
                     } ?>
                     <div class="post">
-                        <p class="post-username">
-                            <ion-icon
-                                name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
-                        </p>
+                        <p class="post-username"> 
+                            <!-- hämta ut bilderna innuti loopen på -->
+                            <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "./files/no_picture.jpg"; ?>
+
+                            <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
+                                style="border-radius:50%;"><strong><a
+                                    href="profile.php?user_name=<?= urlencode($post['user_name']) ?>" class="profile-link">
+                                    <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($post['user_name']))) ?>
+                                </a></strong>
                         <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
                         <?php if (!empty($post['image_base64'])): ?>
-                        <img src="data:image/png;base64,<?php echo $post['image_base64']; ?>" alt="" class="post-img">
-                    <?php endif; ?>
+                            <img src="data:image/png;base64,<?php echo $post['image_base64']; ?>" alt="" class="post-img">
+                        <?php endif; ?>
                         <p class="content short">
                             <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                         </p>
@@ -177,7 +195,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <h4>comment</h4>
                             <?php
 
-                            $commentSql = "SELECT c.commentContent, c.CreatedDate , u.user_name
+                            $commentSql = "SELECT c.commentContent, c.CreatedDate , u.user_name, u.profile_image
                                        FROM comments c
                                        JOIN users u ON c.user_id = u.id
                                        WHERE c.blog_id = :blog_id
@@ -191,9 +209,13 @@ $_SESSION['follow_username'] = $result['user_name'];
                             foreach ($comments as $comment): ?>
                                 <div class="comment">
                                     <span id="user">
-                                        <ion-icon
-                                            name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
-                                        </strong> <?php echo "&nbsp;" . htmlspecialchars($comment["CreatedDate"]); ?>
+                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
+                                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                        style="border-radius:50%;"><strong><a
+                                                href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>"
+                                                class="profile-link">
+                                                <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+                                            </a></strong> <?php echo "&nbsp;" . htmlspecialchars($comment["CreatedDate"]); ?>
                                     </span>
                                     <?php echo htmlspecialchars($comment['commentContent']); ?>
                                 </div>
@@ -201,10 +223,12 @@ $_SESSION['follow_username'] = $result['user_name'];
                         </div>
 
                         <form action="Addcomments.php" method="post">
+
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
+
                             <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 
-                            <input class="comment-input" type="text" name="comment_input" placeholder="Comment">
+                            <input class="comment-input" type="text" name="comment_input" placeholder="Comment" required>
                             <button class="comment-btn" type="submit">Comment</button>
                         </form>
 

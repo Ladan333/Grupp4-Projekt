@@ -1,9 +1,11 @@
 <?php
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 // Starta session för att kunna kolla vem som är inloggad
 session_start();
 
 // Inkluderar databaskopplingen
-require "PDO.php";
+require 'PDO.php';
 
 // Kolla om användaren är inloggad och har rollen "admin"
 if (!isset($_SESSION['role']) || $_SESSION['role'] != '1') {
@@ -14,12 +16,15 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != '1') {
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 // SQL-fråga för att hämta användare (filtrerar om vi söker på något)
-$query = "SELECT * FROM users WHERE first_name LIKE :search OR last_name LIKE :search OR email LIKE :search";
+$query = "SELECT * FROM users WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ?";
 $stmt = $pdo->prepare($query);
-$stmt->execute(['search' => "%$search%"]);
+$stmt->execute(["%$search%", "%$search%", "%$search%"]);
 
 // Hämtar en lista av användare
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -43,13 +48,13 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </form>
 
         <!-- Tabell där vi listar alla användare med information -->
-        <table >
+        <table>
             <tr class="table-header">
                 <th>ID</th>
                 <th>First name</th>
                 <th>Lastname</th>
                 <th>Email</th>
-                <th>Admin*</th>
+                <th>Admin</th>
                 <th>Edit</th>
             </tr>
 
@@ -59,7 +64,16 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($user['first_name']) ?></td>
                     <td><?= htmlspecialchars($user['last_name']) ?></td>
                     <td><?= htmlspecialchars($user['email']) ?></td>
-                    <td><?= htmlspecialchars($user['role']) ?></td>
+                    <td><div class="edit-buttons">
+                        <?php if ($user['role'] == 0)  { ?>
+                            <a class="edit_user_admin" href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Make admin</a>
+
+                        <?php } else { ?>
+                            <a class="delete_user" href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Delete admin</a>
+
+                            <?php } ?>
+                            </div>
+                    </td>
                     <td>
                         <div class="edit-buttons">
                             <a class="edit_user" href="edituser.php?id=<?= $user['id'] ?>">Edit</a>
@@ -70,7 +84,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
             <?php endforeach; ?>
         </table>
-                <p>* 1 = Admin, 0 = User</p>
+       
         <!-- Länk till en separat sida för att hantera alla inlägg -->
         <a class="link_to_blogwall" href="blogwall.php">To posts</a>
 

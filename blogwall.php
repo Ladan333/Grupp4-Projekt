@@ -12,7 +12,7 @@ $isAdmin = $_SESSION["role"] ?? false;
 
 // blogflow 1 = all posts, blogflow 2 = followed users posts
 if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
-    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
+    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id
     FROM blogposts bp
     JOIN users u ON bp.user_id = u.id
     ORDER BY bp.CreatedDate DESC";
@@ -32,7 +32,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
         array_push($followed_users, $result["follow_id"]);
     }
 
-    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, bp.CreatedDate, bp.image_base64, bp.user_id
+    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate, bp.image_base64, bp.user_id
     FROM blogposts bp
     JOIN users u ON bp.user_id = u.id
     ORDER BY bp.CreatedDate DESC";
@@ -101,18 +101,24 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 </form>
             </div>
         </div>
-         
+
         <form action="change_blogflow.php" method="POST">
-            <input type="hidden" name="change_view" value="1";>
-            <button type="submit" class="change-blogflow-btn">Change Blogflow</button>
+            <input type="hidden" name="change_view" value="1" ;>
+            <button class="comment-btn" type="submit">Change Blogflow</button>
         </form>
+
 
         <div class="posts">
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <p class="post-username">
-                        <ion-icon
-                            name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
+                        <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "./files/no_picture.jpg"; ?>
+
+                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
+                            style="border-radius:50%;"> <a href="profile.php?user_name=<?= urlencode($post['user_name']) ?>"
+                            class="profile-link">
+                            <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($post['user_name']))) ?>
+                        </a>
                     </p>
                     <div class="postDate">
                         <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
@@ -132,7 +138,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <?php
 
 
-                        $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name
+                        $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name, u.profile_image
 
                        
 
@@ -149,9 +155,13 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         foreach ($comments as $comment): ?>
                             <div class="comment">
                                 <span id="user">
-                                    <ion-icon
-                                        name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
-                                    </strong>
+                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
+                                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                        style="border-radius:50%;"><strong><a
+                                        href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
+                                        <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+
+                                    </a></strong>
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
                                 <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
@@ -180,7 +190,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <button type="submit" class="delete-btn">Delete post</button>
                         </form>
-                        <?php var_dump($_POST); ?>
+
                     <?php endif; ?>
 
 
@@ -285,4 +295,3 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 </body>
 
 </html>
-
