@@ -11,6 +11,8 @@ $_SESSION['sorting'] = 1;
 $_SESSION['blogflow'] = 1;
 require "PDO.php";
 
+$_SESSION['sorting'] = 1;
+$_SESSION['blogflow'] = 1;
     if (isset($_SESSION["username"])) {
         header("Location: blogwall.php");
         exit();
