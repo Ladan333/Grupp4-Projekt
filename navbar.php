@@ -45,7 +45,7 @@
                     <li><a href="blogwall.php">Wall</a></li>
                     <li><a href="logout.php">Logout</a></li>
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
-                        <li><a href="admin.php">Admin</a></li>
+                        <li><a href="admin_list.php">Admin</a></li>
                     <?php endif; ?>
                 <?php endif; ?>
             </ul>

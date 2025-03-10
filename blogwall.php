@@ -103,8 +103,14 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <p class="post-username">
                         <ion-icon name="person-circle"></ion-icon><?php echo htmlspecialchars(ucwords(strtolower($post['user_name']))); ?>
                     </p>
-                    <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
-                    <img src="<?php echo $post['image_base64'] ? 'data:image/png;base64,' . $post['image_base64'] : ''; ?>" alt="" class="post-img">
+                    <div class="postDate">
+                        <h3 class="post-title"><?php echo nl2br(htmlspecialchars($post['title'])); ?></h3>
+                        <p><small>Posted on: <?php echo $post['CreatedDate']; ?></small></p>
+                    </div>
+                    <?php if (!empty($post['image_base64'])): ?>
+                        <img src="data:image/png;base64,<?php echo $post['image_base64']; ?>" alt="" class="post-img">
+                    <?php endif; ?>
+
                     <p class="content short">
                         <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                     </p>
@@ -114,7 +120,11 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <h4>comment</h4>
                         <?php
                         
+
                         $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name
+
+                       
+
                                    FROM comments c
                                    JOIN users u ON c.user_id = u.id
                                    WHERE c.blog_id = :blog_id
@@ -128,7 +138,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         foreach ($comments as $comment): ?>
                             <div class="comment">
                                 <span id="user">
-                                    <ion-icon name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name']))); ?>:</strong>
+                                    <ion-icon name="person-circle"></ion-icon><strong><?php echo htmlspecialchars(ucwords(strtolower($comment['user_name'])))?> </strong> <?php echo "&nbsp;"  . htmlspecialchars($comment["CreatedDate"]); ?>
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
                                 <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
@@ -185,7 +195,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
                             
     </div>
-
+    <div id="overlay"></div>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -260,6 +270,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     modal.style.display = "none";
                 }
             });
+<<<<<<< HEAD
             //edit button
           
 
@@ -348,6 +359,22 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         //         }
         //     });
         // }
+=======
+        const images = document.querySelectorAll(".post-img");
+        const overlay = document.getElementById("overlay");
+        images.forEach(img => {
+        img.addEventListener("mouseenter", () => {
+            overlay.style.visibility = "visible";  // Show the overlay
+            overlay.style.opacity = "1";           // Make it visible
+        });
+
+        img.addEventListener("mouseleave", () => {
+            overlay.style.visibility = "hidden";  // Hide the overlay
+            overlay.style.opacity = "0";           // Fade it out
+        });
+    });
+    });
+>>>>>>> 845daf25c965fcab9b2a122ca832e8f70d5f0687
     </script>
 
 </body>
