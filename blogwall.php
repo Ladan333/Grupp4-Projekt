@@ -22,13 +22,13 @@ if (isset($_SESSION['login_time'])) {
     exit();
 }
 
-if (!$_SESSION['blogflow'] == null) {
-    $_SESSION['blogflow'] = 1;
-}
+// if (!$_SESSION['blogflow'] == null) {
+//     $_SESSION['blogflow'] = 1;
+// }
 
-if (!$_SESSION['sorting'] == null) {
-    $_SESSION['sorting'] = 1;
-}
+// if (!$_SESSION['sorting'] == null) {
+//     $_SESSION['sorting'] = 1;
+// }
 
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;

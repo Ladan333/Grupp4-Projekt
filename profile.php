@@ -8,13 +8,13 @@ if ($_SESSION['id'] == null) {
     exit();
 }
 
-if (!$_SESSION['blogflow'] == null) {
-    $_SESSION['blogflow'] = 1;
-}
+// if (!$_SESSION['blogflow'] == null) {
+//     $_SESSION['blogflow'] = 1;
+// }
 
-if (!$_SESSION['sorting'] == null) {
-    $_SESSION['sorting'] = 1;
-}
+// if (!$_SESSION['sorting'] == null) {
+//     $_SESSION['sorting'] = 1;
+// }
 
 
 // if(isset($_GET["source"]) && $_GET["source"] == "search"){
