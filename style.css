@@ -189,12 +189,17 @@ input[type=file] {
 
 .post {
     width: 80%;
+    min-height: 200px; 
+    min-width: 380px;
+    max-width: 922px; 
     background: white;
     padding: 15px;
-    margin: 2% auto 0%;
+    margin: 2% auto;
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+ 
 }
+
 
 .post-username {
     font-weight: bold;
@@ -239,16 +244,15 @@ input[type=file] {
 .content {
     margin: 10px 0;
     display: -webkit-box;
-    -webkit-line-clamp: auto;
+    -webkit-line-clamp: 4; 
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: all 0.3s ease;
-    word-break: break-word;
-    /* Breaks long words */
-    overflow-wrap: break-word;
-    /* Ensures words wrap properly */
+    word-break: break-word; 
+    overflow-wrap: break-word; 
 }
+
 
 
 .content.short {
