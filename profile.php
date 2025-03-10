@@ -3,6 +3,11 @@ session_start();
 $profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["username"];
 require("PDO.php");
 
+if ($_SESSION['id'] == null) {
+    header("Location: index.php");
+    exit();
+}
+
 
 // if(isset($_GET["source"]) && $_GET["source"] == "search"){
 // $stmt = $pdo->prepare("SELECT `name`, user_name, pwd, email, profileContent  FROM users WHERE user_name = :user");
@@ -173,7 +178,8 @@ $_SESSION['follow_username'] = $result['user_name'];
                         continue;
                     } ?>
                     <div class="post">
-                        <p class="post-username">
+                        <p class="post-username"> 
+                            <!-- hämta ut bilderna innuti loopen på -->
                             <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "./files/no_picture.jpg"; ?>
 
                             <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"

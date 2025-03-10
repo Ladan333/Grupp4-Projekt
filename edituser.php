@@ -41,10 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $last_name = $_POST['last_name'] ?? '';
     $profileContent = $_POST['profileContent'] ?? '';
 
-    
+    //bildhantering sparad via den globala variabeln $_FILES
     if (!empty($_FILES['profile_image']['tmp_name'])) {
         $imageData = file_get_contents($_FILES['profile_image']['tmp_name']); 
-        $imageBase64 = base64_encode($imageData); 
+        $imageBase64 = base64_encode($imageData);  //konvertering av bild
 
         
         $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, profileContent = ?, profile_image = ? WHERE id = ?");
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$first_name, $last_name, $profileContent, $user_id]);
     }
 
-   
+   // skicka tillbaks till rätt sida beroende på vart du ändrar någons uppgifter. Ändrar du dig själv i adminpanelen så kommer du till din egen profil
     if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != $_SESSION['id']) {
         header("Location: admin_list.php"); 
     } else {

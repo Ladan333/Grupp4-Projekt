@@ -3,7 +3,7 @@ session_start();
 session_destroy();
 session_start();
 
-require"PDO.php";
+require "PDO.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $username = $_POST["username"];
@@ -12,15 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $first_name = $_POST["first_name"];
     $last_name = $_POST["last_name"];
     
-    $stmt = $pdo->prepare("SELECT user_name FROM users WHERE user_name = :username");
+    $stmt = $pdo->prepare("SELECT user_name FROM users WHERE user_name = :username OR email = :email");
     $stmt->bindParam(":username", $username);
-    $stmt->execute();
-    $result = $stmt ->fetch(PDO::FETCH_ASSOC);
-
-    $stmt = $pdo->prepare("SELECT email FROM users WHERE email = :email");
     $stmt->bindParam(":email", $email);
     $stmt->execute();
     $result = $stmt ->fetch(PDO::FETCH_ASSOC);
+
+
 
     if (!$result){
         $stmt = $pdo->prepare("INSERT INTO users (user_name, pwd, first_name, last_name, email) VALUES (:username, :password, :first_name, :last_name, :email)");
@@ -37,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($userInfo){
+                $_SESSION['id'] = $userInfo['id'];
                 $_SESSION['username'] = $userInfo['user_name'];
                 $_SESSION['first_name'] = $userInfo['first_name'];
                 $_SESSION['last_name'] = $userInfo['last_name'];

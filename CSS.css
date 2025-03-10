@@ -812,6 +812,17 @@ th {
   background-color: rgba(98, 98, 98, 0.8);
   border-radius: 5px;
 }
+.edit_user_admin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: colomn;
+  width: 6rem;
+  text-decoration: none;
+  color: var(--textcolor);
+  background-color: rgba(0, 128, 255, 0.8);
+  border-radius: 5px;
+}
 .delete_user{
   display: flex;
   justify-content: center;
