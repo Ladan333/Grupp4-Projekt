@@ -1,6 +1,6 @@
 <?php
 session_start();
-require'PDO.php';
+require 'PDO.php';
 
 var_dump($_POST);
 var_dump($_SESSION);
