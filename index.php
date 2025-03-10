@@ -5,12 +5,12 @@ $cookie_time = time() + 3600;
 
 setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true); 
 
-$_SESSION['sorting'] = 1;
-$_SESSION['blogflow'] = 1;
 
 session_start();
 require "PDO.php";
 
+$_SESSION['sorting'] = 1;
+$_SESSION['blogflow'] = 1;
     if (isset($_SESSION["username"])) {
         header("Location: blogwall.php");
         exit();
