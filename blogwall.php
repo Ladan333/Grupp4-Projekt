@@ -22,6 +22,23 @@ if (isset($_SESSION['login_time'])) {
     exit();
 }
 
+
+
+
+if (!isset($_SESSION['sorting'])) {
+    $_SESSION['sorting'] = 1;
+}
+
+if (isset($_SESSION['last_page']) && $_SESSION['last_page'] !== 'blogwall.php' && $_SERVER['PHP_SELF'] === '/blogwall.php') {
+    $_SESSION['sorting'] = 1;
+}
+
+$_SESSION['last_page'] = basename($_SERVER['PHP_SELF']); 
+
+
+
+
+
 // if (!$_SESSION['blogflow'] == null) {
 //     $_SESSION['blogflow'] = 1;
 // }
@@ -217,28 +234,36 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             </div>
         </div>
         <div class="sorting">
+        <?php 
+            if($_SESSION['blogflow'] == 1) { ?> 
         <form action="change_blogflow.php" method="POST">
             <input type="hidden" name="change_view" value="1" ;>
             <button class="comment-btn blogflow" type="submit">Sort by folowers</button>
         </form>
+            <?php } else { ?>
+        <form action="change_blogflow.php" method="POST">
+            <input type="hidden" name="change_view" value="2" ;>
+            <button class="comment-btn blogflow" type="submit">Sort by all posts</button>
+        </form>
+        <?php } ?> 
 
         <form action="sort_blogwall.php" method="POST">
-            <input type="hidden" name="sort_recent" value="2" ;>
+            <input type="hidden" name="sort_recent" value="1" ;>
             <button class="comment-btn blogflow" type="submit">Sort by recent posts</button>
         </form>
 
         <form action="sort_blogwall.php" method="POST">
-            <input type="hidden" name="sort_comment_count" value="3" ;>
+            <input type="hidden" name="sort_comment_count" value="2" ;>
             <button class="comment-btn blogflow" type="submit">Sort by most comments</button>
         </form>
 
         <form action="sort_blogwall.php" method="POST">
-            <input type="hidden" name="sort_activity" value="4" ;>
+            <input type="hidden" name="sort_activity" value="3" ;>
             <button class="comment-btn blogflow" type="submit">Sort by most recent activity</button>
         </form>
         </div>
 
-
+             
         <div class="posts">
             <?php foreach ($posts as $post): ?>
                 <div class="post">

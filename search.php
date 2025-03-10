@@ -8,10 +8,19 @@ if ($_SESSION['id'] == null) {
     header("Location: index.php");
     exit();
 }
-
+//fungerar nu så att om du söker posts men inte hittar det du söker och söker igen så kommer den fortsätta söka på posts. 
+// men lämnar den sidan så defaultar den till sökning av användare. 
 if (!isset($_SESSION['search_sort'])) {
     $_SESSION['search_sort'] = 1;
 }
+
+
+
+if (isset($_SESSION['last_page']) && $_SESSION['last_page'] !== 'search.php' && $_SERVER['PHP_SELF'] === '/search.php') {
+    $_SESSION['search_sort'] = 1;
+}
+
+$_SESSION['last_page'] = basename($_SERVER['PHP_SELF']); 
 
 $result = [];
 

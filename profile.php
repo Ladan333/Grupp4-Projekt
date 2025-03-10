@@ -8,6 +8,16 @@ if ($_SESSION['id'] == null) {
     exit();
 }
 
+if (!isset($_SESSION['sorting'])) {
+    $_SESSION['sorting'] = 1;
+}
+
+if (isset($_SESSION['last_page']) && $_SESSION['last_page'] !== 'profile.php' && $_SERVER['PHP_SELF'] === '/profile.php') {
+    $_SESSION['sorting'] = 1;
+}
+
+$_SESSION['last_page'] = basename($_SERVER['PHP_SELF']); 
+
 // if (!$_SESSION['blogflow'] == null) {
 //     $_SESSION['blogflow'] = 1;
 // }
