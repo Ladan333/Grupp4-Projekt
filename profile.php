@@ -169,7 +169,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     </div>
                 </div>
             <?php } ?>
-
+                <div class="sorting">
             <form action="sort_blogwall_profile.php" method="POST">
             <input type="hidden" name="sort_recent" value="2" ;>
             <button class="comment-btn blogflow" type="submit">Sort by recent posts</button>
@@ -184,6 +184,7 @@ $_SESSION['follow_username'] = $result['user_name'];
             <input type="hidden" name="sort_activity" value="4" ;>
             <button class="comment-btn blogflow" type="submit">Sort by recent activity</button>
             </form>
+            </div>
 
             <div class="posts">
                 <?php
