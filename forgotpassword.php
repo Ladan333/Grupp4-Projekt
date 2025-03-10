@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $mail->Password = 'Blog123456';
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                 $mail->Port = 465;
-                
+
 
                 $mail->setFrom('no-reply@theblogwall.se', 'The Blog Wall');
                 $mail->addAddress($result_userinfo['email'], $result_userinfo['user_name']);
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <p>Ditt nya lösenord är: <strong>$password</strong></p>
                                 <p>Logga in här: <a href='https://theblogwall.se'>The Blog Wall</a></p>
                                 <p>Vänligen ändra ditt lösenord så snart som möjligt under profilen!</p>";
-                $mail->AltBody = "Hej {$result_userinfo['user_name']},\n\nDitt nya lösenord är: $password\n\nLogga in här: https://theblogwall.se\n\nVänligen ändra ditt lösenord så snart som möjligt.";
+                $mail->AltBody = "Hej {$result_userinfo['user_name']},\n\nDitt nya lösenord är: $password\n\n";
 
 
                 if ($mail->send()) {
