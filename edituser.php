@@ -200,14 +200,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="text-center">
             
-                <form action="delete_post.php" method="POST" name="delete">
-                    <button type="submit" name="delete">Delete profile</button>
-                </form>
+            
                
                 <button type="submit" name="save" class="btn btn-primary">Save Changes</button>
                 <a href="profile.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
+
+            <form action="delete_post.php" method="post" onsubmit="return confirmDelete()">
+                <input type="hidden" name="deletes" value="<?php echo $_SESSION['id']?>">
+                <button type="submit" >Delete profile</button>
+            </form>
+            
+            
+                <script>
+                    function confirmDelete(){
+                        return confirm("Delete your account? cant undo this.....");
+                    }
+                </script>
     </div>
 
 
