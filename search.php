@@ -69,7 +69,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <!-- <link rel="stylesheet" href="CSS.css"> -->
+    <link rel="stylesheet" href="CSS.css">
 
     <title>Document</title>
 </head>
@@ -103,6 +103,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
             
 
             </ul>
+           
         <?php } else if (!empty($posts) && $_SESSION['search_sort'] == 2) { ?>
             <div class="posts">
             <?php foreach ($posts as $post): ?>
