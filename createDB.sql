@@ -42,6 +42,15 @@ CREATE TABLE IF NOT EXISTS follows (
 
 );
 
+CREATE TABLE IF NOT EXISTS likes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES blogposts(id) ON DELETE CASCADE,
+    UNIQUE(user_id, post_id) -- En användare kan bara gilla ett inlägg en gång
+);
+
 ALTER TABLE blogposts
 ADD COLUMN image_base64 MEDIUMTEXT;
 
@@ -218,5 +227,14 @@ VALUES
 --     friends JSON,  /*spara friends här*/
 
 -- );
+/* Databas för likes
+CREATE TABLE likes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES blogposts(id) ON DELETE CASCADE,
+    UNIQUE(user_id, post_id) -- En användare kan bara gilla ett inlägg en gång
+);
 
 
