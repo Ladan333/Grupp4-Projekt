@@ -100,6 +100,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                     </li>
                     <!-- <?php var_dump($row); ?> -->
                 <?php endforeach; ?>
+            
 
             </ul>
         <?php } else if (!empty($posts) && $_SESSION['search_sort'] == 2) { ?>
