@@ -51,6 +51,19 @@ CREATE TABLE IF NOT EXISTS likes (
     UNIQUE(user_id, post_id) -- En användare kan bara gilla ett inlägg en gång
 );
 
+CREATE TABLE IF NOT EXISTS dm (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    respond BOOLEAN DEFAULT TRUE,
+    message_content TEXT NOT NULL,
+    sender_id INT NOT NULL,
+    responder_id INT NOT NULL,
+    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (responder_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(sender_id, responder_id) -- En användare kan inte dma sig själv
+);
+
+
+
 ALTER TABLE blogposts
 ADD COLUMN image_base64 MEDIUMTEXT;
 
