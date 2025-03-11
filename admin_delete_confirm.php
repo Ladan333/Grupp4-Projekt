@@ -5,7 +5,7 @@ require 'PDO.php';
 // Hämta id från URL
 if (!isset($_GET['id'])) {
     $_SESSION['message'] = "Ingen användare vald.";
-    header("Location: users.php");
+    header("Location: admin_list.php");
     exit;
 }
 
@@ -18,7 +18,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
     $_SESSION['message'] = "Användaren hittades inte.";
-    header("Location: users.php");
+    header("Location: admin_list.php");
     exit;
 }
 
