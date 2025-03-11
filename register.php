@@ -32,13 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $first_name = $_POST["first_name"];
     $last_name = $_POST["last_name"];
 
-    require "PDO.php";
+   
 
     $stmt = $pdo->prepare("SELECT user_name FROM users WHERE user_name = :username OR email = :email");
     $stmt->bindParam(":username", $username);
     $stmt->bindParam(":email", $email);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // var_dump($result);
+    // exit;
 
     if (!$result) {
         $stmt = $pdo->prepare("INSERT INTO users (user_name, pwd, first_name, last_name, email) VALUES (:username, :password, :first_name, :last_name, :email)");
@@ -62,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['last_name'] = $userInfo['last_name'];
                 $_SESSION['email'] = $userInfo['email'];
                 $_SESSION['role'] = $userInfo['role'];
+                $_SESSION['login_time'] = time();
 
                 header("Location: blogwall.php");
                 exit();

@@ -11,19 +11,18 @@ if (!isset($_SESSION['id'])) {
     header("Location: index.php");
     exit;
 }
-
+if (isset($_SESSION['password_updated'])) {
+    echo '<div class="alert alert-success">' . $_SESSION['password_updated'] . '</div>';
+    unset($_SESSION['password_updated']);
+} elseif (isset($_SESSION['password_error'])) {
+    echo '<div class="alert alert-danger">' . $_SESSION['password_error'] . '</div>';
+    unset($_SESSION['password_error']);
+}
 
 // Hämtar användarens data från databas
 $user_id = isset($_GET['id']) ? $_GET['id'] : $_SESSION['id'];
 
-//Gör SQL-fråga för att hämta inloggad användare
-// if (!isset($_GET['id']) || empty($_GET['id'])) {
-//     die("❌ Error: No user ID specified.");
-// }
 
-// $user_id = $_GET['id']; // Use ID from URL
-
-// Check if the user exists
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -31,37 +30,78 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$user) {
     die(" Error: User not found.");
 }
-//var_dump($user);
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require 'PDO.php'; 
+    require 'PDO.php';
+
+    if (isset($_POST['change_password'])) {
+        $user_id = $_SESSION['id'];
+        $old_password = $_POST['old_password'];
+        $new_password = $_POST['new_password'];
+
+   
+        $stmt = $pdo->prepare("SELECT pwd FROM users WHERE id = ?");
+        $stmt->execute([$user_id]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            $_SESSION['password_error'] = "Error: User not found.";
+            header("Location: edituser.php");
+            exit();
+        }
+
+   
+        if (!password_verify($old_password, $user['pwd'])) {
+            $_SESSION['password_error'] = "Incorrect current password.";
+            header("Location: edituser.php");
+            exit();
+        }
+
+       
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+        
+        $stmt = $pdo->prepare("UPDATE users SET pwd = ? WHERE id = ?");
+        if ($stmt->execute([$hashed_password, $user_id])) {
+            $_SESSION['password_updated'] = "Password updated successfully.";
+        } else {
+            $_SESSION['password_error'] = "Failed to update password. Try again.";
+        }
+
+        header("Location: edituser.php");
+        exit();
+    }
+
 
     $user_id = $_GET['id'] ?? $_SESSION['id'];
     $first_name = $_POST['first_name'] ?? '';
     $last_name = $_POST['last_name'] ?? '';
     $profileContent = $_POST['profileContent'] ?? '';
+    $email = $_POST['email'] ??'';
 
     //bildhantering sparad via den globala variabeln $_FILES
     if (!empty($_FILES['profile_image']['tmp_name'])) {
-        $imageData = file_get_contents($_FILES['profile_image']['tmp_name']); 
+        $imageData = file_get_contents($_FILES['profile_image']['tmp_name']);
         $imageBase64 = base64_encode($imageData);  //konvertering av bild
 
-        
-        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, profileContent = ?, profile_image = ? WHERE id = ?");
-        $stmt->execute([$first_name, $last_name, $profileContent, $imageBase64, $user_id]);
+
+        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ?, profile_image = ? WHERE id = ?");
+        $stmt->execute([$first_name, $last_name, $profileContent, $email, $imageBase64, $user_id]);
     } else {
-       
-        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, profileContent = ? WHERE id = ?");
-        $stmt->execute([$first_name, $last_name, $profileContent, $user_id]);
+
+        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ? WHERE id = ?");
+        $stmt->execute([$first_name, $last_name, $email, $profileContent, $user_id]);
     }
 
-   // skicka tillbaks till rätt sida beroende på vart du ändrar någons uppgifter. Ändrar du dig själv i adminpanelen så kommer du till din egen profil
+    // skicka tillbaks till rätt sida beroende på vart du ändrar någons uppgifter. Ändrar du dig själv i adminpanelen så kommer du till din egen profil
     if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != $_SESSION['id']) {
-        header("Location: admin_list.php"); 
+        header("Location: admin_list.php");
     } else {
-        header("Location: profile.php"); 
+        header("Location: profile.php");
     }
-    exit;;
+    exit;
+    ;
 
 
     // HTML och formulär för redigering börjar här
@@ -170,9 +210,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2 class="text-center mb-4">Edit Profile</h2>
         <form action="edituser.php?id=<?= $user_id ?>" method="post" enctype="multipart/form-data">
             <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+            <?php
 
+           
+
+
+            $profile_img = !empty($user['profile_image']) ? "data:image/png;base64," . htmlspecialchars($user['profile_image']) : "./files/no_picture.jpg";?>
             <div class="text-center mb-3">
-                <img src="./files/no_picture.jpg" alt="Profile picture" class="profile-img">
+                <img src="<?= $profile_img ?>" alt="Profile picture" class="profile-img">
             </div>
             <div class="mb-3">
                 <label for="user_name" class="form-label">Username</label>
@@ -190,6 +235,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     value="<?= htmlspecialchars($user['last_name'] ?? '') ?>">
             </div>
             <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" name="email" class="form-control bg-dark text-light"
+                    value="<?= htmlspecialchars($user['email'] ?? '') ?>">
+            </div>
+            <div class="mb-3">
                 <label for="profileContent" class="form-label">Bio</label>
                 <textarea id="profileContent" name="profileContent" class="form-control bg-dark text-light"
                     rows="4"><?= htmlspecialchars($user['profileContent'] ?? '') ?></textarea>
@@ -203,6 +253,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="profile.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
+        <form action="edituser.php?id=<?= $user_id ?>" method="POST">
+            <input type="hidden" name="change_password" value="1">
+
+            <div class="mb-3">
+                <label for="old_password" class="form-label">Current Password</label>
+                <input type="password" id="old_password" name="old_password" class="form-control bg-dark text-light"
+                    required>
+            </div>
+            <div class="mb-3">
+                <label for="new_password" class="form-label">New Password</label>
+                <input type="password" id="new_password" name="new_password" class="form-control bg-dark text-light"
+                    required>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </div>
+        </form>
+
     </div>
 
 

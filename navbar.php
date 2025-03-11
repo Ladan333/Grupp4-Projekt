@@ -17,7 +17,7 @@
 
     <body>
         <nav>
-            <ul>
+            <ul class="the-wall">
                 <?php if (isset($_SESSION['username'])): ?>
                     <a href="blogwall.php" class="wall-link"><h2>The Wall</h2></a>
                         
@@ -30,7 +30,7 @@
             </ul>
             <ul>
                 <form action="search.php" method="GET" name="search">
-                    <input class="searchbar" type="text" placeholder="Search user" name="search">
+                    <input class="searchbar" type="text" placeholder="Search for user or post content" name="search">
                     <!-- <button class="buttonsearch" type="submit">Search</button> -->
                 </form>
             </ul>
