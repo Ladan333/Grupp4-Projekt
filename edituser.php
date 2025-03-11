@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $first_name = $_POST['first_name'] ?? '';
     $last_name = $_POST['last_name'] ?? '';
     $profileContent = $_POST['profileContent'] ?? '';
+    $email = $_POST['email'] ??'';
 
     //bildhantering sparad via den globala variabeln $_FILES
     if (!empty($_FILES['profile_image']['tmp_name'])) {
@@ -85,12 +86,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $imageBase64 = base64_encode($imageData);  //konvertering av bild
 
 
-        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, profileContent = ?, profile_image = ? WHERE id = ?");
-        $stmt->execute([$first_name, $last_name, $profileContent, $imageBase64, $user_id]);
+        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ?, profile_image = ? WHERE id = ?");
+        $stmt->execute([$first_name, $last_name, $profileContent, $email, $imageBase64, $user_id]);
     } else {
 
-        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, profileContent = ? WHERE id = ?");
-        $stmt->execute([$first_name, $last_name, $profileContent, $user_id]);
+        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ? WHERE id = ?");
+        $stmt->execute([$first_name, $last_name, $email, $profileContent, $user_id]);
     }
 
     // skicka tillbaks till rätt sida beroende på vart du ändrar någons uppgifter. Ändrar du dig själv i adminpanelen så kommer du till din egen profil
@@ -209,9 +210,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2 class="text-center mb-4">Edit Profile</h2>
         <form action="edituser.php?id=<?= $user_id ?>" method="post" enctype="multipart/form-data">
             <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+            <?php
 
+           
+
+
+            $profile_img = !empty($user['profile_image']) ? "data:image/png;base64," . htmlspecialchars($user['profile_image']) : "./files/no_picture.jpg";?>
             <div class="text-center mb-3">
-                <img src="./files/no_picture.jpg" alt="Profile picture" class="profile-img">
+                <img src="<?= $profile_img ?>" alt="Profile picture" class="profile-img">
             </div>
             <div class="mb-3">
                 <label for="user_name" class="form-label">Username</label>
@@ -227,6 +233,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="last_name" class="form-label">Last Name</label>
                 <input type="text" id="last_name" name="last_name" class="form-control bg-dark text-light"
                     value="<?= htmlspecialchars($user['last_name'] ?? '') ?>">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" name="email" class="form-control bg-dark text-light"
+                    value="<?= htmlspecialchars($user['email'] ?? '') ?>">
             </div>
             <div class="mb-3">
                 <label for="profileContent" class="form-label">Bio</label>
