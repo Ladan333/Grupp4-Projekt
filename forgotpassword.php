@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $mail->Password = 'Blog123456';
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                 $mail->Port = 465;
-
+                
 
                 $mail->setFrom('no-reply@theblogwall.se', 'The Blog Wall');
                 $mail->addAddress($result_userinfo['email'], $result_userinfo['user_name']);
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -117,4 +117,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </body>
 
-</html>
+</html> -->

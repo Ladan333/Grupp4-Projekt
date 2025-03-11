@@ -5,7 +5,7 @@ require 'PDO.php';
 // Hämta id från URL
 if (!isset($_GET['id'])) {
     $_SESSION['message'] = "Ingen användare vald.";
-    header("Location: users.php");
+    header("Location: admin_list.php");
     exit;
 }
 
@@ -18,7 +18,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
     $_SESSION['message'] = "Användaren hittades inte.";
-    header("Location: users.php");
+    header("Location: admin_list.php");
     exit;
 }
 
@@ -35,7 +35,7 @@ $full_name = htmlspecialchars($user['first_name'] . ' ' . $user['last_name']);
 <h1>Bekräfta borttagning</h1>
 <p>Är du säker på att du vill ta bort användaren <strong><?= $full_name ?></strong>?</p>
 
-<form method="POST" action="delete_user.php">
+<form method="POST" action="admin_delete_user.php">
     <input type="hidden" name="id" value="<?= $user_id ?>">
     <button type="submit">Ja, ta bort</button>
     <a href="users.php">Nej, gå tillbaka</a>

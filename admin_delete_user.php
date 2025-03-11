@@ -5,7 +5,7 @@ require 'PDO.php';
 // Kontrollera om id har skickats via POST
 if (!isset($_POST['id'])) {
     $_SESSION['message'] = "Ingen användare vald.";
-    header("Location: users.php");
+    header("Location: admin_list.php");
     exit;
 }
 
@@ -18,7 +18,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
     $_SESSION['message'] = "Användaren hittades inte.";
-    header("Location: users.php");
+    header("Location: admin_list.php");
     exit;
 }
 
@@ -32,5 +32,5 @@ $deleteStmt->execute([$user_id]);
 $_SESSION['message'] = "Användaren $full_name är nu borttagen.";
 
 // Skicka tillbaka till users.php
-header("Location: users.php");
+header("Location: admin_list.php");
 exit;

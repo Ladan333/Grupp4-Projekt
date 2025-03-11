@@ -4,6 +4,7 @@
   --bordercolor: #000000;
   --secondarycolor: #b9b9b9;
 }
+
 @font-face {
   font-family: "Leche Frita";
   src: url("files/Leche_Frita.woff2") format("woff2"),
@@ -22,11 +23,9 @@ body {
 
 nav {
   display: flex;
-  background: linear-gradient(
-      -10deg,
+  background: linear-gradient(-10deg,
       rgba(0, 0, 0, 0.7) 500%,
-      rgba(128, 124, 124, 0.6) 51%
-    ),
+      rgba(128, 124, 124, 0.6) 51%),
     linear-gradient(10deg, rgba(0, 0, 0, 0.7) 50%, rgba(255, 255, 255, 1) 51%);
 
   background-size: cover;
@@ -36,6 +35,7 @@ nav {
   justify-content: space-between;
   height: 6rem;
 }
+
 nav ul {
   display: flex;
   list-style: none;
@@ -52,12 +52,10 @@ nav ul {
   justify-content: center;
   align-self: center;
   font-size: 3rem;
-  background: linear-gradient(
-    45deg,
-    rgb(106, 106, 106) 0%,
-    rgba(80, 80, 80, 0.9) 50%,
-    rgba(106, 106, 106, 1) 100%
-  );
+  background: linear-gradient(45deg,
+      rgb(106, 106, 106) 0%,
+      rgba(80, 80, 80, 0.9) 50%,
+      rgba(106, 106, 106, 1) 100%);
   background-clip: text;
   color: transparent;
   margin-left: 5rem;
@@ -72,10 +70,12 @@ nav ul {
   text-align: center;
   text-decoration: none;
 }
+
 .wall-link h2 {
   font-size: 3rem;
   font-weight: bold;
 }
+
 .searchbar {
   flex: 1;
   width: 20rem;
@@ -99,6 +99,7 @@ nav ul {
   border-radius: 8px;
   cursor: pointer;
 }
+
 .button:hover {
   background: rgb(90, 90, 90);
   color: black;
@@ -149,7 +150,7 @@ nav ul a {
   position: absolute;
   top: 96px;
   right: 0;
-  display: none; 
+  display: none;
   padding-right: 1rem;
 }
 
@@ -188,6 +189,7 @@ nav ul a {
     right: 0;
     text-align: center;
   }
+
   .wall-link {
     font-size: 2rem;
     position: absolute;
@@ -202,6 +204,7 @@ nav ul a {
     padding-top: 0.7rem;
     margin-bottom: 0.5rem;
   }
+
   .wall-link h2 {
     padding-bottom: 0.5rem;
   }
@@ -211,10 +214,12 @@ nav ul a {
     padding: 0.8rem 1rem;
     width: auto;
   }
+
   nav {
     gap: 0.5rem;
     height: 8rem;
   }
+
   .searchbar {
     position: absolute;
     left: 0.5rem;
@@ -222,14 +227,19 @@ nav ul a {
     margin-left: 1rem;
     height: 1rem;
   }
-  .container{
+
+  .container {
     width: 100%;
+  }
+
+  .post-img:hover {
+    transform: scale(1.35);
+    /* Slight zoom effect on hover */
+    z-index: 999;
+    /* Bring image to the front */
+  }
 }
-.post-img:hover {
-    transform: scale(1.35); /* Slight zoom effect on hover */
-    z-index: 999; /* Bring image to the front */
-}
-}
+
 @media screen and (max-width: 1024px) {
   .wall-link {
     font-size: 2rem;
@@ -251,10 +261,12 @@ nav ul a {
     padding: 0.8rem 1rem;
     width: auto;
   }
+
   nav {
     gap: 0.5rem;
     height: 8rem;
   }
+
   .searchbar {
     position: absolute;
     left: 0.5rem;
@@ -270,10 +282,12 @@ nav ul a {
     padding: 0.8rem 1rem;
     width: auto;
   }
+
   nav {
     gap: 0.5rem;
     height: 8rem;
   }
+
   .searchbar {
     position: absolute;
     left: 0.5rem;
@@ -281,7 +295,42 @@ nav ul a {
     margin-left: 1rem;
     height: 1rem;
   }
-  .profile-main{
+
+  .form-container {
+    position: relative;
+    width: 28rem !important;
+    height: auto;
+    perspective: 1000px;
+    /* 3D effect */
+  }
+
+  .login_Input,
+  .forgot-password .email_Input {
+    display: flex;
+    width: 80%;
+    max-width: 300px !important;
+    padding: 0.5rem;
+    background: #fff;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--bordercolor);
+    border-radius: 10px;
+    text-align: center;
+    flex-direction: column;
+    height: 2rem;
+    text-align: left;
+    font-size: 1rem;
+  }
+
+  label,
+  .forgot-password label {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--textcolor);
+    margin: 0.5rem 4.5rem !important;
+    align-self: flex-start;
+  }
+
+  .profile-main {
     display: flex;
     flex-direction: column-reverse;
     justify-content: center;
@@ -290,16 +339,19 @@ nav ul a {
     /* margin-left: 7rem; 
     margin-top: 3rem; */
   }
-  .sidebar-section{
+
+  .sidebar-section {
     width: 80% !important;
     margin: 0;
     height: auto !important;
   }
-  .posts-section{
+
+  .posts-section {
     width: 80% !important;
     margin: 0;
   }
-  .comment-input{
+
+  .comment-input {
     flex: 1;
     width: 50% !important;
     max-width: 50rem;
@@ -308,15 +360,19 @@ nav ul a {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
-    margin-bottom:.5rem;
+    margin-bottom: .5rem;
   }
-  .container{
+
+  .container {
     width: 100%;
-}
-.post-img:hover {
-    transform: scale(1.35); /* Slight zoom effect on hover */
-    z-index: 999; /* Bring image to the front */
-}
+  }
+
+  .post-img:hover {
+    transform: scale(1.35);
+    /* Slight zoom effect on hover */
+    z-index: 999;
+    /* Bring image to the front */
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -329,9 +385,11 @@ nav ul a {
     padding: 0;
     color: #b9b9b9;
   }
-  .burger p{
+
+  .burger p {
     margin: 0;
   }
+
   .submenu {
     width: 100%;
     position: absolute;
@@ -339,9 +397,11 @@ nav ul a {
     right: 0;
     text-align: center;
   }
+
   .the-wall {
     display: none;
   }
+
   nav ul h2 {
     font-size: 2rem;
     position: absolute;
@@ -362,6 +422,7 @@ nav ul a {
     padding: 0.8rem 1rem;
     width: auto;
   }
+
   body {
     width: auto;
     min-width: 420px;
@@ -375,6 +436,7 @@ nav ul a {
     min-width: 420px;
     height: 11rem;
   }
+
   .searchbar {
     position: absolute;
     left: 0.5rem;
@@ -382,14 +444,19 @@ nav ul a {
     margin-left: 1rem;
     height: 1rem;
   }
-  .container{
+
+  .container {
     width: 100%;
+  }
+
+  .post-img:hover {
+    transform: scale(1.15);
+    /* Slight zoom effect on hover */
+    z-index: 999;
+    /* Bring image to the front */
+  }
 }
-.post-img:hover {
-    transform: scale(1.15); /* Slight zoom effect on hover */
-    z-index: 999; /* Bring image to the front */
-}
-}
+
 @media screen and (max-width: 390px) {
   .burger {
     display: block;
@@ -400,9 +467,11 @@ nav ul a {
     padding: 0;
     color: #b9b9b9;
   }
-  .burger p{
+
+  .burger p {
     margin: 0;
   }
+
   nav ul {
     min-width: 390px;
   }
@@ -427,6 +496,7 @@ nav ul a {
     padding: 0.8rem 1rem;
     width: auto;
   }
+
   body {
     width: auto;
     min-width: 390px;
@@ -441,6 +511,7 @@ nav ul a {
     min-width: 390px;
     height: 11rem;
   }
+
   .searchbar {
     position: absolute;
     left: 0.5rem;
@@ -449,37 +520,80 @@ nav ul a {
     height: 1rem;
   }
 }
+
+/* index.php */
 .index {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  height: 100vh;
+  width: 100%;
+  height: auto;
   background: var(--backgroundcolor);
   border: 1px solid var(--bordercolor);
 }
-.login {
+
+.form-container {
+  position: relative;
+  width: 40rem;
+  height: auto;
+  perspective: 1000px;
+  /* 3D effect */
+}
+
+.flip-card {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.flip-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.form-side {
+  position: absolute;
+  width: 100%;
+  backface-visibility: hidden;
+}
+
+/* Login, forget-password & register Forms */
+
+.login,
+.forgot-password,
+.register {
   margin-top: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: auto;
+  /* height: auto; */
   background: rgba(76, 76, 76, 0.5);
   padding-top: 1rem;
   border-radius: 10px;
-  width: 40rem;
+  width: 100%;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
   padding-bottom: 2rem;
+  min-height: 25rem;
 }
-.login h2 {
+
+.forgot-password {
+  transform: rotateY(180deg);
+}
+
+.register {
+  transform: rotateY(180deg);
+}
+
+.login h2,
+.forgot-password h2 {
   font-size: 3rem;
-  background: linear-gradient(
-    90deg,
-    transparent 5%,
-    rgb(9, 9, 9) 50%,
-    transparent 95%
-  );
+  background: linear-gradient(90deg,
+      transparent 5%,
+      rgb(9, 9, 9) 50%,
+      transparent 95%);
   background-clip: text;
   color: transparent;
   text-align: center;
@@ -489,9 +603,10 @@ nav ul a {
   padding: 0 1rem;
   text-shadow: 0 0px 20px rgba(52, 52, 52, 0.5);
 }
-.login .login_Input {
-  display: flex;
 
+.login_Input,
+.forgot-password .email_Input {
+  display: flex;
   width: 100%;
   max-width: 400px;
   padding: 0.5rem;
@@ -506,7 +621,8 @@ nav ul a {
   font-size: 1rem;
 }
 
-.login label {
+label,
+.forgot-password label {
   font-size: 1.5rem;
   font-weight: 500;
   color: var(--textcolor);
@@ -515,7 +631,9 @@ nav ul a {
   margin-left: 7rem;
 }
 
-.login button {
+.login button,
+.forgot-password button,
+.register button {
   padding: 0.5rem 1rem;
   margin: 1rem;
   font-size: 1rem;
@@ -526,13 +644,18 @@ nav ul a {
   border-radius: 8px;
   cursor: pointer;
 }
-.login button:hover {
+
+.login button:hover,
+.forgot-password button:hover {
   background: rgb(90, 90, 90);
   color: black;
   border: 1px solid var(--bordercolor);
   transform: scale(1.05);
 }
-.login a {
+
+.login a,
+.forgot-password a,
+.register a {
   font-size: 1.5rem;
   font-weight: 500;
   color: var(--textcolor);
@@ -564,6 +687,7 @@ nav ul a {
   margin: 0.5rem;
   margin-top: -1rem;
 }
+
 .login .pindex {
   font-size: 1rem;
   font-weight: 500;
@@ -580,6 +704,7 @@ nav ul a {
   justify-content: flex-start;
   align-items: center;
 }
+
 .main_search_result ul {
   display: flex;
   flex-direction: column;
@@ -599,11 +724,9 @@ nav ul a {
   padding: 1rem;
 
   border-radius: 8px;
-  background: linear-gradient(
-      10deg,
+  background: linear-gradient(10deg,
       rgba(0, 0, 0, 0.7) 500%,
-      rgba(128, 124, 124, 0.6) 51%
-    ),
+      rgba(128, 124, 124, 0.6) 51%),
     linear-gradient(-10deg, rgba(0, 0, 0, 0.3) 50%, rgba(255, 255, 255, 1) 51%);
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
   margin-top: 1rem;
@@ -626,14 +749,17 @@ nav ul a {
   text-align: left;
   padding-left: 1rem;
 }
+
 .profile-link {
   display: flex;
   justify-content: space-between;
   gap: 20px;
 }
+
 .name {
   text-decoration: underline;
 }
+
 .username-search {
   font-size: 1.5rem;
   color: rgb(175, 175, 175);
@@ -664,6 +790,7 @@ nav ul a {
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
+
 .profile-info {
   width: 100%;
   text-align: left;
@@ -672,6 +799,7 @@ nav ul a {
   flex-direction: column;
   align-items: center;
 }
+
 .profile-info ul {
   padding: 0;
   margin: 0;
@@ -688,19 +816,18 @@ nav ul a {
   position: relative;
   padding-bottom: 1rem;
 }
+
 .profile-info li::after {
   content: "";
   display: block;
   width: 100%;
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(79, 79, 79, 0.2) 25%,
-    rgba(0, 0, 0, 0.5),
-    rgba(79, 79, 79, 0.2) 75%,
-    transparent 100%
-  );
+  background: linear-gradient(to right,
+      transparent 0%,
+      rgba(79, 79, 79, 0.2) 25%,
+      rgba(0, 0, 0, 0.5),
+      rgba(79, 79, 79, 0.2) 75%,
+      transparent 100%);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -717,6 +844,7 @@ nav ul a {
   align-items: center;
   width: 100%;
 }
+
 .profile-picture img {
   width: 200px;
   height: 200px;
@@ -726,6 +854,7 @@ nav ul a {
   object-fit: cover;
   display: block;
 }
+
 .info-label {
   font-weight: bold;
   text-transform: uppercase;
@@ -744,6 +873,7 @@ nav ul a {
   display: block;
   padding-left: 10px;
 }
+
 .edit-profile button {
   display: flex;
   justify-content: center;
@@ -754,16 +884,19 @@ nav ul a {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 8px;
 }
+
 .edit-profile button:hover {
   background-color: rgba(225, 225, 225, 0.9);
   border: 1px solid rgba(0, 0, 0, 0.5);
   transform: scale(1.05);
 }
+
 .edit-profile a {
   text-decoration: none;
   color: black;
 }
-.profile-main{
+
+.profile-main {
   display: flex;
   /* flex-direction: column-reverse; */
   justify-content: space-evenly;
@@ -772,18 +905,21 @@ nav ul a {
   /* margin-left: 7rem; 
   margin-top: 3rem; */
 }
-.sidebar-section{
+
+.sidebar-section {
   width: 30%;
-  margin: 15px 0; 
+  margin: 15px 0;
   height: 80vw;
 }
-.posts-section{
+
+.posts-section {
   width: 50%;
   margin: 15px 0;
   height: 80vw;
 
 }
-.comment-input{
+
+.comment-input {
   flex: 1;
   width: 20rem;
   max-width: 50rem;
@@ -792,8 +928,9 @@ nav ul a {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
-  margin-bottom:.5rem;
+  margin-bottom: .5rem;
 }
+
 /* Admin_List */
 
 .main-admin_list {
@@ -804,7 +941,7 @@ nav ul a {
   width: 100%;
   height: auto;
   margin: 1rem auto;
-  margin-top:3rem; 
+  margin-top: 3rem;
   width: 70%;
   height: auto;
   background: var(--secondarycolor);
@@ -814,19 +951,21 @@ nav ul a {
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
-.main-admin_list h1{
+
+.main-admin_list h1 {
   font-size: 2rem;
   font-weight: 500;
   color: var(--textcolor);
   margin: 0.5rem;
   margin-top: 1rem;
 
-  padding:.5rem;
+  padding: .5rem;
   background: rgba(158, 158, 158, 0.8);
   border-radius: 8px;
 }
+
 table {
-  
+
   border-collapse: collapse;
   width: 100%;
   width: 100%;
@@ -834,17 +973,20 @@ table {
   margin: 0 auto;
   background: rgba(158, 158, 158, 0.8);
   border-radius: 10px;
-  overflow: hidden; 
+  overflow: hidden;
 }
+
 .table-header {
   font-size: 1.5rem;
- 
+
 }
-.table-header th{
+
+.table-header th {
   background: rgba(28, 28, 28, 0.8);
 }
+
 th {
-  background-color: rgba(98, 98, 98, 0.8); 
+  background-color: rgba(98, 98, 98, 0.8);
   font-weight: bold;
   font-size: 1rem;
   color: var(--textcolor);
@@ -855,11 +997,11 @@ th {
 
 
 .table-header th {
-  background-color: #666; 
+  background-color: #666;
 }
-.table-header td
- {
-  
+
+.table-header td {
+
   padding: .5rem;
   text-align: center;
   font-weight: bold;
@@ -871,7 +1013,7 @@ th {
   vertical-align: middle;
 }
 
-.searchbar-admin{
+.searchbar-admin {
   flex: 1;
   width: 20rem;
   max-width: 50rem;
@@ -880,9 +1022,10 @@ th {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
-  margin-bottom:.5rem;
+  margin-bottom: .5rem;
 }
-.btn-search-admin{
+
+.btn-search-admin {
   gap: 1rem;
   margin-top: 1rem;
   background-color: rgba(255, 255, 255, 0.8);
@@ -890,7 +1033,7 @@ th {
   border-radius: 8px;
 }
 
-.edit_user{
+.edit_user {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -901,7 +1044,8 @@ th {
   background-color: rgba(98, 98, 98, 0.8);
   border-radius: 5px;
 }
-.edit_user_admin{
+
+.edit_user_admin {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -912,7 +1056,8 @@ th {
   background-color: rgba(0, 128, 255, 0.8);
   border-radius: 5px;
 }
-.delete_user{
+
+.delete_user {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -924,7 +1069,8 @@ th {
   background-color: rgba(255, 0, 0, 0.7);
   border-radius: 5px;
 }
-.link_to_blogwall{
+
+.link_to_blogwall {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -942,13 +1088,13 @@ th {
 
 .edit-buttons {
   display: flex;
-  flex-direction: column; 
-  justify-content: center; 
-  align-items: center; 
-  gap: 5px; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 
-.main-admin_list p {  
+.main-admin_list p {
   font-size: 1rem;
   font-weight: 500;
   font-style: italic;
@@ -958,14 +1104,14 @@ th {
 }
 
 
-.login .forgotpass{
+.login .forgotpass {
   font-size: 1rem;
-  
+
 }
 
-.sorting{
-  display:flex; 
+.sorting {
+  display: flex;
   flex-direction: row;
   justify-content: center;
-  padding-top:.5rem;
+  padding-top: .5rem;
 }
