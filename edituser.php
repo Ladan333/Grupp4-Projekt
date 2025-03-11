@@ -256,7 +256,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="profile.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
-
+        <form action="edituser.php?id=<?= $user_id ?>" method="POST">
+             <input type="hidden" name="change_password" value="1">
+ 
+             <div class="mb-3">
+                 <label for="old_password" class="form-label">Current Password</label>
+                 <input type="password" id="old_password" name="old_password" class="form-control bg-dark text-light"
+                     required>
+             </div>
+             <div class="mb-3">
+                 <label for="new_password" class="form-label">New Password</label>
+                 <input type="password" id="new_password" name="new_password" class="form-control bg-dark text-light"
+                     required>
+             </div>
+             <div class="text-center">
+                 <button type="submit" class="btn btn-primary">Change Password</button>
+             </div>
+         </form>
             <form action="delete.php" method="post" onsubmit="return confirmDelete()">
                 <input type="hidden" name="deletes" value="<?php echo $_SESSION['id']?>">
                 <button type="submit" >Delete profile</button>
