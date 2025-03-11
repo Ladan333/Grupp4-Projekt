@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $recaptcha_secret = "6LdPze8qAAAAAD8w9IMR2K8rnET4AdxIyviyy3z-"; 
     $recaptcha_response = $_POST['g-recaptcha-response'];
 
-    
+    //captcha
     $verify_url = "https://www.google.com/recaptcha/api/siteverify";
     $response = file_get_contents($verify_url . "?secret=" . $recaptcha_secret . "&response=" . $recaptcha_response);
     $response_data = json_decode($response);
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <input class="login_Input" name="email" id="email" type="text" placeholder="Email" required><br><br>
 
         <p>All field are required to successfully register!</p>
-        <div class="g-recaptcha" data-sitekey="6LdPze8qAAAAACHaleZLBJzS1bXV-oWHmIdfSf9I"></div>
+        <!-- <div class="g-recaptcha" data-sitekey="6LdPze8qAAAAACHaleZLBJzS1bXV-oWHmIdfSf9I"></div> -->
 <br>
 <button class="button" type="submit" value="login">Register</button>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
