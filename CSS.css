@@ -969,3 +969,16 @@ th {
   justify-content: center;
   padding-top:.5rem;
 }
+/*Gilla-knapp*/
+.like-btn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.like-btn:hover {
+  opacity: 0.7;
+}
+
