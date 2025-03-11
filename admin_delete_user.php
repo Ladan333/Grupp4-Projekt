@@ -18,7 +18,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
     $_SESSION['message'] = "Användaren hittades inte.";
-    header("Location: users.php");
+    header("Location: admin_list.php");
     exit;
 }
 
