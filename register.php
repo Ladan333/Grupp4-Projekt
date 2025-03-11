@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $response_data = json_decode($response);
     if (!$response_data->success) {
         echo "reCAPTCHA verification failed. Please try again.<br>";
-        echo "<a href='register.php'>Back to page</a>";
+        echo "<a href='index.php'>Back to page</a>";
         exit(); 
     }
     
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 exit();
             }
         } else {
-            header("Location: register.php");
+            header("Location: index.php");
             exit();
         }
     } else {
@@ -80,16 +80,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- <meta http-equiv="refresh" content="2"> -->
+        <meta http-equiv="refresh" content="2">
     <title>Document</title>
 </head>
 <body>
-<?php require"navbar.php"; ?>
+
 
 <main class="index">
     <form class="login" action="register.php" method="POST">
@@ -118,4 +118,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </main>
     
 </body>
-</html>
+</html> -->
