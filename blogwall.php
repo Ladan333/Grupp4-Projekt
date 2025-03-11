@@ -263,7 +263,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
         </form>
         </div>
 
-               
+                
         <div class="posts">
             <?php foreach ($posts as $post): ?>
                 <div class="post">
@@ -294,7 +294,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <?php
 
 
-                        $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name, u.profile_image
+                        $commentSql = "SELECT c.id, c.commentContent, c.CreatedDate, u.user_name, u.profile_image
 
                        
 
@@ -321,6 +321,14 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
                                 <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
+                                <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
+                        <!-- Only allow the user who created the post or admins to delete -->
+                        <form action="delete_comment.php" method="POST" style="display: inline;">
+                            <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
+                            <button type="submit" class="delete-btn">X</button>
+                        </form>
+
+                    <?php endif; ?>
                             </div>
 
 
