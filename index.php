@@ -7,6 +7,8 @@ setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
 
 session_start();
+$_SESSION['sorting'] = 1;
+$_SESSION['blogflow'] = 1;
 require "PDO.php";
 
 $_SESSION['sorting'] = 1;
