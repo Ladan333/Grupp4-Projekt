@@ -33,6 +33,20 @@ require_once 'PDO.php';
     <main class="index">
 
 
+
+    <div>
+        <php? foreach(): ?>
+            
+
+            <php? endforeach ?>
+
+    </div>
+
+    <div>
+
+    </div>
+
+
     <div class="comments-section">
                         
     <form action="AddComments.php" id="addComments-form" method="POST">
