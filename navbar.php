@@ -17,7 +17,7 @@
 
     <body>
         <nav>
-            <ul>
+            <ul class="the-wall">
                 <?php if (isset($_SESSION['username'])): ?>
                     <a href="blogwall.php" class="wall-link"><h2>The Wall</h2></a>
                         
