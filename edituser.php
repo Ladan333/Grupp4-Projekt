@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
 
-            <form action="delete_post.php" method="post" onsubmit="return confirmDelete()">
+            <form action="delete.php" method="post" onsubmit="return confirmDelete()">
                 <input type="hidden" name="deletes" value="<?php echo $_SESSION['id']?>">
                 <button type="submit" >Delete profile</button>
             </form>

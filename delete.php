@@ -2,7 +2,7 @@
 session_start();
 require 'PDO.php';
 
-
+//Delete post - ligger i blogwall
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
     $post_id = $_POST['post_id'];
 
@@ -23,7 +23,7 @@ else{
 
 }
 
-
+//Delete user - ligger i edituser.php
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
      $user = (int)$_POST['deletes'];
 
@@ -35,7 +35,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
       if($stmt->execute()){
 
         $_SESSION['success'] = 'User deleted succesful';
+        unset($_SESSION[""]);
+        session_destroy();
         header("Location: index.php");
+        
         exit();
      }
 
@@ -47,6 +50,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
         header("edituser.php");
         exit();
     }
+
+}
+
+//Delete comment - ligger i blogwall rad 298
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])){
+    $query = $pdo->prepare('DELETE FROM comments WHERE id = :userid');
+    $query->bindParam(':userid', $_POST['delete-comment']);
+    
+
+    if(!empty($_POST['delete-comment'])){
+        $query->execute();
+        header('location: blogwall.php');
+        exit();
+    }
+        else{
+            $_SESSION['error'] ="Failed";
+        }
 
 }
    
