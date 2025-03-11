@@ -121,8 +121,8 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
     }
 }
 ?>
-
-
+  
+                 
 
 
 <!DOCTYPE html>
@@ -207,20 +207,19 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             <button id="openModalBtn" class="add-post-btn"><ion-icon name="add-circle"></ion-icon> Add Post</button>
         </div>
 
-
-
-        <!-- Add Post Modal -->
-        <div id="postModal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn">&times;</span>
+            
+            
+                <!-- Add Post Modal -->
+            <div id="postModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn">&times;</span>
                 <h2>Add a new post</h2>
                 <form class="add-post-form" action="add_post.php" method="POST" enctype="multipart/form-data">
                     <label for="add-post-title">Title:</label>
                     <input type="text" id="add-post-title" name="title" required placeholder="Amazing blogwall...">
-
+                    
                     <label for="postContent">Post text:</label>
-                    <textarea id="postContent" name="content" rows="4" required
-                        placeholder="Skriv ditt inlägg här..."></textarea>
+                    <textarea id="postContent" name="content" rows="4" required placeholder="Skriv ditt inlägg här..."></textarea>
 
                     <label id="post-text">Upload image:</label>
                     <label for="postImage" class="postImage">
@@ -228,7 +227,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <p id="image-names">Upload image</p>
                     </label>
                     <input type="file" id="postImage" name="image" accept="image/*">
-
+            
                     <button type="submit" class="submit-btn">Publish</button>
                 </form>
             </div>
@@ -294,7 +293,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <?php
 
 
-                        $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name, u.profile_image
+                        $commentSql = "SELECT c.id, c.user_id, c.commentContent, c.CreatedDate, u.user_name, u.profile_image
 
                        
 
@@ -321,6 +320,17 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                 </span>
                                 <?php echo htmlspecialchars($comment['commentContent']); ?>
                                 <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
+                                <?php if($comment['user_id'] == $_SESSION['id']): ?>
+                                <form action="delete.php" method="post" onsubmit="return confirmDelete()">
+                                    <input type="hidden" name="delete-comment" value="<?php echo $comment['id']?>">
+                                    <button type="submit">delete</button>
+                                </form>
+                                <script>
+                                     function confirmDelete(){
+                                        return confirm("Delete commit? cant undo this.....");
+                                        }
+                                </script>
+                                <?php endif; ?>
                             </div>
 
 
@@ -342,13 +352,13 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     <?php endif; ?>
                     <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
-                        <form action="delete_post.php" method="POST" style="display: inline;">
+                        <form action="delete.php" method="POST" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <button type="submit" class="delete-btn">Delete post</button>
                         </form>
 
                     <?php endif; ?>
-
+                    
 
                 </div>
             <?php endforeach; ?>
