@@ -17,5 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sort_recent"])) {
     $_SESSION['sorting'] = 3;
 }
 
-header("Location: profile.php");
+$location = "Location: profile.php?user_name=" . $_SESSION['follow_username'];
+
+header($location);
 exit();
