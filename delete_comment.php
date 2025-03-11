@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("PDO.php");
+$source = $_SESSION['last_page'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_comment"])) {
     $id = $_POST["delete_comment"];
@@ -20,5 +21,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_comment"])) {
     }
 }
 
-header("Location: blogwall.php");
+header("Location: $source");
 exit;
