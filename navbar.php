@@ -34,7 +34,10 @@
                     <!-- <button class="buttonsearch" type="submit">Search</button> -->
                 </form>
             </ul>
-             
+             <div class="display-messages">
+             <a href="messages.php">&#9993;</a>
+             <p>1</p>
+             </div>
             <div class="burger" onclick="toggleMenu()">
                 <p>☰</p>
             </div>
