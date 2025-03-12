@@ -39,7 +39,10 @@ require_once('display_count.php');
 
             <div class="display-messages">
                 <a href="messages.php">&#9993;</a>
-                <p><?php echo $_SESSION['display_count'];?></p>
+                <p><?php
+                if($_SESSION['display_count'] > 0){
+                echo $_SESSION['display_count'];
+                }?></p>
             </div>
             <div class="burger" onclick="toggleMenu()">
                 <p>☰</p>
