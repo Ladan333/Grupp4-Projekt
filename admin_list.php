@@ -84,7 +84,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td>
                         <div class="edit-buttons">
                             <a class="edit_user" href="edituser.php?id=<?= $user['id'] ?>">Edit</a>
-                            <a class="delete_user" href="admin_delete_confirm.php?id=<?= $user['id'] ?>">Delete</a>
+                            <form method="POST" action="admin_delete_user.php">
+                                <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                                <button class="delete_user" type="submit" onclick="return confirm('Are you sure you want to delete <?= htmlspecialchars($user['first_name']) . ' ' . htmlspecialchars($user['last_name']) ?>?');">Delete</button>
+                            </form>
+
                         </div>
                     </td>
                 </tr>
