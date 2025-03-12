@@ -49,6 +49,16 @@ $result = $stmt->fetchall(PDO::FETCH_ASSOC);
 
     <main class="index">
 
+    <form action="AddComments.php" id="addComments-form" method="POST">
+
+<input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
+<input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+
+<input class="comment-input" type="text" name="comment_input" placeholder="message" required>
+
+<button class="comment-btn" type="submit">Send message</button>
+</form>
+
     <?php foreach ($result as $results): ?>
         
                             <div class="results">
@@ -71,6 +81,7 @@ $result = $stmt->fetchall(PDO::FETCH_ASSOC);
                         </form> -->
 
                     <?php endif; ?>
+
     <?php endforeach; ?>
 
        
