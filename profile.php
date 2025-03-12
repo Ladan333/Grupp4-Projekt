@@ -183,7 +183,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                         <p class="content short">
                             <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                         </p>
-                        <button class="toggle-btn">Visa mer</button>
+                        <button class="toggle-btn">Show more</button>
                         <!-- Comment Section -->
                         <div class="comments-section">
                             <h4>comment</h4>
@@ -202,23 +202,29 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                             foreach ($comments as $comment): ?>
                                 <div class="comment">
-                                    <span id="user">
-                                        <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
-                                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
-                                            style="border-radius:50%;"><strong><a
-                                                href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>"
-                                                class="profile-link">
-                                                <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
-                                            </a></strong> <?php echo "&nbsp;" . htmlspecialchars($comment["CreatedDate"]); ?>
-                                    </span>
-                                    <?php echo htmlspecialchars($comment['commentContent']); ?>
+                                <div class="comment-header">
+                                <div id="user">
+                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
+                                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                        style="border-radius:50%;"><strong><a
+                                            href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
+                                            <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+                                            <?php echo "&nbsp;&nbsp;" . htmlspecialchars($comment['CreatedDate']) ?>
 
-                                    <form action="delete_comment.php" method="POST" style="display: inline;">
-                                        <input type="hidden" name="delete_comment"
-                                            value="<?= htmlspecialchars($comment['id']) ?>">
-                                        <button type="submit" class="delete-btn">X</button>
-                                    </form>
+                                        </a></strong>
                                 </div>
+                                <div id="comment-delete-btn">
+
+                                        <!-- Only allow the user who created the post or admins to delete -->
+                                        <form action="delete_comment.php" method="POST" style="display: inline;">
+                                            <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
+                                            <button type="submit" class="delete-btn">X</button>
+                                        </form>
+
+                                </div>
+                                </div>
+                                <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
+                            </div>
                             <?php endforeach; ?>
                         </div>
 
@@ -278,16 +284,17 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                     if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
                         <button><a href="edituser.php">Edit profile</a></button>
-                        <button><a href="following.php">Following</a></button>
+                        <button><a href="following.php">Follows</a></button>
                     <?php } else if (!$follow_result) { ?>
                             <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                 <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
                             </form>
-                    <?php } else if ($follow_result) { ?>
+                            <button><a href="messages.php">Send Message</a></button>
+                            <?php } else if ($follow_result) { ?>
                                 <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                     <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
-                        <?php } ?>
-                    </form>
+                                    <?php } ?>
+                                </form>
 
                 </div>
                 <div class="profile-info">
