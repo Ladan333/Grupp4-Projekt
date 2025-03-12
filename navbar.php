@@ -47,7 +47,7 @@
                     <li><a href="profile.php">Profile</a></li>
                     <li><a href="blogwall.php">Wall</a></li>
                     <li><a href="logout.php">Logout</a></li>
-                    <li><a href="dm.php">Messages</a></li>
+                    <li><a href="messages.php">Messages</a></li>
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
                         <li><a href="admin_list.php">Admin</a></li>
                     <?php endif; ?>
