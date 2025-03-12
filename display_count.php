@@ -1,19 +1,22 @@
 <?php 
-if(session_status()==PHP_SESSION_NONE) {session_start();}
-            require_once('PDO.php');
-       
-            $user_id = $_SESSION['id']; 
+if(session_status() == PHP_SESSION_NONE) { session_start(); }
+require_once('PDO.php');
 
-            $stmt = $pdo->prepare("
-                SELECT COUNT(respond) AS unread_count 
-                FROM dm 
-                WHERE respond = 1 AND responder_id = :user_id
-            ");
-            
-            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            $_SESSION['display_count'] = $result['unread_count'] ?? 0;
-            ?>
-            
+$user_id = $_SESSION['id'] ?? null; 
+
+if ($user_id) {
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) AS unread_count 
+        FROM dms 
+        WHERE unread_status = 1 AND user2_id = :user_id
+    ");
+    
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $fetchcount = $stmt->fetch(PDO::FETCH_ASSOC) ?? ['unread_count' => 0];
+
+    $_SESSION['display_count'] = $fetchcount['unread_count'];
+} else {
+    $_SESSION['display_count'] = 0; 
+}
+?>

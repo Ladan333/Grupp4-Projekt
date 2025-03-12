@@ -289,11 +289,15 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                 <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
                             </form>
-                            <button><a href="messages.php">Send Message</a></button>
+                           
+                            <button><a href="messages.php?id=<?php echo urlencode($result['id']); ?>">Send Messages</a></button>
                             <?php } else if ($follow_result) { ?>
                                 <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                     <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
+                                    <button><a href="messages.php?id=<?php echo urlencode($result['id']); ?>">Send Messages</a></button>
+
                                     <?php } ?>
+
                                 </form>
 
                 </div>
