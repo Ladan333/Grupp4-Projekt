@@ -471,7 +471,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                     // Handle image display
                     if (image) {
-                        const username = "<?php echo htmlspecialchars(ucwords(strtolower($profile_username))); ?>"; // Get the username of the person who posted
+                        const username = "<?php echo htmlspecialchars(ucwords(strtolower($username))); ?>"; // Get the username of the person who posted
                         imageNamesLabel.textContent = `${username}'s post image`;
                     } else {
                         imageNamesLabel.textContent = "Upload Image";
