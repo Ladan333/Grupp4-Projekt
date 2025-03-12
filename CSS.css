@@ -26,7 +26,14 @@ body {
   display: flex;
   flex-direction: column;
 }
+.message-img {
+  transition: width .5s ease-in;
+}
 
+.message-img:hover {
+  width: 600px;
+  height: auto;
+}
 nav {
   display: flex;
   background: linear-gradient(-10deg,
