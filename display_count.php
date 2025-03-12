@@ -1,12 +1,12 @@
 <?php 
-if(session_status() == PHP_SESSION_NONE) { session_start(); }
+if (session_status() == PHP_SESSION_NONE) { session_start(); }
 require_once('PDO.php');
 
 $user_id = $_SESSION['id'] ?? null; 
 
 if ($user_id) {
     $stmt = $pdo->prepare("
-        SELECT COUNT(*) AS unread_count 
+        SELECT COUNT(DISTINCT user1_id) AS unread_count 
         FROM dms 
         WHERE unread_status = 1 AND user2_id = :user_id
     ");
