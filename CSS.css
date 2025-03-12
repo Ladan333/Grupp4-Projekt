@@ -874,11 +874,14 @@ label,
   display: block;
   padding-left: 10px;
 }
-
-.edit-profile button {
+.edit-profile{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.edit-profile button {
+
   gap: 1rem;
   margin-top: 1rem;
   background-color: rgba(255, 255, 255, 0.8);
