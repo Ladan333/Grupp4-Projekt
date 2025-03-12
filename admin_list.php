@@ -71,32 +71,26 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($user['first_name']) ?></td>
                     <td><?= htmlspecialchars($user['last_name']) ?></td>
                     <td><?= htmlspecialchars($user['email']) ?></td>
-                    <td>
-                        <div class="edit-buttons">
-                            <?php if ($user['role'] == 0) { ?>
-                                <a class="edit_user_admin"
-                                    href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Make admin</a>
+                    <td><div class="edit-buttons">
+                        <?php if ($user['role'] == 0)  { ?>
+                            <a class="edit_user_admin" href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Make admin</a>
 
-                            <?php } else { ?>
-                                <a class="delete_user"
-                                    href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Delete admin</a>
+                        <?php } else { ?>
+                            <a class="delete_user" href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Delete admin</a>
 
                             <?php } ?>
-                        </div>
+                            </div>
                     </td>
                     <td>
                         <div class="edit-buttons">
                             <a class="edit_user" href="edituser.php?id=<?= $user['id'] ?>">Edit</a>
-                            <a class="delete_user" href="admin_delete.php?id=<?= $user['id'] ?>"
-                                onclick="return confirm('Are you sure you want to delete <?= htmlspecialchars($user['first_name']) . ' ' . htmlspecialchars($user['last_name']) ?>?');">
-                                Delete
-                            </a>
+                            <a class="delete_user" href="admin_delete_confirm.php?id=<?= $user['id'] ?>">Delete</a>
                         </div>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </table>
-
+       
         <!-- Länk till en separat sida för att hantera alla inlägg -->
         <a class="link_to_blogwall" href="blogwall.php">To posts</a>
 
