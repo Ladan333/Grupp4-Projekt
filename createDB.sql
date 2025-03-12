@@ -51,15 +51,16 @@ CREATE TABLE IF NOT EXISTS likes (
     UNIQUE(user_id, post_id) -- En användare kan bara gilla ett inlägg en gång
 );
 
-CREATE TABLE IF NOT EXISTS dm (
+CREATE TABLE IF NOT EXISTS dms (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    respond BOOLEAN DEFAULT TRUE,
+    unread_status BOOLEAN DEFAULT TRUE,
     message_content TEXT NOT NULL,
-    sender_id INT NOT NULL,
-    responder_id INT NOT NULL,
-    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (responder_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE(sender_id, responder_id) -- En användare kan inte dma sig själv
+    message_image MEDIUMTEXT,
+    CreatedDate DATETIME NOT NULL DEFAULT NOW(),
+    user1_id INT NOT NULL,
+    user2_id INT NOT NULL,
+    FOREIGN KEY (user1_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (user2_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 
