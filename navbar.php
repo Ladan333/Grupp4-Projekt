@@ -34,7 +34,10 @@
                     <!-- <button class="buttonsearch" type="submit">Search</button> -->
                 </form>
             </ul>
-
+             <div class="display-messages">
+             <a href="messages.php">&#9993;</a>
+             <p>1</p>
+             </div>
             <div class="burger" onclick="toggleMenu()">
                 <p>☰</p>
             </div>
@@ -44,6 +47,7 @@
                     <li><a href="profile.php">Profile</a></li>
                     <li><a href="blogwall.php">Wall</a></li>
                     <li><a href="logout.php">Logout</a></li>
+                    <li><a href="dm.php">Messages</a></li>
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
                         <li><a href="admin_list.php">Admin</a></li>
                     <?php endif; ?>

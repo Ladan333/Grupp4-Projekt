@@ -189,7 +189,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <h4>comment</h4>
                             <?php
 
-                            $commentSql = "SELECT c.commentContent, c.CreatedDate , u.user_name, u.profile_image
+                            $commentSql = "SELECT c.id, c.commentContent, c.CreatedDate , u.user_name, u.profile_image
                                        FROM comments c
                                        JOIN users u ON c.user_id = u.id
                                        WHERE c.blog_id = :blog_id
@@ -212,6 +212,12 @@ $_SESSION['follow_username'] = $result['user_name'];
                                             </a></strong> <?php echo "&nbsp;" . htmlspecialchars($comment["CreatedDate"]); ?>
                                     </span>
                                     <?php echo htmlspecialchars($comment['commentContent']); ?>
+
+                                    <form action="delete_comment.php" method="POST" style="display: inline;">
+                                        <input type="hidden" name="delete_comment"
+                                            value="<?= htmlspecialchars($comment['id']) ?>">
+                                        <button type="submit" class="delete-btn">X</button>
+                                    </form>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -272,15 +278,16 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                     if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
                         <button><a href="edituser.php">Edit profile</a></button>
+                        <button><a href="following.php">Following</a></button>
                     <?php } else if (!$follow_result) { ?>
-                        <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
-                            <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
-                        </form>
+                            <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
+                                <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
+                            </form>
                     <?php } else if ($follow_result) { ?>
-                        <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
-                            <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
+                                <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
+                                    <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
                         <?php } ?>
-                        </form>
+                    </form>
 
                 </div>
                 <div class="profile-info">
@@ -318,7 +325,7 @@ $_SESSION['follow_username'] = $result['user_name'];
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".post").forEach(post => {
                 let content = post.querySelector(".content");
                 let button = post.querySelector(".toggle-btn");
@@ -330,7 +337,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     button.style.display = "none";
                 }
 
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     if (content.classList.contains("short")) {
                         content.classList.remove("short");
                         this.textContent = "Show less";
@@ -360,7 +367,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                 //     });
                 // }
             });
-            document.getElementById("postImage").addEventListener("change", function(event) {
+            document.getElementById("postImage").addEventListener("change", function (event) {
                 const fileInput = event.target;
                 const fileNameDisplay = document.getElementById("image-names");
 
@@ -398,7 +405,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                 }
             });
             document.querySelectorAll(".update-btn").forEach(button => {
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     const post = this.closest(".post"); // Get the parent post element
                     const postId = post.querySelector("input[name='post_id']")?.value; // Get post ID
                     const title = post.querySelector(".post-title").textContent.trim();
