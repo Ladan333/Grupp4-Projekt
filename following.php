@@ -27,7 +27,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Document</title>
 </head>
 <body>
-    
+<?php require "navbar.php"?>     
 
 <ul>
 <?php foreach ($result as $row): ?>

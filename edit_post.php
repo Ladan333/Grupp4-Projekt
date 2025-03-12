@@ -2,6 +2,7 @@
 require "PDO.php";
 session_start();
 
+$source = $_SESSION['last_page'];
 
 if ($_SERVER['REQUEST_METHOD'] && isset($_POST)) {
     $id = $_POST['post_id'];
@@ -14,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST)) {
     $stmt->bindParam(":content", $content, PDO::PARAM_STR);
     $stmt->execute();
 
-    header("Location: blogwall.php");
+    header("Location: $source");
     exit();
 
 }

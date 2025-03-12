@@ -278,16 +278,17 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                     if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
                         <button><a href="edituser.php">Edit profile</a></button>
-                        <button><a href="following.php">Following</a></button>
+                        <button><a href="following.php">Follows</a></button>
                     <?php } else if (!$follow_result) { ?>
                             <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                 <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
                             </form>
-                    <?php } else if ($follow_result) { ?>
+                            <button><a href="messages.php">Send Message</a></button>
+                            <?php } else if ($follow_result) { ?>
                                 <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                     <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
-                        <?php } ?>
-                    </form>
+                                    <?php } ?>
+                                </form>
 
                 </div>
                 <div class="profile-info">
