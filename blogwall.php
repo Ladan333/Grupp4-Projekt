@@ -8,16 +8,16 @@ if ($_SESSION['id'] == null) {
 }
 // Sessioncookie för auto-utloggnuing efter en timme. 
 if (isset($_SESSION['login_time'])) {
-    $session_lifetime = 3600; 
+    $session_lifetime = 3600;
 
     if (time() - $_SESSION['login_time'] > $session_lifetime) {
-        
+
         session_destroy();
-        header("Location: index.php"); 
+        header("Location: index.php");
         exit();
     }
 } else {
-    
+
     header("Location: index.php");
     exit();
 }
@@ -33,7 +33,7 @@ if (isset($_SESSION['last_page']) && $_SESSION['last_page'] !== 'blogwall.php' &
     $_SESSION['sorting'] = 1;
 }
 
-$_SESSION['last_page'] = basename($_SERVER['PHP_SELF']); 
+$_SESSION['last_page'] = basename($_SERVER['PHP_SELF']);
 
 
 
@@ -52,19 +52,19 @@ $isAdmin = $_SESSION["role"] ?? false;
 
 // blogflow 1 = all posts, blogflow 2 = followed users posts
 if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
-    
-    if ($_SESSION['sorting'] == 1){
-    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id
+
+    if ($_SESSION['sorting'] == 1) {
+        $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id
     FROM blogposts bp
     JOIN users u ON bp.user_id = u.id
     ORDER BY bp.CreatedDate DESC";
-    } else if ($_SESSION['sorting'] == 2){
+    } else if ($_SESSION['sorting'] == 2) {
         $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
         FROM blogposts bp
         JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
         GROUP BY c.blog_id
         ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
-    } else if ($_SESSION["sorting"] == 3){
+    } else if ($_SESSION["sorting"] == 3) {
         $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
         FROM blogposts bp
         JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
@@ -87,25 +87,25 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
         array_push($followed_users, $result["follow_id"]);
     }
 
-    if ($_SESSION['sorting'] == 1){
+    if ($_SESSION['sorting'] == 1) {
         $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id
         FROM blogposts bp
         JOIN users u ON bp.user_id = u.id
         ORDER BY bp.CreatedDate DESC";
-        } else if ($_SESSION['sorting'] == 2){
-            $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
+    } else if ($_SESSION['sorting'] == 2) {
+        $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
             FROM blogposts bp
             JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
             GROUP BY c.blog_id
             ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
-        } else if ($_SESSION["sorting"] == 3){
-            $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
+    } else if ($_SESSION["sorting"] == 3) {
+        $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
             FROM blogposts bp
             JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
             WHERE c.CreatedDate >= NOW() - INTERVAL 1 DAY
             GROUP BY c.blog_id
             ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
-        }
+    }
 
 
     $stmt = $pdo->prepare($sql);
@@ -234,36 +234,36 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             </div>
         </div>
         <div class="sorting">
-        <?php 
-            if($_SESSION['blogflow'] == 1) { ?> 
-        <form action="change_blogflow.php" method="POST">
-            <input type="hidden" name="change_view" value="1" ;>
-            <button class="comment-btn blogflow" type="submit">Sort by folowers</button>
-        </form>
+            <?php
+            if ($_SESSION['blogflow'] == 1) { ?>
+                <form action="change_blogflow.php" method="POST">
+                    <input type="hidden" name="change_view" value="1" ;>
+                    <button class="comment-btn blogflow" type="submit">Sort by folowers</button>
+                </form>
             <?php } else { ?>
-        <form action="change_blogflow.php" method="POST">
-            <input type="hidden" name="change_view" value="2" ;>
-            <button class="comment-btn blogflow" type="submit">Sort by all posts</button>
-        </form>
-        <?php } ?> 
+                <form action="change_blogflow.php" method="POST">
+                    <input type="hidden" name="change_view" value="2" ;>
+                    <button class="comment-btn blogflow" type="submit">Sort by all posts</button>
+                </form>
+            <?php } ?>
 
-        <form action="sort_blogwall.php" method="POST">
-            <input type="hidden" name="sort_recent" value="1" ;>
-            <button class="comment-btn blogflow" type="submit">Sort by recent posts</button>
-        </form>
+            <form action="sort_blogwall.php" method="POST">
+                <input type="hidden" name="sort_recent" value="1" ;>
+                <button class="comment-btn blogflow" type="submit">Sort by recent posts</button>
+            </form>
 
-        <form action="sort_blogwall.php" method="POST">
-            <input type="hidden" name="sort_comment_count" value="2" ;>
-            <button class="comment-btn blogflow" type="submit">Sort by most comments</button>
-        </form>
+            <form action="sort_blogwall.php" method="POST">
+                <input type="hidden" name="sort_comment_count" value="2" ;>
+                <button class="comment-btn blogflow" type="submit">Sort by most comments</button>
+            </form>
 
-        <form action="sort_blogwall.php" method="POST">
-            <input type="hidden" name="sort_activity" value="3" ;>
-            <button class="comment-btn blogflow" type="submit">Sort by most recent activity</button>
-        </form>
+            <form action="sort_blogwall.php" method="POST">
+                <input type="hidden" name="sort_activity" value="3" ;>
+                <button class="comment-btn blogflow" type="submit">Sort by most recent activity</button>
+            </form>
         </div>
 
-                
+
         <div class="posts">
             <?php foreach ($posts as $post): ?>
                 <div class="post">
@@ -310,25 +310,29 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                         foreach ($comments as $comment): ?>
                             <div class="comment">
-                                <span id="user">
+                                <div class="comment-header">
+                                <div id="user">
                                     <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
                                     <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
                                         style="border-radius:50%;"><strong><a
                                             href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
                                             <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+                                            <?php echo "&nbsp;&nbsp;" . htmlspecialchars($comment['CreatedDate']) ?>
 
                                         </a></strong>
-                                </span>
-                                <?php echo htmlspecialchars($comment['commentContent']); ?>
-                                <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
-                                <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
-                        <!-- Only allow the user who created the post or admins to delete -->
-                        <form action="delete_comment.php" method="POST" style="display: inline;">
-                            <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
-                            <button type="submit" class="delete-btn">X</button>
-                        </form>
+                                </div>
+                                <div id="comment-delete-btn">
+                                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
+                                        <!-- Only allow the user who created the post or admins to delete -->
+                                        <form action="delete_comment.php" method="POST" style="display: inline;">
+                                            <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
+                                            <button type="submit" class="delete-btn">X</button>
+                                        </form>
 
-                    <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
+                                </div>
+                                <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
                             </div>
 
 
@@ -474,7 +478,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                     // Change form action for editing
                     form.insertAdjacentHTML("beforeend", `<input type="hidden" name="post_id" value="${postId}">`);
-                    
+
                     // Update modal appearance
                     modalTitle.textContent = "Edit Post";
                     submitButton.textContent = "Update Post";
@@ -523,8 +527,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
             const driverObj = driver({
                 showProgress: true,
-                steps: [
-                    {
+                steps: [{
                         element: ".container",
                         popover: {
                             title: "BlogWall page",
@@ -543,10 +546,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         }
                     },
                     {
-                        element: ".blogflow",
+                        element: ".sorting",
                         popover: {
-                            title: "Change Blogflow",
-                            description: "Click here to filter posts based on the people you are following.",
+                            title: "Sorting Posts",
+                            description: "Click here to filter posts based on what you would like.",
                             side: "bottom",
                             align: 'start'
                         }
@@ -587,7 +590,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                             align: 'start'
                         }
                     },
-                    
+
                 ]
             });
 

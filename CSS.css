@@ -142,30 +142,6 @@ nav ul a {
   padding: 10px;
   user-select: none;
 }
-.display-messages a{
-  position: absolute;
-  top: 1rem;
-  right: 4rem;
-  font-size: 2rem;
-  cursor: pointer;
-  color: black;
-  display: block;
-  padding: 10px;
-  user-select: none;
-  text-decoration: none;
-}
-.display-messages p{
-  position: relative;
-  top: 1rem;
-  right: 4rem;
-  font-size: 1rem;
-  /* cursor: pointer; */
-  color: black;
-  display: block;
-  /* padding: 10px; */
-  user-select: none;
-  text-decoration: none;
-}
 
 .submenu {
   width: 200px;
@@ -608,6 +584,7 @@ nav ul a {
 }
 
 .register {
+  display: none;
   transform: rotateY(180deg);
 }
 
