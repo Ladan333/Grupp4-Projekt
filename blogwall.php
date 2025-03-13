@@ -354,7 +354,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     <?php endif; ?>
                     <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
-                        <form action="delete_post.php" method="POST" style="display: inline;">
+                        <form action="delete.php" method="POST" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <button type="submit" class="delete-btn">Delete post</button>
                         </form>
