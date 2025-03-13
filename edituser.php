@@ -273,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  <button type="submit" class="btn btn-primary">Change Password</button>
              </div>
          </form>
-            <form action="admin_delete_user.php" method="post" onsubmit="return confirmDelete()">
+            <form action="delete.php" method="post" onsubmit="return confirmDelete()">
                 <input type="hidden" name="deletes" value="<?php echo $_SESSION['id']?>">
                 <button type="submit" >Delete profile</button>
             </form>

@@ -20,7 +20,20 @@ body {
   box-sizing: border-box;
   background-color: #cccccc;
 }
+.chat-messages {
+  max-height: 500px; 
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.message-img {
+  transition: width .5s ease-in;
+}
 
+.message-img:hover {
+  width: 600px;
+  height: auto;
+}
 nav {
   display: flex;
   background: linear-gradient(-10deg,
@@ -141,6 +154,30 @@ nav ul a {
   display: block;
   padding: 10px;
   user-select: none;
+}
+.display-messages a{
+  position: absolute;
+  top: 1rem;
+  right: 4.1rem;
+  font-size: 2rem;
+  cursor: pointer;
+  color: black;
+  display: block;
+  padding: 10px;
+  user-select: none;
+  text-decoration: none;
+}
+.display-messages p{
+  position: relative;
+  top: 1rem;
+  right: 4rem;
+  font-size: 1rem;
+  /* cursor: pointer; */
+  color: black;
+  display: block;
+  /* padding: 10px; */
+  user-select: none;
+  text-decoration: none;
 }
 
 .submenu {

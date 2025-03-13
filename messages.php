@@ -1,5 +1,7 @@
 <?php
 
+
+
 use function PHPSTORM_META\type;
 
 $cookie_name = "user_session";
@@ -10,6 +12,7 @@ setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
 
 session_start();
+
 require_once 'PDO.php';
 
 if ($_SESSION['id'] == null) {
@@ -63,20 +66,27 @@ if ($results != null) {
     <main class="index">
 
     <?php if (!empty($conversations)) { ?>
-            <ul>
+            
+        <ul>
                 <?php foreach ($conversations as $conversation): ?>
                     <?php foreach ($conversation as $key => $value): ?>
                     <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars( $value['profile_image']) : "./files/no_picture.jpg"; ?>
                     <li class="searchResult">
-                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
-                        <a href="conversations.php?user_name=<?php echo urlencode($value['user_name']); ?>" class="profile-link">
+
+                   
+                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
+                        <a href="test.php?user_name=<?php echo urlencode($value['user_name']); ?>" class="profile-link">
+                        
 
                             <span class="username-search"><?php echo htmlspecialchars($value["user_name"]); ?></span>
+                            
                             <?php $message_content = htmlspecialchars($value["message_content"])?>
-                            <span class="username-search"><?php echo htmlspecialchars($message_content =  (strlen($message_content) > 75) ? substr($message_content, 0, 75) . '...' : $message_content); ?></span>
+                            <!-- <span class="username-search"><?php echo htmlspecialchars($message_content =  (strlen($message_content) > 75) ? substr($message_content, 0, 75) . '...' : $message_content); ?></span> -->
+                         
                             <?php if ($value['unread_status'] == 1) { ?>
-                                <span class="username-search">Unread</span>
+                                <span class="username-search" style="color:grey; opacity:0.5;">Unread</span>
                             <?php } ?>
+                            
                            
                         </a>
                     </li>
@@ -87,7 +97,6 @@ if ($results != null) {
             
 
             </ul>
-
 
 
        
