@@ -5,28 +5,44 @@ $cookie_time = time() + 3600;
 
 setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
+session_start();
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
 
 
-session_start();
 require_once 'PDO.php';
 
 
-//if($_SERVER('REQUEST_METHOD') == 'POST' && isset($_POST)){
+if( isset($_GET['user_name'])){
 
-//$id = $_POST[''];
+$user = $_GET['user_name'];
+$statement = $pdo->prepare("SELECT id FROM users WHERE user_name = :user");
+$statement->bindParam(":user", $user, PDO::PARAM_STR);
+$statement->execute();
+$usersId = $statement->fetch(PDO::FETCH_ASSOC);
+$userId = $usersId['id'] ?? null; //Konverterar från array till int
 
-    $stmt = $pdo->prepare('SELECT d.message_image, d.message_content, d.CreatedDate, u.first_name
-FROM dms as d JOIN users as u on d.user1_id & d.user2_id
-WHERE d.user1_id = u.id OR d.user2_id = u.id
-');
-//$stmt->bindParam(":----", $, PDO::PARAM_STR);
+if(!$userId){
+    header('Location: messages.php'); //Någon kontroll här kanske - vad ska vi göra om GET inte skickats? Kommer bli tomt på sidan ifall vi skulle kört vidare.. redirect nu bara.. kanske returnera något att displaya på redirecten?
+    exit();
+}
+
+
+
+    $stmt = $pdo->prepare("SELECT d.message_image, d.message_content, d.CreatedDate, u.user_name
+FROM dms as d JOIN users as u on d.user1_id = u.id OR d.user2_id = u.id
+WHERE (d.user1_id = :thisUser AND d.user2_id = :user) OR (d.user1_id = :user AND d.user2_id = :thisUser)
+ORDER BY d.CreatedDate ASC");
+$stmt->bindParam(":user", $userId, PDO::PARAM_INT);
+$stmt->bindParam(":thisUser", $_SESSION['id'], PDO::PARAM_INT);
 
 $stmt->execute();
 $result = $stmt->fetchall(PDO::FETCH_ASSOC);
 
-//}
+}
+else{
+
+}
 
 
 ?>
@@ -54,7 +70,7 @@ $result = $stmt->fetchall(PDO::FETCH_ASSOC);
 <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
 <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 
-<input class="comment-input" type="text" name="comment_input" placeholder="message" required>
+<textarea class="comment-input" name="comment_input"  cols="40" placeholder="message" required></textarea>
 
 <button class="comment-btn" type="submit">Send message</button>
 </form>
@@ -63,12 +79,12 @@ $result = $stmt->fetchall(PDO::FETCH_ASSOC);
         
                             <div class="results">
                                 <span id="user">
+                                    <strong><a
+                                    href="profile.php?user_name=<?= urlencode($results['user_name']) ?>" class="profile-link">
+                                    <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($results['user_name']))) ?>
                                     <?php $profile_img = !empty($results['message_image']) ? "data:image/png;base64," . htmlspecialchars($results['message_image']) : "./files/no_picture.jpg"; ?>
                                     <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
-                                        style="border-radius:50%;"><strong><a
-                                            href="profile.php?user_name=<?= urlencode($results['first_name']) ?>" class="profile-link">
-                                            <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($results['first_name']))) ?>
-
+                                        style="border-radius:50%;">
                                         </a></strong>
                                 </span>
                                 <?php echo htmlspecialchars($results['message_content']); ?>
