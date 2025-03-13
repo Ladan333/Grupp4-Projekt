@@ -1,4 +1,9 @@
 <?php
+
+
+
+use function PHPSTORM_META\type;
+
 $cookie_name = "user_session";
 $cookie_value = session_id();
 $cookie_time = time() + 3600;
@@ -7,10 +12,38 @@ setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
 
 session_start();
+
 require_once 'PDO.php';
 
+if ($_SESSION['id'] == null) {
+    header("Location: index.php");
+    exit();
+}
 
+$conversations = [];
 
+if (!$_SESSION['id'] == null) {
+    $stmt = $pdo->prepare('SELECT MAX(id) FROM dms WHERE user1_id = :session_id OR user2_id = :session_id
+GROUP BY user1_id');
+    $stmt->bindparam(":session_id", $_SESSION['id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $results = $stmt->fetchall(PDO::FETCH_ASSOC);
+}
+
+if ($results != null) { 
+    foreach ($results as $row) {
+    $stmt = $pdo ->prepare('SELECT dms.id, u.user_name, dms.unread_status, dms.CreatedDate, dms.message_content
+                                   FROM dms JOIN users as u ON dms.user1_id = u.id OR dms.user2_id = u.id
+                                   WHERE dms.id = :result_id AND u.user_name NOT LIKE :user_name ');
+    $stmt -> bindparam(":result_id", $row['MAX(id)'], type: PDO::PARAM_INT);
+    $user_name = '%' . $_SESSION['username'] . '%';
+    $stmt -> bindparam(':user_name', $user_name, PDO::PARAM_STR);
+    $stmt->execute();
+    $result = $stmt->fetchall(PDO::FETCH_ASSOC);
+
+    array_push($conversations, $result);
+}
+}
 
 ?>
 
@@ -32,56 +65,40 @@ require_once 'PDO.php';
 
     <main class="index">
 
+    <?php if (!empty($conversations)) { ?>
+            
+        <ul>
+                <?php foreach ($conversations as $conversation): ?>
+                    <?php foreach ($conversation as $key => $value): ?>
+                    <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars( $value['profile_image']) : "./files/no_picture.jpg"; ?>
+                    <li class="searchResult">
 
-    <div class="comments-section">
+                   
+                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
+                        <a href="test.php?user_name=<?php echo urlencode($value['user_name']); ?>" class="profile-link">
                         
-    <form action="AddComments.php" id="addComments-form" method="POST">
 
-                        <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
-                        <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+                            <span class="username-search"><?php echo htmlspecialchars($value["user_name"]); ?></span>
+                            
+                            <?php $message_content = htmlspecialchars($value["message_content"])?>
+                            <!-- <span class="username-search"><?php echo htmlspecialchars($message_content =  (strlen($message_content) > 75) ? substr($message_content, 0, 75) . '...' : $message_content); ?></span> -->
+                         
+                            <?php if ($value['unread_status'] == 1) { ?>
+                                <span class="username-search" style="color:grey; opacity:0.5;">Unread</span>
+                            <?php } ?>
+                            
+                           
+                        </a>
+                    </li>
+                    <!-- <?php var_dump($row); ?> -->
+                    <?php endforeach; ?>
+                <?php endforeach; } ?>
+                
+            
 
-                        <input class="comment-input" type="text" name="comment_input" placeholder="comment" required>
-
-                        <button class="comment-btn" type="submit">Comment</button>
-                    </form>
-    <h4>comment</h4>
-
-                        <?php
-
-
-                        $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name, u.profile_image
-
-                       
-
-                                   FROM comments c
-                                   JOIN users u ON c.user_id = u.id
-                                   WHERE c.blog_id = :blog_id
-                                   ORDER BY c.CreatedDate DESC";
-                        $commentStmt = $pdo->prepare($commentSql);
-                        $commentStmt->bindParam(':blog_id', $post['id'], PDO::PARAM_INT);
-                        $commentStmt->execute();
-                        $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
-                        $comments = array_reverse($comments);
-
-                        foreach ($comments as $comment): ?>
-                            <div class="comment">
-                                <span id="user">
-                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
-                                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
-                                        style="border-radius:50%;"><strong><a
-                                            href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
-                                            <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
-
-                                        </a></strong>
-                                </span>
-                                <?php echo htmlspecialchars($comment['commentContent']); ?>
-                                <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
-                            </div>
+            </ul>
 
 
-
-                        <?php endforeach; ?>
-                    </div>
        
     </main>
 

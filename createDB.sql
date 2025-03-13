@@ -51,18 +51,29 @@ CREATE TABLE IF NOT EXISTS likes (
     UNIQUE(user_id, post_id) -- En användare kan bara gilla ett inlägg en gång
 );
 
-CREATE TABLE IF NOT EXISTS dm (
+CREATE TABLE IF NOT EXISTS dms (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    respond BOOLEAN DEFAULT TRUE,
+    unread_status BOOLEAN DEFAULT TRUE,
     message_content TEXT NOT NULL,
-    sender_id INT NOT NULL,
-    responder_id INT NOT NULL,
-    FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (responder_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE(sender_id, responder_id) -- En användare kan inte dma sig själv
+    message_image MEDIUMTEXT,
+    CreatedDate DATETIME NOT NULL DEFAULT NOW(),
+    user1_id INT NOT NULL,
+    user2_id INT NOT NULL,
+    FOREIGN KEY (user1_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (user2_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-
+    SELECT dms.*, 
+           user1.username AS user1_name, 
+           user2.username AS user2_name
+    FROM dms
+    JOIN users user1 ON user1.id = dms.user1_id
+    JOIN users user2 ON user2.id = dms.user2_id
+    WHERE (dms.user1_id = :user_id AND dms.user2_id = :reciever)
+       OR (dms.user1_id = :reciever AND dms.user2_id = :user_id)
+    ORDER BY dms.id ASC
+    LIMIT 25
+;
 
 ALTER TABLE blogposts
 ADD COLUMN image_base64 MEDIUMTEXT;
