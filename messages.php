@@ -20,17 +20,6 @@ if ($_SESSION['id'] == null) {
     exit();
 }
 
-// if (!$_SESSION['id'] == null) {
-//     $stmt = $pdo ->prepare('SELECT u.user_name, dms.unread_status, max(dms.CreatedDate), max(dms.message_content)
-//                                    FROM dms JOIN users as u ON dms.user1_id = u.id OR dms.user2_id = u.id
-//                                    WHERE dms.user1_id = :session_id OR dms.user2_id = :session_id
-//                                    GROUP BY user1_id');
-//     $stmt -> bindparam(":session_id", $_SESSION['id'], type: PDO::PARAM_INT);
-//     $stmt -> execute();
-//     $conversations = $stmt -> fetchall(PDO::FETCH_ASSOC);
-// }
-
-
 $conversations = [];
 
 if (!$_SESSION['id'] == null) {
@@ -55,13 +44,6 @@ if ($results != null) {
     array_push($conversations, $result);
 }
 }
-// foreach ($conversations as $conversation) {
-//     foreach ($conversation as $key => $value) {
-//         if ($value['user_name'] == $_SESSION['username']){
-//             unset($conversation);
-//         }
-//     }
-// }
 
 ?>
 
@@ -90,6 +72,7 @@ if ($results != null) {
                     <?php foreach ($conversation as $key => $value): ?>
                     <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars( $value['profile_image']) : "./files/no_picture.jpg"; ?>
                     <li class="searchResult">
+
                    
                     <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
                         <a href="test.php?user_name=<?php echo urlencode($value['user_name']); ?>" class="profile-link">
