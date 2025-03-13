@@ -51,11 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $mail->Password = 'Blog123456';
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                 $mail->Port = 465;
-                
+
+                $mail->CharSet = 'UTF-8';
+                $mail->Encoding = 'base64';
 
                 $mail->setFrom('no-reply@theblogwall.se', 'The Blog Wall');
                 $mail->addAddress($result_userinfo['email'], $result_userinfo['user_name']);
-             
+
 
 
                 $mail->isHTML(true);
