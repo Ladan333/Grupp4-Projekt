@@ -28,7 +28,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
     $searchUser = $_GET['search'];
     $_SESSION['search'] = $searchUser;
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE user_name OR first_name OR last_name LIKE :searchUser GROUP BY id ");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE (user_name LIKE :searchUser) OR (first_name LIKE :searchUser) OR (last_name LIKE :searchUser) GROUP BY id ");
     $searchUser = "%" . $searchUser . "%";
     $stmt->bindParam(":searchUser", $searchUser, PDO::PARAM_STR);
     $stmt->execute();
