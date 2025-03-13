@@ -27,10 +27,17 @@ $result = [];
 if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'] == 1) {
     $searchUser = $_GET['search'];
     $_SESSION['search'] = $searchUser;
-
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE (user_name LIKE :searchUser) OR (first_name LIKE :searchUser) OR (last_name LIKE :searchUser) GROUP BY id ");
-    $searchUser = "%" . $searchUser . "%";
-    $stmt->bindParam(":searchUser", $searchUser, PDO::PARAM_STR);
+    
+    $stmt = $pdo->prepare("
+    SELECT * FROM users 
+    WHERE user_name LIKE :searchuser 
+    OR first_name LIKE :searchfirst 
+    OR last_name LIKE :searchlast
+    ");    $searchUser = "%" . $searchUser . "%";
+    
+    $stmt->bindParam(":searchuser", $searchUser, PDO::PARAM_STR);
+    $stmt->bindParam(":searchfirst", $searchUser, PDO::PARAM_STR);
+    $stmt->bindParam(":searchlast", $searchUser, PDO::PARAM_STR);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else if (isset($_GET["search"]) && !empty($_GET["search"]) && $_SESSION["search_sort"] == 2) {
@@ -85,7 +92,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
    
 
         <?php if (!empty($result) && $_SESSION['search_sort'] == 1) { ?>
-            <ul class="searching-list">
+            <ul>
                 <?php foreach ($result as $row): ?>
                     <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "./files/no_picture.jpg"; ?>
                     <li class="searchResult">
