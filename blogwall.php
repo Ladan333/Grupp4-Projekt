@@ -287,6 +287,19 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                     </p>
                     <button class="toggle-btn">Show more</button>
+                    
+                     <!-- kod för gilla-knapp -->
+                    <?php
+                    // Hämta antalet gillningar för inlägget
+                    $stmt = $pdo->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ?");
+                    $stmt->execute([$post['id']]);
+                    $like_count = $stmt->fetchColumn();
+                    ?>
+                    <button class="like-btn" data-post-id="<?= $post['id']; ?>">
+                    ❤️ <span class="like-count"><?= $like_count; ?></span>
+                     </button>
+
+                    
                     <!-- Comment Section -->
                     <div class="comments-section">
                         <h4>comment</h4>

@@ -3,7 +3,7 @@ session_start();
 require 'PDO.php';
 
 if (!isset($_SESSION['id'])) {
-    header("Location: index.php");
+    echo json_encode(["success" => false, "message" => "Ej inloggad"]);
     exit();
 }
 
@@ -25,8 +25,15 @@ if ($post_id) {
         $stmt = $pdo->prepare("INSERT INTO likes (user_id, post_id) VALUES (:user_id, :post_id)");
         $stmt->execute(['user_id' => $user_id, 'post_id' => $post_id]);
     }
+
+    // Hämta det nya antalet gillningar
+    $stmt = $pdo->prepare("SELECT COUNT(*) AS like_count FROM likes WHERE post_id = :post_id");
+    $stmt->execute(['post_id' => $post_id]);
+    $like_count = $stmt->fetchColumn();
+
+    echo json_encode(["success" => true, "likes" => $like_count]);
+    exit();
 }
 
-// Skicka tillbaka användaren till föregående sida
-header("Location: " . $_SERVER['HTTP_REFERER']);
+echo json_encode(["success" => false, "message" => "Ogiltigt post_id"]);
 exit();
