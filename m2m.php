@@ -34,20 +34,20 @@ $other_user_id = (int) $other_user['id'];
 error_log("User ID: $user_id, Other User ID: $other_user_id");
 
 
-$updateStmt = $pdo->prepare("
-    UPDATE dms 
-    SET unread_status = 0 
-    WHERE unread_status = 1 
-    AND (
-        (user1_id = :user_id1 AND user2_id = :other_user_id1) 
-        OR (user1_id = :other_user_id2 AND user2_id = :user_id2)
-    )
-");
-$updateStmt->bindParam(':user_id1', $user_id, PDO::PARAM_INT);
-$updateStmt->bindParam(':other_user_id1', $other_user_id, PDO::PARAM_INT);
-$updateStmt->bindParam(':other_user_id2', $other_user_id, PDO::PARAM_INT);
-$updateStmt->bindParam(':user_id2', $user_id, PDO::PARAM_INT);
-$updateStmt->execute();
+// $updateStmt = $pdo->prepare("
+//     UPDATE dms 
+//     SET unread_status = 0 
+//     WHERE unread_status = 1 
+//     AND (
+//         (user1_id = :user_id1 AND user2_id = :other_user_id1) 
+//         OR (user1_id = :other_user_id2 AND user2_id = :user_id2)
+//     )
+// ");
+// $updateStmt->bindParam(':user_id1', $user_id, PDO::PARAM_INT);
+// $updateStmt->bindParam(':other_user_id1', $other_user_id, PDO::PARAM_INT);
+// $updateStmt->bindParam(':other_user_id2', $other_user_id, PDO::PARAM_INT);
+// $updateStmt->bindParam(':user_id2', $user_id, PDO::PARAM_INT);
+// $updateStmt->execute();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
     $message_content = !empty($_POST['message']) ? trim($_POST['message']) : NULL;
@@ -61,16 +61,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
     if (!$message_content && !$message_image) {
         die(" ERROR: Cannot send an empty message.");
     }
-
+    $true = 1; 
     $stmt = $pdo->prepare("
-        INSERT INTO dms (unread_status, message_content, message_image, CreatedDate, user1_id, user2_id)
-        VALUES (1, :message_content, :message_image, NOW(), :user_id, :other_user_id)
-    ");
+    INSERT INTO dms (unread_status, message_content, message_image, CreatedDate, user1_id, user2_id)
+    VALUES (:true, :message_content, :message_image, NOW(), :user_id, :other_user_id)
+");
 
     $stmt->bindParam(':message_content', $message_content, PDO::PARAM_STR);
     $stmt->bindParam(':message_image', $message_image, PDO::PARAM_LOB);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->bindParam(':other_user_id', $other_user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':true', $true, PDO::PARAM_INT);
+
 
     if (!$stmt->execute()) {
         die(" INSERT Failed: " . print_r($stmt->errorInfo(), true));
@@ -82,24 +84,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
 
 
 $stmt = $pdo->prepare("
-    SELECT dms.*, 
-           user1.user_name AS user1_name, 
-           user2.user_name AS user2_name
-    FROM dms
-    JOIN users user1 ON user1.id = dms.user1_id
-    JOIN users user2 ON user2.id = dms.user2_id
-    WHERE 
-       (dms.user1_id = :user1 AND dms.user2_id = :user2)
-    OR (dms.user1_id = :user2 AND dms.user2_id = :user1)
-    ORDER BY dms.CreatedDate ASC
+SELECT 
+    dms.id AS message_id,
+    dms.message_content,
+    dms.message_image,
+    dms.CreatedDate,
+    dms.unread_status,
+    dms.user1_id,
+    dms.user2_id,
+    user1.user_name AS user1_name,  -- Hämtar användarnamn för user1
+    user2.user_name AS user2_name   -- Hämtar användarnamn för user2
+FROM dms
+JOIN users user1 ON user1.id = dms.user1_id  
+JOIN users user2 ON user2.id = dms.user2_id  
+WHERE 
+    (dms.user1_id = :user_id1 AND dms.user2_id = :other_user_id1)
+    OR (dms.user1_id = :other_user_id2 AND dms.user2_id = :user_id2)
+ORDER BY dms.CreatedDate ASC;
 ");
 
-$parameters = [
-    ':user1' => $user_id,
-    ':user2' => $other_user_id
-];
+// Bind parametrarna
+$stmt->bindParam(':user_id1', $user_id, PDO::PARAM_INT);
+$stmt->bindParam(':other_user_id1', $other_user_id, PDO::PARAM_INT);
+$stmt->bindParam(':other_user_id2', $other_user_id, PDO::PARAM_INT);
+$stmt->bindParam(':user_id2', $user_id, PDO::PARAM_INT);
 
-$stmt->execute($parameters);
+$stmt->execute();
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
@@ -483,7 +493,7 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <input type="file" id="message_image" name="message_image">
             </div>
             <button type="submit" name="save" class="btn btn-primary">Send</button>
-            <a href="profile.php" class="btn btn-secondary">Cancel</a>
+            <a href="blogwall.php" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 
