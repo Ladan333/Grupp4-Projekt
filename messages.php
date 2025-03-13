@@ -73,34 +73,35 @@ $unreadCount = $unreadStmt->fetch(PDO::FETCH_ASSOC)['unread_count'];
 <body>
     <?php require "navbar.php"; ?>
 
-   
-      
 
-        <ul class="messages-list">
+
+
+    <ul class="searching-list">
         <?php foreach ($messages as $msg): ?>
-    <li class="searchResult">
-        <?php 
-        $profile_img = !empty($msg['profile_image']) 
-            ? "data:image/png;base64," . htmlspecialchars($msg['profile_image'], ENT_QUOTES, 'UTF-8') 
-            : "./files/no_picture.jpg"; 
-        ?>
-        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
-        <a href="m2m.php?user_name=<?= urlencode($msg['conversation_partner'] ?? '') ?>">
-            <strong><?= htmlspecialchars($msg['conversation_partner'] ?? '', ENT_QUOTES, 'UTF-8') ?></strong>
-            <br>
-            <span class="name"><?= htmlspecialchars($msg['message_content'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
-            <br>
-            <!-- <span class="message-date"><?= htmlspecialchars($msg['CreatedDate'] ?? '', ENT_QUOTES, 'UTF-8') ?></span> -->
-            <?php if (!empty($msg['unread_status']) && $msg['unread_status'] == 1): ?>
-                <span class="unread-indicator" style="color:white;">Unread</span>
-            <?php endif; ?>
-        </a>
-    </li>
-<?php endforeach; ?>
+            <li class="searchResult">
+                <?php
+                $profile_img = !empty($msg['profile_image'])
+                    ? "data:image/png;base64," . htmlspecialchars($msg['profile_image'], ENT_QUOTES, 'UTF-8')
+                    : "./files/no_picture.jpg";
+                ?>
+                <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
+                <a href="m2m.php?user_name=<?= urlencode($msg['conversation_partner'] ?? '') ?>">
+                    <strong><?= htmlspecialchars($msg['conversation_partner'] ?? '', ENT_QUOTES, 'UTF-8') ?></strong>
+                    <br>
+                    <span class="name"><?= htmlspecialchars($msg['message_content'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
+                    <br>
+                    <!-- <span class="message-date"><?= htmlspecialchars($msg['CreatedDate'] ?? '', ENT_QUOTES, 'UTF-8') ?></span> -->
+                    <?php if (!empty($msg['unread_status']) && $msg['unread_status'] == 1 && $msg['user2_id'] == $user_id): ?>
+                        <span class="unread-indicator" style="color:white;">Unread</span>
+                    <?php endif; ?>
 
-        </ul>
+                </a>
+            </li>
+        <?php endforeach; ?>
 
-   
+    </ul>
+
+
 
 </body>
 

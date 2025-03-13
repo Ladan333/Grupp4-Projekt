@@ -34,20 +34,17 @@ $other_user_id = (int) $other_user['id'];
 error_log("User ID: $user_id, Other User ID: $other_user_id");
 
 
-// $updateStmt = $pdo->prepare("
-//     UPDATE dms 
-//     SET unread_status = 0 
-//     WHERE unread_status = 1 
-//     AND (
-//         (user1_id = :user_id1 AND user2_id = :other_user_id1) 
-//         OR (user1_id = :other_user_id2 AND user2_id = :user_id2)
-//     )
-// ");
-// $updateStmt->bindParam(':user_id1', $user_id, PDO::PARAM_INT);
-// $updateStmt->bindParam(':other_user_id1', $other_user_id, PDO::PARAM_INT);
-// $updateStmt->bindParam(':other_user_id2', $other_user_id, PDO::PARAM_INT);
-// $updateStmt->bindParam(':user_id2', $user_id, PDO::PARAM_INT);
-// $updateStmt->execute();
+$updateStmt = $pdo->prepare("
+    UPDATE dms 
+    SET unread_status = 0 
+    WHERE unread_status = 1 
+    AND user2_id = :user_id 
+    AND user1_id = :other_user_id
+");
+
+$updateStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$updateStmt->bindParam(':other_user_id', $other_user_id, PDO::PARAM_INT);
+$updateStmt->execute();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
     $message_content = !empty($_POST['message']) ? trim($_POST['message']) : NULL;
