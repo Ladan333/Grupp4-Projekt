@@ -1,4 +1,6 @@
-<p?php if(session_status()==PHP_SESSION_NONE) {session_start();} ?>
+<?php if(session_status()==PHP_SESSION_NONE) {session_start();}
+require_once('display_count.php');
+?>
 
 
 
@@ -35,6 +37,13 @@
                 </form>
             </ul>
 
+            <div class="display-messages">
+                <a href="messages.php">&#9993;</a>
+                <p><?php
+                if($_SESSION['display_count'] > 0){
+                echo $_SESSION['display_count'];
+                }?></p>
+            </div>
             <div class="burger" onclick="toggleMenu()">
                 <p>☰</p>
             </div>
@@ -44,6 +53,7 @@
                     <li><a href="profile.php">Profile</a></li>
                     <li><a href="blogwall.php">Wall</a></li>
                     <li><a href="logout.php">Logout</a></li>
+                    <li><a href="messages.php">Messages</a></li>
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
                         <li><a href="admin_list.php">Admin</a></li>
                     <?php endif; ?>

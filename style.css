@@ -244,7 +244,7 @@ input[type=file] {
 .content {
     margin: 10px 0;
     display: -webkit-box;
-    -webkit-line-clamp: 4; 
+    -webkit-line-clamp: auto; 
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -296,11 +296,16 @@ input[type=file] {
     flex-direction: column;
     gap: 8px;
 }
-
+.comment-header{
+    display: flex;
+    justify-content: space-between;
+}
 #user {
     display: flex;
 }
-
+.comment p{
+    padding-left: 1em;
+}
 #user ion-icon {
     padding-right: 3px;
 }
