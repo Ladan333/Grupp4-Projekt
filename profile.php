@@ -183,13 +183,13 @@ $_SESSION['follow_username'] = $result['user_name'];
                         <p class="content short">
                             <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                         </p>
-                        <button class="toggle-btn">Visa mer</button>
+                        <button class="toggle-btn">Show more</button>
                         <!-- Comment Section -->
                         <div class="comments-section">
                             <h4>comment</h4>
                             <?php
 
-                            $commentSql = "SELECT c.commentContent, c.CreatedDate , u.user_name, u.profile_image
+                            $commentSql = "SELECT c.id, c.commentContent, c.CreatedDate , u.user_name, u.profile_image
                                        FROM comments c
                                        JOIN users u ON c.user_id = u.id
                                        WHERE c.blog_id = :blog_id
@@ -202,17 +202,29 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                             foreach ($comments as $comment): ?>
                                 <div class="comment">
-                                    <span id="user">
-                                        <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
-                                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
-                                            style="border-radius:50%;"><strong><a
-                                                href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>"
-                                                class="profile-link">
-                                                <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
-                                            </a></strong> <?php echo "&nbsp;" . htmlspecialchars($comment["CreatedDate"]); ?>
-                                    </span>
-                                    <?php echo htmlspecialchars($comment['commentContent']); ?>
+                                <div class="comment-header">
+                                <div id="user">
+                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
+                                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                        style="border-radius:50%;"><strong><a
+                                            href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
+                                            <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+                                            <?php echo "&nbsp;&nbsp;" . htmlspecialchars($comment['CreatedDate']) ?>
+
+                                        </a></strong>
                                 </div>
+                                <div id="comment-delete-btn">
+
+                                        <!-- Only allow the user who created the post or admins to delete -->
+                                        <form action="delete_comment.php" method="POST" style="display: inline;">
+                                            <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
+                                            <button type="submit" class="delete-btn">X</button>
+                                        </form>
+
+                                </div>
+                                </div>
+                                <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
+                            </div>
                             <?php endforeach; ?>
                         </div>
 
@@ -234,7 +246,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                         <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $_SESSION['id']): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
-                            <form action="delete_post.php" method="POST" style="display: inline;">
+                            <form action="delete.php" method="POST" style="display: inline;">
                                 <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                                 <button type="submit" class="delete-btn">Delete post</button>
                             </form>
@@ -272,15 +284,21 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                     if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
                         <button><a href="edituser.php">Edit profile</a></button>
+                        <button><a href="following.php">Follows</a></button>
                     <?php } else if (!$follow_result) { ?>
-                        <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
-                            <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
-                        </form>
-                    <?php } else if ($follow_result) { ?>
-                        <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
-                            <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
-                        <?php } ?>
-                        </form>
+                            <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
+                                <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
+                            </form>
+                           
+                            <button><a href="m2m.php?user_name=<?php echo urlencode($result['user_name']); ?>">Send Messages</a></button>
+                            <?php } else if ($follow_result) { ?>
+                                <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
+                                    <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
+                                    <button><a href="m2m.php?user_name=<?php echo urlencode($result['user_name']); ?>">Send Messages</a></button>
+
+                                    <?php } ?>
+
+                                </form>
 
                 </div>
                 <div class="profile-info">
@@ -318,7 +336,7 @@ $_SESSION['follow_username'] = $result['user_name'];
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".post").forEach(post => {
                 let content = post.querySelector(".content");
                 let button = post.querySelector(".toggle-btn");
@@ -330,7 +348,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     button.style.display = "none";
                 }
 
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     if (content.classList.contains("short")) {
                         content.classList.remove("short");
                         this.textContent = "Show less";
@@ -360,7 +378,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                 //     });
                 // }
             });
-            document.getElementById("postImage").addEventListener("change", function(event) {
+            document.getElementById("postImage").addEventListener("change", function (event) {
                 const fileInput = event.target;
                 const fileNameDisplay = document.getElementById("image-names");
 
@@ -398,7 +416,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                 }
             });
             document.querySelectorAll(".update-btn").forEach(button => {
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     const post = this.closest(".post"); // Get the parent post element
                     const postId = post.querySelector("input[name='post_id']")?.value; // Get post ID
                     const title = post.querySelector(".post-title").textContent.trim();

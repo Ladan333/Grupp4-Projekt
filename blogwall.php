@@ -121,8 +121,8 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
     }
 }
 ?>
-  
-                 
+
+
 
 
 <!DOCTYPE html>
@@ -207,19 +207,20 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             <button id="openModalBtn" class="add-post-btn"><ion-icon name="add-circle"></ion-icon> Add Post</button>
         </div>
 
-            
-            
-                <!-- Add Post Modal -->
-            <div id="postModal" class="modal">
-                <div class="modal-content">
-                    <span class="close-btn">&times;</span>
+
+
+        <!-- Add Post Modal -->
+        <div id="postModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
                 <h2>Add a new post</h2>
                 <form class="add-post-form" action="add_post.php" method="POST" enctype="multipart/form-data">
                     <label for="add-post-title">Title:</label>
                     <input type="text" id="add-post-title" name="title" required placeholder="Amazing blogwall...">
-                    
+
                     <label for="postContent">Post text:</label>
-                    <textarea id="postContent" name="content" rows="4" required placeholder="Skriv ditt inlägg här..."></textarea>
+                    <textarea id="postContent" name="content" rows="4" required
+                        placeholder="Skriv ditt inlägg här..."></textarea>
 
                     <label id="post-text">Upload image:</label>
                     <label for="postImage" class="postImage">
@@ -227,7 +228,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <p id="image-names">Upload image</p>
                     </label>
                     <input type="file" id="postImage" name="image" accept="image/*">
-            
+
                     <button type="submit" class="submit-btn">Publish</button>
                 </form>
             </div>
@@ -306,7 +307,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <?php
 
 
-                        $commentSql = "SELECT c.id, c.user_id, c.commentContent, c.CreatedDate, u.user_name, u.profile_image
+                        $commentSql = "SELECT c.id, c.commentContent, c.CreatedDate, u.user_name, u.profile_image
 
                        
 
@@ -322,28 +323,29 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                         foreach ($comments as $comment): ?>
                             <div class="comment">
-                                <span id="user">
+                                <div class="comment-header">
+                                <div id="user">
                                     <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
                                     <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
                                         style="border-radius:50%;"><strong><a
                                             href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
                                             <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+                                            <?php echo "&nbsp;&nbsp;" . htmlspecialchars($comment['CreatedDate']) ?>
 
                                         </a></strong>
-                                </span>
-                                <?php echo htmlspecialchars($comment['commentContent']); ?>
-                                <p><?php echo htmlspecialchars($comment['CreatedDate']) ?></p>
-                                <?php if($comment['user_id'] == $_SESSION['id']): ?>
-                                <form action="delete.php" method="post" onsubmit="return confirmDelete()">
-                                    <input type="hidden" name="delete-comment" value="<?php echo $comment['id']?>">
-                                    <button type="submit">delete</button>
-                                </form>
-                                <script>
-                                     function confirmDelete(){
-                                        return confirm("Delete commit? cant undo this.....");
-                                        }
-                                </script>
-                                <?php endif; ?>
+                                </div>
+                                <div id="comment-delete-btn">
+                                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
+                                        <!-- Only allow the user who created the post or admins to delete -->
+                                        <form action="delete_comment.php" method="POST" style="display: inline;">
+                                            <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
+                                            <button type="submit" class="delete-btn">X</button>
+                                        </form>
+
+                                    <?php endif; ?>
+                                </div>
+                                </div>
+                                <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
                             </div>
 
 
@@ -371,7 +373,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         </form>
 
                     <?php endif; ?>
-                    
+
 
                 </div>
             <?php endforeach; ?>
@@ -482,13 +484,13 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                     // Handle image display
                     if (image) {
-                        imageNamesLabel.textContent = "Current Image: " + image.getAttribute("src");
+                        const username = "<?php echo htmlspecialchars(ucwords(strtolower($username))); ?>"; // Get the username of the person who posted
+                        imageNamesLabel.textContent = `${username}'s post image`;
                     } else {
                         imageNamesLabel.textContent = "Upload Image";
                     }
 
                     // Change form action for editing
-                    form.action = "edit_post.php";
                     form.insertAdjacentHTML("beforeend", `<input type="hidden" name="post_id" value="${postId}">`);
 
                     // Update modal appearance
@@ -496,6 +498,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     submitButton.textContent = "Update Post";
                     editMode = true;
                     editPostId = postId;
+                    form.action = "edit_post.php";
 
                     // Open modal
                     modal.style.display = "flex";
@@ -559,8 +562,8 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     {
                         element: ".sorting",
                         popover: {
-                            title: "Sorting posts",
-                            description: "Click here to filter/sort posts based on the way you need.",
+                            title: "Sorting Posts",
+                            description: "Click here to filter posts based on what you would like.",
                             side: "bottom",
                             align: 'start'
                         }

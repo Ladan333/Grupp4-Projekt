@@ -10,7 +10,6 @@ if (!isset($_POST['id'])) {
 }
 
 $user_id = $_POST['id'];
-
 // Hämta användarprofil innan borttagning
 $stmt = $pdo->prepare("SELECT first_name, last_name FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
