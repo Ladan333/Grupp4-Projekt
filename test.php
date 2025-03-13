@@ -1,16 +1,52 @@
 <?php
 require_once('PDO.php');
 session_start();
+$user_id = $_SESSION['id']; 
+$other_user_name = isset($_GET['user_name']) ? trim($_GET['user_name']) : null;
+
+if (!$other_user_name) {
+    die("Invalid request: Missing username.");
+}
+
+
+
+
+$stmt = $pdo->prepare("SELECT id FROM users WHERE user_name = :user_name");
+$stmt->bindParam(':user_name', $other_user_name, PDO::PARAM_STR);
+$stmt->execute();
+$other_user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$other_user) {
+    die("User not found.");
+}
+
+$other_user_id = $other_user['id'];
+
+
+$updateStmt = $pdo->prepare("
+    UPDATE dms 
+    SET unread_status = 0 
+    WHERE unread_status = 1 
+    AND user1_id = :other_user_id 
+    AND user2_id = :user_id
+");
+
+$updateStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$updateStmt->bindParam(':other_user_id', $other_user_id, PDO::PARAM_INT);
+$updateStmt->execute();
+
+
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
-    $user2_id = $_SESSION['id']; 
-    $user1_id = $_GET['id']; 
+    $user1_id = $_SESSION['id']; 
+    $user2_id = $other_user_id; 
 
     $message_content = !empty($_POST['message']) ? trim($_POST['message']) : NULL;
     $message_image = NULL;
 
     if (!empty($_FILES['message_image']['tmp_name'])) {
         $imageData = file_get_contents($_FILES['message_image']['tmp_name']);
-        $message_image = base64_encode($imageData); // Encode image as Base64
+        $message_image = base64_encode($imageData);
     }
 
 
@@ -25,14 +61,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
     $stmt->bindParam(':user2_id', $user2_id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
-        echo "Message sent successfully!";
+        header("Location: " . $_SERVER['REQUEST_URI']); 
+        exit();
     } else {
         echo "Error sending message.";
-    }
+    } 
 }
 
-$user_id = $_SESSION['id']; // Inloggad användares ID
-$other_user_id = 1; // ID på den person du chattar med
+$user_id = $_SESSION['id']; 
+
 
 $stmt = $pdo->prepare("
     SELECT dms.*, 
@@ -43,8 +80,8 @@ $stmt = $pdo->prepare("
     JOIN users user2 ON user2.id = dms.user2_id
     WHERE (dms.user1_id = :user_id AND dms.user2_id = :other_user_id)
        OR (dms.user1_id = :other_user_id AND dms.user2_id = :user_id)
-    ORDER BY dms.id ASC
-    LIMIT 25
+    ORDER BY dms.CreatedDate ASC
+    
 ");
 
 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -53,13 +90,31 @@ $stmt->execute();
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<script>
+    function scrollToBottom() {
+        var chatMessages = document.querySelector(".chat-messages");
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
 
+   
+    window.onload = function() {
+        scrollToBottom();
+    };
+
+    document.querySelector("form").addEventListener("submit", function() {
+        setTimeout(scrollToBottom, 100); 
+    });
+</script>
+
+<?php require "navbar.php"?>
 <div class="chat-messages">
     <?php foreach ($messages as $msg): ?>
         <?php if ($msg['user1_id'] == $user_id): ?>
-            <p><strong>Du:</strong> <?php echo htmlspecialchars($msg['message_content']); ?></p>
+            <p><strong>Du:</strong> <?php echo htmlspecialchars($msg['message_content']) . "&nbsp". htmlspecialchars($msg['CreatedDate']);?></p>
             <?php if (!empty($msg['message_image'])): ?>
-                <img src="data:image/jpeg;base64,<?php echo htmlspecialchars($msg['message_image']); ?>" width="150">
+                <img class="message-img" src="data:image/jpeg;base64,<?php echo htmlspecialchars($msg['message_image']); ?>" width="400">
             <?php endif; ?>
         <?php else: ?>
             <p><strong><?php echo htmlspecialchars($msg['user1_name']); ?>:</strong>
