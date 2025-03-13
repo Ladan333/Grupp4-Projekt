@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS likes (
 CREATE TABLE IF NOT EXISTS dms (
     id INT AUTO_INCREMENT PRIMARY KEY,
     unread_status BOOLEAN DEFAULT TRUE,
-    message_content TEXT NOT NULL,
+    message_content TEXT,
     message_image MEDIUMTEXT,
     CreatedDate DATETIME NOT NULL DEFAULT NOW(),
     user1_id INT NOT NULL,
