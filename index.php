@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 $cookie_name = "user_session";
 $cookie_value = session_id();
 $cookie_time = time() + 3600;
