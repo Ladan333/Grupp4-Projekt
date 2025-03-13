@@ -28,7 +28,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
     $searchUser = $_GET['search'];
     $_SESSION['search'] = $searchUser;
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE user_name LIKE :searchUser ");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE user_name OR first_name OR last_name LIKE :searchUser GROUP BY id ");
     $searchUser = "%" . $searchUser . "%";
     $stmt->bindParam(":searchUser", $searchUser, PDO::PARAM_STR);
     $stmt->execute();
@@ -85,7 +85,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
    
 
         <?php if (!empty($result) && $_SESSION['search_sort'] == 1) { ?>
-            <ul>
+            <ul class="searching-list">
                 <?php foreach ($result as $row): ?>
                     <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "./files/no_picture.jpg"; ?>
                     <li class="searchResult">
