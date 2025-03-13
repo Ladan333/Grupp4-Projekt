@@ -75,7 +75,7 @@ if ($results != null) {
 
                    
                     <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
-                        <a href="test.php?user_name=<?php echo urlencode($value['user_name']); ?>" class="profile-link">
+                        <a href="m2m.php?user_name=<?php echo urlencode($value['user_name']); ?>" class="profile-link">
                         
 
                             <span class="username-search"><?php echo htmlspecialchars($value["user_name"]); ?></span>
