@@ -31,18 +31,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->execute();
     $result_userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $hashwed_password = $result_userinfo['pwd'];
-
-
     if (!$result_userinfo) {
-        echo "invalid";
-    } else if (password_verify($password, $hashwed_password)) {
-        $_SESSION['username'] = $username;
-        $_SESSION['role'] = $result_userinfo['role'];
-        $_SESSION['id'] = $result_userinfo['id'];
-        $_SESSION['login_time'] = time();
-        header("Location: blogwall.php");
-        exit();
+        echo '<h3 style="text-align:center; color:red;">Invalid username or password</h3>';
+    } else {
+        $hashed_password = $result_userinfo['pwd'];
+    
+        if (password_verify($password, $hashed_password)) {
+            $_SESSION['username'] = $username;
+            $_SESSION['role'] = $result_userinfo['role'];
+            $_SESSION['id'] = $result_userinfo['id'];
+            $_SESSION['login_time'] = time();
+            header("Location: blogwall.php");
+            exit();
+        } else {
+            echo '<h3 style="text-align:center; color:red;">Invalid username or password</h3>';
+        }
     }
 }
 
