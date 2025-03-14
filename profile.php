@@ -159,7 +159,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                             if (!empty($posts) && $_SESSION['profile_id'] == $_SESSION['id']) {
-                            for ($x = 0; ($x - 1) <= count($posts); $x++) : 
+                            for ($x = 0; $x < count($posts); $x++) : 
                                 if ($posts[$x]["user_id"] != $_SESSION["profile_id"]) {
                                     unset($posts[$x]);
                             }
