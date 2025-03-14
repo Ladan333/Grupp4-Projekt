@@ -65,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['email'] = $userInfo['email'];
                 $_SESSION['role'] = $userInfo['role'];
                 $_SESSION['login_time'] = time();
+                $_SESSION['blogflow'] = 1;
 
                 header("Location: blogwall.php");
                 exit();
