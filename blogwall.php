@@ -268,6 +268,19 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
 
         <div class="posts">
+            <style>
+                .empty_feed {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    font-size: 1.5rem;
+                }
+            </style>
+            <?php if (empty($posts)) : ?>
+                <p class="empty_feed">No posts could be found<br></p>
+                <p class="empty_feed">Try following some users or add a post yourself!</p>
+            <?php endif; ?>
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <p class="post-username">

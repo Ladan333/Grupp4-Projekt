@@ -133,34 +133,61 @@ $_SESSION['follow_username'] = $result['user_name'];
                 </form>
             </div>
 
+            <?php
+                            if ($_SESSION['sorting'] == 1) {
+                                $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id
+                             FROM blogposts bp
+                             JOIN users u ON bp.user_id = u.id
+                             ORDER BY bp.CreatedDate DESC";
+                            } else if ($_SESSION['sorting'] == 2) {
+                                $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
+                             FROM blogposts bp
+                             JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
+                             GROUP BY c.blog_id
+                             ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
+                            } else if ($_SESSION["sorting"] == 3) {
+                                $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
+                            FROM blogposts bp
+                            JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
+                            WHERE c.CreatedDate >= NOW() - INTERVAL 1 DAY
+                            GROUP BY c.blog_id
+                            ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
+                            }
+            
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute();
+                            $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                            if (!empty($posts) && $_SESSION['profile_id'] == $_SESSION['id']) {
+                            for ($x = 0; ($x - 1) <= count($posts); $x++) : 
+                                if ($posts[$x]["user_id"] != $_SESSION["profile_id"]) {
+                                    unset($posts[$x]);
+                            }
+                            endfor;
+                            }      
+            ?>
+
             <div class="posts">
-                <?php
-
-
-
-                if ($_SESSION['sorting'] == 1) {
-                    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id
-                 FROM blogposts bp
-                 JOIN users u ON bp.user_id = u.id
-                 ORDER BY bp.CreatedDate DESC";
-                } else if ($_SESSION['sorting'] == 2) {
-                    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
-                 FROM blogposts bp
-                 JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
-                 GROUP BY c.blog_id
-                 ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
-                } else if ($_SESSION["sorting"] == 3) {
-                    $sql = "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate,  bp.image_base64, bp.user_id, COUNT(c.blog_id)
-                FROM blogposts bp
-                JOIN users AS u ON bp.user_id = u.id JOIN comments AS c ON c.blog_id = bp.id
-                WHERE c.CreatedDate >= NOW() - INTERVAL 1 DAY
-                GROUP BY c.blog_id
-                ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
+            <style>
+                .empty_feed {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    font-size: 1.5rem;
                 }
+            </style>
+            <?php if (empty($posts) && $_SESSION['profile_id'] == $_SESSION['id']) : ?>
+                <p class="empty_feed">No posts could be found<br></p>
+                <p class="empty_feed">Try adding some posts for others to see!</p>
+            <?php endif; ?>
 
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute();
-                $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            <?php if (empty($posts) && $_SESSION['profile_id'] != $_SESSION['id']) : ?>
+                <p class="empty_feed">No posts could be found<br></p>
+                <p class="empty_feed">This user has made no posts matching the criteria!</p>
+            <?php endif; ?>
+
+                <?php
 
                 foreach ($posts as $post): ?>
                     <?php if ($post['user_id'] != $_SESSION['profile_id']) {
