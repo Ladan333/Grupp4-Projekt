@@ -13,9 +13,9 @@ session_start();
 $_SESSION['sorting'] = 1;
 $_SESSION['blogflow'] = 1;
 require "PDO.php";
+require "UserDAO.php";
 
-$_SESSION['sorting'] = 1;
-$_SESSION['blogflow'] = 1;
+
 if (isset($_SESSION["username"])) {
     header("Location: blogwall.php");
     exit();
@@ -26,20 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    $stmt = $pdo->prepare("SELECT id, pwd, role FROM users WHERE user_name = :username");
-    $stmt->bindParam(":username", $username);
-    $stmt->execute();
-    $result_userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $userDAO = new UserDAO($pdo);
+    $userInfo = $userDAO->getUserByUsername($username);
 
-    if (!$result_userinfo) {
+
+
+
+    if (!$userInfo) {
         echo '<h3 style="text-align:center; color:red;">Invalid username or password</h3>';
     } else {
-        $hashed_password = $result_userinfo['pwd'];
+        $hashed_password = $userInfo['pwd'];
     
         if (password_verify($password, $hashed_password)) {
             $_SESSION['username'] = $username;
-            $_SESSION['role'] = $result_userinfo['role'];
-            $_SESSION['id'] = $result_userinfo['id'];
+            $_SESSION['role'] = $userInfo['role'];
+            $_SESSION['id'] = $userInfo['id'];
             $_SESSION['login_time'] = time();
             header("Location: blogwall.php");
             exit();
