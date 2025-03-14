@@ -8,7 +8,7 @@ session_start();
 
 
 if (!isset($_SESSION['id'])) {
-    die(" ERROR: No user logged in.");
+    header('Location: index.php');
 }
 
 $user_id = (int) $_SESSION['id'];

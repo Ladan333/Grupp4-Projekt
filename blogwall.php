@@ -237,8 +237,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             </div>
         </div>
         <div class="sorting">
+
             <?php
-            if ($_SESSION['blogflow'] == 1 ||  $_SESSION['blogflow'] == null) { ?>
+        
+            if ($_SESSION['blogflow'] == 1) { ?>
                 <form action="change_blogflow.php" method="POST">
                     <input type="hidden" name="change_view" value="1" ;>
                     <button class="comment-btn blogflow" type="submit">Sort by folowers</button>
