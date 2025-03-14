@@ -1,5 +1,8 @@
 <?php
 session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require 'PDO.php';
 
 if ($_SESSION['id'] == null) {
@@ -235,10 +238,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
         </div>
         <div class="sorting">
             <?php
-            if ($_SESSION['blogflow'] == 1) { ?>
+            if ($_SESSION['blogflow'] == 1 ||  $_SESSION['blogflow'] == null) { ?>
                 <form action="change_blogflow.php" method="POST">
                     <input type="hidden" name="change_view" value="1" ;>
-                    <button class="comment-btn blogflow" type="submit">Sort by folowers</button>
+                    <button class="comment-btn blogflow" type="submit">Sort by followers</button>
                 </form>
             <?php } else { ?>
                 <form action="change_blogflow.php" method="POST">
@@ -265,6 +268,19 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
 
         <div class="posts">
+            <style>
+                .empty_feed {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    font-size: 1.5rem;
+                }
+            </style>
+            <?php if (empty($posts)) : ?>
+                <p class="empty_feed">No posts could be found<br></p>
+                <p class="empty_feed">Try following some users or add a post yourself!</p>
+            <?php endif; ?>
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <p class="post-username">

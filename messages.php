@@ -1,49 +1,62 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-
-
-use function PHPSTORM_META\type;
-
-$cookie_name = "user_session";
-$cookie_value = session_id();
-$cookie_time = time() + 3600;
-
-setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
-
-
+require_once('PDO.php');
 session_start();
 
-require_once 'PDO.php';
 
-if ($_SESSION['id'] == null) {
-    header("Location: index.php");
-    exit();
+if (!isset($_SESSION['id'])) {
+    die("❌ ERROR: No user logged in.");
 }
+
+$user_id = (int) $_SESSION['id'];
 
 $conversations = [];
 
-if (!$_SESSION['id'] == null) {
-    $stmt = $pdo->prepare('SELECT MAX(id) FROM dms WHERE user1_id = :session_id OR user2_id = :session_id
-GROUP BY user1_id');
-    $stmt->bindparam(":session_id", $_SESSION['id'], PDO::PARAM_INT);
-    $stmt->execute();
-    $results = $stmt->fetchall(PDO::FETCH_ASSOC);
-}
 
-if ($results != null) { 
-    foreach ($results as $row) {
-    $stmt = $pdo ->prepare('SELECT dms.id, u.user_name, dms.unread_status, dms.CreatedDate, dms.message_content
-                                   FROM dms JOIN users as u ON dms.user1_id = u.id OR dms.user2_id = u.id
-                                   WHERE dms.id = :result_id AND u.user_name NOT LIKE :user_name ');
-    $stmt -> bindparam(":result_id", $row['MAX(id)'], type: PDO::PARAM_INT);
-    $user_name = '%' . $_SESSION['username'] . '%';
-    $stmt -> bindparam(':user_name', $user_name, PDO::PARAM_STR);
-    $stmt->execute();
-    $result = $stmt->fetchall(PDO::FETCH_ASSOC);
+$stmt = $pdo->prepare("
+    SELECT dms.id AS message_id,
 
-    array_push($conversations, $result);
-}
-}
+           dms.message_content,
+           dms.CreatedDate,
+           dms.unread_status,
+           dms.user1_id,
+           dms.user2_id,
+           user1.*,
+           user2.*,
+           CASE 
+               WHEN dms.user1_id = :user_id THEN user2.user_name 
+               ELSE user1.user_name 
+           END AS conversation_partner
+    FROM dms
+    JOIN users user1 ON user1.id = dms.user1_id
+    JOIN users user2 ON user2.id = dms.user2_id
+    WHERE dms.id IN (
+        SELECT MAX(id) FROM dms 
+        WHERE user1_id = :user_id1 OR user2_id = :user_id2
+        GROUP BY LEAST(user1_id, user2_id), GREATEST(user1_id, user2_id)
+    )
+    ORDER BY dms.CreatedDate DESC
+");
+
+$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$stmt->bindParam(':user_id1', $user_id, PDO::PARAM_INT);
+$stmt->bindParam(':user_id2', $user_id, PDO::PARAM_INT);
+$stmt->execute();
+$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$_SESSION['display_count'] = $unreadCount ?? 0;
+
+$unreadStmt = $pdo->prepare("
+    SELECT COUNT(DISTINCT user1_id) AS unread_count 
+    FROM dms 
+    WHERE unread_status = 1 
+    AND user2_id = :user_id
+");
+$unreadStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$unreadStmt->execute();
+$unreadCount = $unreadStmt->fetch(PDO::FETCH_ASSOC)['unread_count'];
 
 ?>
 
@@ -53,54 +66,42 @@ if ($results != null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <meta http-equiv="refresh" content="20"> -->
     <link rel="stylesheet" type="text/css" href="CSS.css">
-    <link preload href="./files/Leche_Frita.ttf" as="font" type="font/ttf" crossorigin>
-    <title>Document</title>
+    <title>Messenger</title>
 </head>
 
 <body>
-<?php require "navbar.php"; ?>
+    <?php require "navbar.php"; ?>
 
 
-    <main class="index">
-
-    <?php if (!empty($conversations)) { ?>
-            
-        <ul>
-                <?php foreach ($conversations as $conversation): ?>
-                    <?php foreach ($conversation as $key => $value): ?>
-                    <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars( $value['profile_image']) : "./files/no_picture.jpg"; ?>
-                    <li class="searchResult">
-
-                   
-                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
-                        <a href="m2m.php?user_name=<?php echo urlencode($value['user_name']); ?>" class="profile-link">
-                        
-
-                            <span class="username-search"><?php echo htmlspecialchars($value["user_name"]); ?></span>
-                            
-                            <?php $message_content = htmlspecialchars($value["message_content"])?>
-                            <!-- <span class="username-search"><?php echo htmlspecialchars($message_content =  (strlen($message_content) > 75) ? substr($message_content, 0, 75) . '...' : $message_content); ?></span> -->
-                         
-                            <?php if ($value['unread_status'] == 1) { ?>
-                                <span class="username-search" style="color:grey; opacity:0.5;">Unread</span>
-                            <?php } ?>
-                            
-                           
-                        </a>
-                    </li>
-                    <!-- <?php var_dump($row); ?> -->
-                    <?php endforeach; ?>
-                <?php endforeach; } ?>
-                
-            
-
-            </ul>
 
 
-       
-    </main>
+    <ul class="searching-list">
+        <?php foreach ($messages as $msg): ?>
+            <li class="searchResult">
+                <?php
+                $profile_img = !empty($msg['profile_image'])
+                    ? "data:image/png;base64," . htmlspecialchars($msg['profile_image'], ENT_QUOTES, 'UTF-8')
+                    : "./files/no_picture.jpg";
+                ?>
+                <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
+                <a href="m2m.php?user_name=<?= urlencode($msg['conversation_partner'] ?? '') ?>">
+                    <strong><?= htmlspecialchars($msg['conversation_partner'] ?? '', ENT_QUOTES, 'UTF-8') ?></strong>
+                    <br>
+                    <span class="name"><?= htmlspecialchars($msg['message_content'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
+                    <br>
+                    <!-- <span class="message-date"><?= htmlspecialchars($msg['CreatedDate'] ?? '', ENT_QUOTES, 'UTF-8') ?></span> -->
+                    <?php if (!empty($msg['unread_status']) && $msg['unread_status'] == 1 && $msg['user2_id'] == $user_id): ?>
+                        <span class="unread-indicator" style="color:white;">Unread</span>
+                    <?php endif; ?>
+
+                </a>
+            </li>
+        <?php endforeach; ?>
+
+    </ul>
+
+
 
 </body>
 
