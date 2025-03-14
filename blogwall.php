@@ -314,7 +314,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     $stmt->execute([$post['id']]);
                     $like_count = $stmt->fetchColumn();
                     ?>
-                    <button class="like-btn" data-post-id="<?= $post['id']; ?>">
+                    <button  class="like-btn" data-post-id="<?= $post['id']; ?>">
                     ❤️ <span class="like-count"><?= $like_count; ?></span>
                      </button>
 
