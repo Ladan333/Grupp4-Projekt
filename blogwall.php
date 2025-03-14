@@ -1,5 +1,8 @@
 <?php
 session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require 'PDO.php';
 
 if ($_SESSION['id'] == null) {
@@ -235,7 +238,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
         </div>
         <div class="sorting">
             <?php
-            if ($_SESSION['blogflow'] == 1) { ?>
+            if ($_SESSION['blogflow'] == 1 ||  $_SESSION['blogflow'] == null) { ?>
                 <form action="change_blogflow.php" method="POST">
                     <input type="hidden" name="change_view" value="1" ;>
                     <button class="comment-btn blogflow" type="submit">Sort by folowers</button>
@@ -288,6 +291,19 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                     </p>
                     <button class="toggle-btn">Show more</button>
+                    
+                     <!-- kod för gilla-knapp -->
+                    <?php
+                    // Hämta antalet gillningar för inlägget
+                    $stmt = $pdo->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ?");
+                    $stmt->execute([$post['id']]);
+                    $like_count = $stmt->fetchColumn();
+                    ?>
+                    <button class="like-btn" data-post-id="<?= $post['id']; ?>">
+                    ❤️ <span class="like-count"><?= $like_count; ?></span>
+                     </button>
+
+                    
                     <!-- Comment Section -->
                     <div class="comments-section">
                         <h4>comment</h4>
@@ -354,7 +370,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     <?php endif; ?>
                     <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
-                        <form action="delete_post.php" method="POST" style="display: inline;">
+                        <form action="delete.php" method="POST" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <button type="submit" class="delete-btn">Delete post</button>
                         </form>

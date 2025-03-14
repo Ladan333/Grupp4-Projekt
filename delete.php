@@ -37,6 +37,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
         $_SESSION['success'] = 'User deleted succesful';
         unset($_SESSION[""]);
         session_destroy();
+        setcookie(session_name(), '', time() - 3600, '/'); 
         header("Location: index.php");
         
         exit();

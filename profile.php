@@ -246,7 +246,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                         <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $_SESSION['id']): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
-                            <form action="delete_post.php" method="POST" style="display: inline;">
+                            <form action="delete.php" method="POST" style="display: inline;">
                                 <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                                 <button type="submit" class="delete-btn">Delete post</button>
                             </form>
@@ -289,11 +289,15 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                 <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
                             </form>
-                            <button><a href="messages.php">Send Message</a></button>
+                           
+                            <button><a href="m2m.php?user_name=<?php echo urlencode($result['user_name']); ?>">Send Messages</a></button>
                             <?php } else if ($follow_result) { ?>
                                 <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                     <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
+                                    <button><a href="m2m.php?user_name=<?php echo urlencode($result['user_name']); ?>">Send Messages</a></button>
+
                                     <?php } ?>
+
                                 </form>
 
                 </div>
