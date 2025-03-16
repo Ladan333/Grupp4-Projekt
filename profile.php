@@ -1,9 +1,11 @@
 <?php
-session_start();
-$profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["username"];
+require_once("UserDAO.php");
 require("PDO.php");
 
-if ($_SESSION['id'] == null) {
+session_start();
+$profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["username"];
+
+if ($_SESSION['user'] == null) {
     header("Location: index.php");
     exit();
 }
@@ -39,19 +41,26 @@ if (isset($_GET["user_name"])) {
     $stmt->bindParam(":user", $_GET["user_name"]);
 
     $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 } else {
 
-
-    $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name, profile_image,  profileContent  FROM users WHERE user_name = :user");
-    $stmt->bindParam(":user", $_SESSION["username"]);
-
-    $stmt->execute();
+    $result = $_SESSION['user']; 
+   
 }
 
 
-$result = $stmt->fetch(PDO::FETCH_ASSOC);
-$_SESSION['profile_id'] = $result['id'];
-$_SESSION['follow_username'] = $result['user_name'];
+
+if ($result) {
+    if (is_array($result)) {
+        // For the database result, use array indexing
+        $_SESSION['profile_id'] = $result['id'];
+        $_SESSION['follow_username'] = $result['user_name'];
+    } elseif (is_object($result)) {
+        // For the session user object, use getter methods
+        $_SESSION['profile_id'] = $result->getId();  // Use getter method for User object
+        $_SESSION['follow_username'] = $result->getUserName();  // Use getter method for User object
+    }
+}
 //     echo "<br>";
 // var_dump($_SESSION);
 //     echo "<br>";
@@ -158,7 +167,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                             $stmt->execute();
                             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                            if (!empty($posts) && $_SESSION['profile_id'] == $_SESSION['id']) {
+                            if (!empty($posts) && $_SESSION['profile_id'] == $_SESSION['user']->getId()) {
                             for ($x = 0; $x <= count($posts); $x++) : 
                                 if ($posts[$x]["user_id"] != $_SESSION["profile_id"]) {
                                     unset($posts[$x]);
@@ -178,12 +187,12 @@ $_SESSION['follow_username'] = $result['user_name'];
                     font-size: 1.5rem;
                 }
             </style>
-            <?php if (empty($posts) && $_SESSION['profile_id'] == $_SESSION['id']) : ?>
+            <?php if (empty($posts) && $_SESSION['profile_id'] == $_SESSION['user']->getId()) : ?>
                 <p class="empty_feed">No posts could be found<br></p>
                 <p class="empty_feed">Try adding some posts for others to see!</p>
             <?php endif; ?>
 
-            <?php if (empty($posts) && $_SESSION['profile_id'] != $_SESSION['id']) : ?>
+            <?php if (empty($posts) && $_SESSION['profile_id'] != $_SESSION['user']->getId()) : ?>
                 <p class="empty_feed">No posts could be found<br></p>
                 <p class="empty_feed">This user has made no posts matching the criteria!</p>
             <?php endif; ?>
@@ -266,13 +275,13 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <button class="comment-btn" type="submit">Comment</button>
                         </form>
 
-                        <?php if ($post['user_id'] == $_SESSION['id']): ?>
+                        <?php if ($post['user_id'] == $_SESSION['user']->getId()): ?>
                             <button class="update-btn">Edit post</button>
                         <?php endif; ?>
 
 
 
-                        <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $_SESSION['id']): ?>
+                        <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $_SESSION['user']->getId()): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
                             <form action="delete.php" method="POST" style="display: inline;">
                                 <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
@@ -303,14 +312,14 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                 <div class="edit-profile">
                     <?php
-
+                    $id = $_SESSION['user']->getId();
                     $stmt = $pdo->prepare("SELECT * FROM follows WHERE user_id = :user_id AND follow_id = :follow_id");
-                    $stmt->bindParam(":user_id", $_SESSION['id']);
+                    $stmt->bindParam(":user_id", $id);
                     $stmt->bindParam(':follow_id', $_SESSION['profile_id']);
                     $stmt->execute();
                     $follow_result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                    if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
+                    if (isset($_SESSION["user"]) && strcasecmp($_SESSION["user"]->getUserName(), $profile_username) === 0) { ?>
                         <button><a href="edituser.php">Edit profile</a></button>
                         <button><a href="following.php">Follows</a></button>
                     <?php } else if (!$follow_result) { ?>

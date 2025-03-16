@@ -41,12 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($userDAO->registerUser($username, $password, $email, $first_name, $last_name)) {
             $userInfo = $userDAO->getUserByUserName($username);
             if ($userInfo) {
-                $_SESSION['id'] = $userInfo['id'];
-                $_SESSION['username'] = $userInfo['user_name'];
-                $_SESSION['first_name'] = $userInfo['first_name'];
-                $_SESSION['last_name'] = $userInfo['last_name'];
-                $_SESSION['email'] = $userInfo['email'];
-                $_SESSION['role'] = $userInfo['role'];
+                $_SESSION['id'] = $userInfo;
                 $_SESSION['login_time'] = time();
                 $_SESSION['blogflow'] = 1;
 

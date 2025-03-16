@@ -1,11 +1,14 @@
 <?php
+// require 'user.php';
+require_once 'UserDAO.php';
+require "PDO.php";
 session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-require 'PDO.php';
 
-if ($_SESSION['id'] == null) {
+
+
+
+
+if ($_SESSION['user'] == null) {
     header("Location: index.php");
     exit();
 }
@@ -82,7 +85,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else if ($_SESSION["blogflow"] == 2) {
     $stmt = $pdo->prepare("SELECT follow_id FROM follows WHERE user_id = :user_id");
-    $stmt->bindParam(":user_id", $_SESSION['id']);
+    $stmt->bindParam(":user_id", $_SESSION['user']->getID);
     $stmt->execute();
     $followed_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $followed_users = [];
@@ -353,7 +356,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                         </a></strong>
                                 </div>
                                 <div id="comment-delete-btn">
-                                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
+                                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['user']->getId()): ?>
                                         <!-- Only allow the user who created the post or admins to delete -->
                                         <form action="delete_comment.php" method="POST" style="display: inline;">
                                             <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
@@ -380,10 +383,12 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
-                    <?php if ($post['user_id'] == $_SESSION['id']): ?>
+                    <?php 
+               ;
+                    if ($post['user_id'] == $_SESSION['user']->getId()): ?>
                         <button class="update-btn">Edit post</button>
                     <?php endif; ?>
-                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
+                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['user']->getId()): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
                         <form action="delete.php" method="POST" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
