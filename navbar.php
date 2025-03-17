@@ -2,11 +2,14 @@
     // require 'user.php';
     require_once 'UserDAO.php';
     require "PDO.php";
-    // require_once('display_count.php');
-    // require_once('userEntity.php');
+   
+    require_once('display_count.php');
+    require_once('userEntity.php');
     
     if (session_status() == PHP_SESSION_NONE) {
     session_start();
+    error_log("User ID: " . $user_id);
+error_log("Fetchcount: " . print_r($fetchcount, true));
 }
 
 

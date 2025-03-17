@@ -1,9 +1,9 @@
 <?php
+require_once 'userEntity.php';
 session_start();
 require 'PDO.php';
 require_once 'UserController.php';
 require_once 'UserDAO.php';
-require_once 'userEntity.php';
 
 //Delete post - ligger i blogwall
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){

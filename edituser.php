@@ -8,6 +8,7 @@
 
 // var_dump($_POST);
 // Startar session för att veta vilken användare som är inloggad
+require_once 'userEntity.php';
 session_start();
 // Get the user ID from URL or default to logged-in user
 
@@ -15,7 +16,6 @@ session_start();
 require 'PDO.php'; // Kopplar till databasen
 require 'userDAO.php';
 require 'UserController.php';
-require_once 'userEntity.php';
 
 // Kollar om användaren är inloggad, skickas till login
 if (!isset($_SESSION['user'])) {
