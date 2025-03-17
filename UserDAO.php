@@ -74,12 +74,22 @@ public function getUserByUserName($username){
             $userInfo["role"],
             $userInfo["profileContent"],
             $userInfo["profile_image"],
-            $userInfo["CreatedDate"]
+            createdDate: $userInfo["CreatedDate"]
 
         );
     }
 
 }
+
+public function getUserByUserByNameForProfile($username){
+    $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_name = :username");
+    $stmt->bindParam(":username", $username);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+    
+    
+ 
 
 public function registerUser($username, $password,$email, $first_name, $last_name){
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);

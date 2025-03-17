@@ -27,7 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //     exit(); 
     // }
     
-    $username = $_POST["username"];
+    
+    $user = $_SESSION['user'];
+   
+    $username = $user->getId();
+        
+    
+    }
     $password = $_POST["password"];
     $email = $_POST["email"];
     $first_name = $_POST["first_name"];
