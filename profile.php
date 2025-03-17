@@ -7,7 +7,7 @@ session_start();
 $profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["username"];
 require("PDO.php");
 
-if ($_SESSION['id'] == null) {
+if ($_SESSION['user'] == null) {
     header("Location: index.php");
     exit();
 }
