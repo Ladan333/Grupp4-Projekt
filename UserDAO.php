@@ -6,6 +6,18 @@ class UserDAO{
         $this->pdo = $pdo;
 }
 
+public function DeleteUserById($user_id)
+{
+    $deleteStmt = $this->pdo->prepare("DELETE FROM users WHERE id = ?");
+    $deleteStmt->execute([$user_id]);
+}
+public function getUserById($user_id)
+{
+$stmt = $this->pdo->prepare("SELECT first_name, last_name FROM users WHERE id = ?");
+$stmt->execute([$user_id]);
+return $user = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 public function changePicture($first_name, $last_name, $email, $profileContent, $user_id)
 {
     $stmt = $this->pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ? WHERE id = ?");
