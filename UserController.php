@@ -1,5 +1,4 @@
 <?php
-// require 'userDAO.php';
 
 class UserController{
     private $dao;
@@ -25,7 +24,6 @@ public function changeOrNot($first_name, $last_name,  $email, $profileContent ,$
         $this->dao->dontChangePicture($first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id);
     } else {
         $this->dao->changePicture($first_name, $last_name, $email, $profileContent, $user_id);
-    
     }
     
     // skicka tillbaks till rätt sida beroende på vart du ändrar någons uppgifter. Ändrar du dig själv i adminpanelen så kommer du till din egen profil
