@@ -2,7 +2,13 @@
 session_start(); 
 require_once("PDO.php");
 require_once "followDAO.php";
-$id = $_SESSION['id']; // Current logged-in user
+
+if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+}else{
+    header('Location: index.php');
+} // Current logged-in user
 
 $followDao = new FollowDAO($pdo);
 $result = $followDao->showFollowers($id);
