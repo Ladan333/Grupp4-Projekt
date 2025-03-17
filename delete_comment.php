@@ -2,6 +2,7 @@
 session_start();
 require_once("PDO.php");
 require_once "postsDAO.php";
+require_once 'userEntity.php';
 $source = $_SESSION['last_page'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_comment"])) {
