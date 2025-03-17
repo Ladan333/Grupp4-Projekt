@@ -6,10 +6,22 @@ class UserDAO{
         $this->pdo = $pdo;
 }
 
+public function DeleteBlogPostBy($post_id)
+{
+    $stmt = $this->pdo->prepare("DELETE FROM blogposts WHERE id = :post_id ");
+    $stmt->bindParam(':post_id', $post_id);
+    if(!$stmt->execute()){
+        return false;
+    }
+   
+     
+}
+
 public function DeleteUserById($user_id)
 {
     $deleteStmt = $this->pdo->prepare("DELETE FROM users WHERE id = ?");
     $deleteStmt->execute([$user_id]);
+    
 }
 public function getUserById($user_id)
 {

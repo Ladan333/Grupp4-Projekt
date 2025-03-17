@@ -1,10 +1,12 @@
 <?php
 
+
 class UserController{
     private $dao;
     private $pdo;
     public function __construct($pdo)
     {
+
         $this->pdo = $pdo;
         $this->dao = new UserDAO($pdo);
     }
@@ -64,6 +66,86 @@ $user = $this->dao->getUserById($user_id);
     // Skicka tillbaka till users.php
     header("Location: admin_list.php");
     exit;
+}
+
+
+
+public function delete()
+{
+//Delete post - ligger i blogwall
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
+    $post_id = $_POST['post_id'];
+
+// $stmt = $pdo->prepare("DELETE FROM blogposts WHERE id = :post_id ");
+// $stmt->bindParam(':post_id', $post_id);
+$deleteBlogPost = $this->dao->DeleteBlogPostBy($post_id);
+
+if($deleteBlogPost){
+    $_SESSION['success'] = 'Post deleted successfully!';
+    header("Location: blogwall.php ");
+    exit();
+}
+
+else{
+    $_SESSION['error'] = "You dont have permission to delete this post";
+    header("Location: blogwall.php");
+    exit();
+}
+
+}
+
+//Delete user - ligger i edituser.php
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
+     $user = (int)$_POST['deletes'];
+
+     if(!empty($user)){
+
+        // $stmt = $pdo->prepare("DELETE FROM users WHERE id = :deleteuser");
+        // $stmt->bindParam(':deleteuser', $user, PDO::PARAM_INT);
+        $stmt = $this->dao->DeleteUserById($user);
+
+      if($stmt){
+
+        $_SESSION['success'] = 'User deleted succesful';
+        unset($_SESSION[""]);
+        session_destroy();
+        setcookie(session_name(), '', time() - 3600, '/'); 
+        header("Location: index.php");
+        
+        exit();
+     }
+
+        else{
+            $_SESSION["error"] = "Failed";
+        }
+    }else{
+        $_SESSION["error"] = "Invalid username";
+        header("edituser.php");
+        exit();
+    }
+    
+
+}
+
+//Delete comment - ligger i blogwall rad 298
+// if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])){
+//     $query = $pdo->prepare('DELETE FROM comments WHERE id = :userid');
+//     $query->bindParam(':userid', $_POST['delete-comment']);
+//     $this->dao->
+    
+
+//     if(!empty($_POST['delete-comment'])){
+//         $query->execute();
+//         header('location: blogwall.php');
+//         exit();
+//     }
+//         else{
+//             $_SESSION['error'] ="Failed";
+//         }
+
+// }
+   
+
 }
 
 
