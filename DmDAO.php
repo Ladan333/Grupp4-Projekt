@@ -141,6 +141,29 @@ ORDER BY dms.CreatedDate ASC;
 
     }
 
+    public function displayDmCount($user_id){
+        $stmt = $this->pdo->prepare("
+        SELECT COUNT(DISTINCT user1_id) AS unread_count 
+        FROM dms 
+        WHERE unread_status = 1 AND user2_id = :user_id
+    ");
+    
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+   return $stmt->fetch(PDO::FETCH_ASSOC) ?? ['unread_count' => 0];
+    }
+    public function fetchCountDm($user_id){
+        $stmt = $this->pdo->prepare("
+        SELECT COUNT(DISTINCT user1_id) AS unread_count 
+        FROM dms 
+        WHERE unread_status = 1 
+        AND user2_id = :user_id
+    ");
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC) ?? ['unread_count' => 0];
+    }
+
 }
 
 
