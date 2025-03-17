@@ -117,6 +117,13 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 return $result;
 }
 
+public function changeRole($isAdmin, $user_id)
+{
+    $stmt = $this->pdo->prepare("UPDATE users SET role = ? WHERE id = ?");
+    $stmt->execute([$isAdmin, $user_id]);
+
+}
+
 }
 ?>
 
