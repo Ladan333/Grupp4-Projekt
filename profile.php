@@ -3,8 +3,9 @@ require_once "UserDAO.php";
 require_once "postsDAO.php";
 require_once "FollowDAO.php";
 require_once 'PostCont.php';
+
 session_start();
-var_dump(unserialize($_SESSION['user'])) . PHP_EOL;
+
 // var_dump($userInfo);
 var_dump($_SESSION['user']) . PHP_EOL;
 $profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : unserialize($_SESSION['user']);
