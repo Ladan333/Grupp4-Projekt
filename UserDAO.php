@@ -74,7 +74,7 @@ public function getUserByUserName($username){
             $userInfo["role"],
             $userInfo["profileContent"],
             $userInfo["profile_image"],
-            $userInfo["createdDate"]
+            $userInfo["CreatedDate"]
 
         );
     }
