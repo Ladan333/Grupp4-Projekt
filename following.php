@@ -1,18 +1,11 @@
 <?php 
 session_start(); 
 require_once("PDO.php");
+require_once "followDAO.php";
 $id = $_SESSION['id']; // Current logged-in user
 
-$query = "SELECT u.id, u.first_name, u.last_name, u.user_name
-          FROM follows f
-          JOIN users u ON f.follow_id = u.id
-          WHERE f.user_id = :id
-          ORDER BY u.first_name DESC";
-
-$stmt = $pdo->prepare($query);
-$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-$stmt->execute();
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$followDao = new FollowDAO($pdo);
+$result = $followDao->showFollowers($id);
 
 if(!$result){
     header("Location: profile.php");
