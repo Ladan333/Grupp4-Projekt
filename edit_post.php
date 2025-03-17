@@ -1,7 +1,7 @@
 <?php
 require "PDO.php";
 require_once "PostsDAO.php";
-require_once "userEntity.php";
+require_once 'userEntity.php';
 
 session_start();
 

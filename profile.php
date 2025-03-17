@@ -3,9 +3,12 @@ require_once "UserDAO.php";
 require_once "postsDAO.php";
 require_once "FollowDAO.php";
 require_once 'PostCont.php';
-require_once "userEntity.php";
+
 session_start();
-$profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["username"];
+
+// var_dump($userInfo);
+var_dump($_SESSION['user']) . PHP_EOL;
+$profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : unserialize($_SESSION['user']);
 require("PDO.php");
 
 if ($_SESSION['user'] == null) {
@@ -30,7 +33,7 @@ if (isset($_GET["user_name"])) {
     $result = $userDAO->getUserByUserName($_GET["user_name"]);
 } else {
     $userDAO = new UserDAO($pdo);
-    $result = $userDAO->getUserByUsername($_SESSION["username"]);
+    $result = $userDAO->getUserByUsername($_SESSION["user"]);
 }
 
 $_SESSION['profile_id'] = $result['id'];

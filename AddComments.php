@@ -1,7 +1,7 @@
 <?php     
 require "PDO.php";
 require "postsDAO.php";
-require_once "userEntity.php";
+require_once 'userEntity.php';
 session_start(); 
 
 //Kommentarer till inlägg

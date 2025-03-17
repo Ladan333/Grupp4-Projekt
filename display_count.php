@@ -3,8 +3,9 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-require_once('PDO.php');
+require_once'PDO.php';
 require_once "DmDAO.php";
+require_once "userEntity.php";
 
 exit;
 
