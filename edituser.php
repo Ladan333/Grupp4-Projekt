@@ -15,6 +15,7 @@ session_start();
 require 'PDO.php'; // Kopplar till databasen
 require 'userDAO.php';
 require 'UserController.php';
+require_once "userEntity.php";
 
 // Kollar om användaren är inloggad, skickas till login
 if (!isset($_SESSION['user'])) {

@@ -3,6 +3,7 @@ require_once "UserDAO.php";
 require_once "postsDAO.php";
 require_once "FollowDAO.php";
 require_once 'PostCont.php';
+require_once "userEntity.php";
 session_start();
 $profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["username"];
 require("PDO.php");

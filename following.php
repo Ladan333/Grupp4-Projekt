@@ -2,6 +2,7 @@
 session_start(); 
 require_once("PDO.php");
 require_once "followDAO.php";
+require_once "userEntity.php";
 
 if(isset($_SESSION['user'])){
     $user = $_SESSION['user'];

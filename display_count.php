@@ -6,10 +6,12 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once('PDO.php');
 require_once "DmDAO.php";
 
-if(isset($_SESSION['user'])){
-    $user = $_SESSION['user'];
-    $user_id = $user->getId();
-}
+exit;
+
+
+    // $user = $_SESSION['user'];
+    // $user_id = $user->getId();
+
 
 if ($user_id) {
 $dmDao = new DmDAO($pdo);

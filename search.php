@@ -6,6 +6,7 @@ session_start();
 require_once("PostsDAO.php");
 require_once("UserDAO.php");
 require "PDO.php";
+require_once "userEntity.php";
 if ($_SESSION['user'] == null) {
     header("Location: index.php");
     exit();
