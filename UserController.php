@@ -1,5 +1,6 @@
 <?php
-require 'userDAO.php';
+// require 'userDAO.php';
+
 class UserController{
     private $dao;
     private $pdo;
@@ -21,10 +22,10 @@ public function changeOrNot($first_name, $last_name,  $email, $profileContent ,$
         if (empty($email)) {
             die("Error: Email field cannot be empty!");
         }
-        $this->dao->changePicture($first_name, $last_name, email: $email, $profileContent, $user_id);
-    } else {
-    
         $this->dao->dontChangePicture($first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id);
+    } else {
+        $this->dao->changePicture($first_name, $last_name, $email, $profileContent, $user_id);
+    
     }
     
     // skicka tillbaks till rätt sida beroende på vart du ändrar någons uppgifter. Ändrar du dig själv i adminpanelen så kommer du till din egen profil
