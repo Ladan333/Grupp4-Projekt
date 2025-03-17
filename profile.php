@@ -4,9 +4,10 @@ require_once "postsDAO.php";
 require_once "FollowDAO.php";
 require_once 'PostCont.php';
 session_start();
-var_dump($_SESSION) . PHP_EOL;
+var_dump($_SESSION['User']) . PHP_EOL;
 // var_dump($userInfo);
-$profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["username"];
+var_dump($_SESSION['User']) . PHP_EOL;
+$profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["User"];
 require("PDO.php");
 
 if ($_SESSION['user'] == null) {
