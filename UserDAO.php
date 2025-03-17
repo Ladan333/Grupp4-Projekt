@@ -6,6 +6,20 @@ class UserDAO{
         $this->pdo = $pdo;
 }
 
+public function findUserWhoWantToChangePassword($user_id)
+{
+    $stmt = $this->pdo->prepare("SELECT pwd FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+public function changePassword($new_password, $user_id)
+{
+    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+    $stmt = $this->pdo->prepare("UPDATE users SET pwd = ? WHERE id = ?");
+   return $stmt->execute([$hashed_password, $user_id]);
+}
+
 public function getUserByUserName($username){
     $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_name = :username");
     $stmt->bindParam(":username", $username);
