@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $hashed_password = $userInfo->getPassword();
 
         if (password_verify($password, $hashed_password)) {
-            $_SESSION['user'] = serialize($userInfo);
+            $_SESSION['user'] = $userInfo;
             $_SESSION['role'] = $userInfo->getRole();
             $_SESSION['login_time'] = time();
             $_SESSION['sorting'] = 1;

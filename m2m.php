@@ -2,17 +2,18 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+require_once "userEntity.php";
 require_once('PDO.php');
 require_once "DmDAO.php";
 session_start();
 
 
-if (!isset($_SESSION['id'])) {
+if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+}else{
     header('Location: index.php');
 }
-
-$user_id = (int) $_SESSION['id'];
 $other_user_name = isset($_GET['user_name']) ? trim($_GET['user_name']) : null;
 
 if (!$other_user_name) {

@@ -3,10 +3,12 @@ session_start();
 require 'PDO.php'; 
 
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user'])) {
     header("Location: index.php");
     exit();
 }
+$user = $_SESSION['user'];
+$user_id = $user->getId();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
@@ -30,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         $stmt = $pdo->prepare("INSERT INTO blogposts (title, blogContent, image_base64, user_id) 
                                VALUES (?, ?, ?, ?)");
-        $stmt->execute([$title, $content, $imageBase64, $_SESSION['id']]);
+        $stmt->execute([$title, $content, $imageBase64, $user_id]);
 
         
         $_SESSION['success'] = 'Post added successfully!';
