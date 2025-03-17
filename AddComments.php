@@ -1,5 +1,6 @@
 <?php     
 require "PDO.php";
+require "postsDAO.php";
 session_start(); 
 
 //Kommentarer till inlägg
@@ -14,16 +15,10 @@ session_start();
                         if ($source == 'profile.php' && isset($_SESSION['follow_username'])) {
                             $source = 'profile.php?user_name=' . urlencode($_SESSION['follow_username']);
                         }
-                        
+                        $postDao = new PostsDAO($pdo);
+                        $addcomment = $postDao->addComment($comment, $userid, $blog_id);
 
-                        $stmt = $pdo->prepare( "INSERT INTO comments(commentContent, user_id, blog_id)
-                                                       VALUES(:commentsContent, :userid, :blog_id) ");
-                        
-                        $stmt->bindParam(":commentsContent" , $comment);
-                        $stmt->bindParam(":userid", $userid) ;
-                        $stmt->bindParam(":blog_id", $blog_id, PDO::PARAM_INT);
 
-                        $stmt->execute();
 
                         // urlencode($comment);
                         header("Location: $source");
