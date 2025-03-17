@@ -136,6 +136,21 @@ public function changeRole($isAdmin, $user_id)
 
 }
 
+public function searchUsersByNameOrUsername($searchUser){
+    $stmt = $this->pdo->prepare("
+    SELECT * FROM users 
+    WHERE user_name LIKE :searchuser 
+    OR first_name LIKE :searchfirst 
+    OR last_name LIKE :searchlast
+    ");    $searchUser = "%" . $searchUser . "%";
+    
+    $stmt->bindParam(":searchuser", $searchUser, PDO::PARAM_STR);
+    $stmt->bindParam(":searchfirst", $searchUser, PDO::PARAM_STR);
+    $stmt->bindParam(":searchlast", $searchUser, PDO::PARAM_STR);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
 }
 ?>
 
