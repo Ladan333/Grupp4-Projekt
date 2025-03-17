@@ -8,7 +8,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require 'PDO.php';
 
-if ($_SESSION['id'] == null) {
+if ($_SESSION['user'] == null) {
     header("Location: index.php");
     exit();
 }

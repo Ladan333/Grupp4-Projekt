@@ -27,16 +27,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $userDAO = new UserDAO($pdo);
     $userInfo = $userDAO->getUserByUsername($username);
-
+    var_dump($userInfo);
     if (!$userInfo) {
         echo '<h3 style="text-align:center; color:red;">Invalid username or password</h3>';
     } else {
-        $hashed_password = $userInfo['pwd'];
+        $hashed_password = $userInfo->getPassword();
     
         if (password_verify($password, $hashed_password)) {
-            $_SESSION['username'] = $username;
-            $_SESSION['role'] = $userInfo['role'];
-            $_SESSION['id'] = $userInfo['id'];
+            $_SESSION['user'] = $userInfo;
             $_SESSION['login_time'] = time();
             header("Location: blogwall.php");
             exit();
