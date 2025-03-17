@@ -1,4 +1,12 @@
 <?php
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+// echo "<pre>";
+// print_r($_POST);
+// echo "</pre>";
+
+// var_dump($_POST);
 // Startar session för att veta vilken användare som är inloggad
 session_start();
 // Get the user ID from URL or default to logged-in user
@@ -33,14 +41,17 @@ if (!$user) {
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+
     require 'PDO.php';
+
 
     if (isset($_POST['change_password'])) {
         $user_id = $_SESSION['id'];
         $old_password = $_POST['old_password'];
         $new_password = $_POST['new_password'];
 
-   
+
         $stmt = $pdo->prepare("SELECT pwd FROM users WHERE id = ?");
         $stmt->execute([$user_id]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -51,17 +62,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-   
+
         if (!password_verify($old_password, $user['pwd'])) {
             $_SESSION['password_error'] = "Incorrect current password.";
             header("Location: edituser.php");
             exit();
         }
 
-       
+
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-        
+
         $stmt = $pdo->prepare("UPDATE users SET pwd = ? WHERE id = ?");
         if ($stmt->execute([$hashed_password, $user_id])) {
             $_SESSION['password_updated'] = "Password updated successfully.";
@@ -72,22 +83,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: edituser.php");
         exit();
     }
+    if (isset($_GET['id'])) {
+        $user_id = $_GET['id'];
+    } else {
+        $user_id = $_SESSION['id'];
+    }
 
 
-    $user_id = $_GET['id'] ?? $_SESSION['id'];
     $first_name = $_POST['first_name'] ?? '';
     $last_name = $_POST['last_name'] ?? '';
     $profileContent = $_POST['profileContent'] ?? '';
-    $email = $_POST['email'] ??'';
+    $email = $_POST['email'] ?? '';
 
     //bildhantering sparad via den globala variabeln $_FILES
     if (!empty($_FILES['profile_image']['tmp_name'])) {
         $imageData = file_get_contents($_FILES['profile_image']['tmp_name']);
         $imageBase64 = base64_encode($imageData);  //konvertering av bild
 
-
+        if (empty($email)) {
+            die("Error: Email field cannot be empty!");
+        }
         $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ?, profile_image = ? WHERE id = ?");
-        $stmt->execute([$first_name, $last_name, $profileContent, $email, $imageBase64, $user_id]);
+        $stmt->execute([$first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id]);
     } else {
 
         $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ? WHERE id = ?");
@@ -101,11 +118,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: profile.php");
     }
     exit;
-    ;
+    
 
 
-    // HTML och formulär för redigering börjar här
-} ?>
+
+}
+// $user_id = $_GET['id'] ?? $_SESSION['id'];
+
+
+
+// HTML och formulär för redigering börjar här
+?>
 <!DOCTYPE html>
 <html lang="sv">
 
@@ -212,10 +235,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
             <?php
 
-           
 
 
-            $profile_img = !empty($user['profile_image']) ? "data:image/png;base64," . htmlspecialchars($user['profile_image']) : "./files/no_picture.jpg";?>
+
+            $profile_img = !empty($user['profile_image']) ? "data:image/png;base64," . htmlspecialchars($user['profile_image']) : "./files/no_picture.jpg"; ?>
             <div class="text-center mb-3">
                 <img src="<?= $profile_img ?>" alt="Profile picture" class="profile-img">
             </div>
@@ -249,41 +272,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="file" id="profile_image" name="profile_image" class="form-control bg-dark text-light">
             </div>
             <div class="text-center">
-            
-            
-               
-                <button type="submit" name="save" class="btn btn-primary">Save Changes</button>
+
+
+            <input type="submit" name="save" class="btn btn-primary" value="Save Changes">
+
                 <a href="profile.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
         <form action="edituser.php?id=<?= $user_id ?>" method="POST">
-             <input type="hidden" name="change_password" value="1">
- 
-             <div class="mb-3">
-                 <label for="old_password" class="form-label">Current Password</label>
-                 <input type="password" id="old_password" name="old_password" class="form-control bg-dark text-light"
-                     required>
-             </div>
-             <div class="mb-3">
-                 <label for="new_password" class="form-label">New Password</label>
-                 <input type="password" id="new_password" name="new_password" class="form-control bg-dark text-light"
-                     required>
-             </div>
-             <div class="text-center">
-                 <button type="submit" class="btn btn-primary">Change Password</button>
-             </div>
-         </form>
-            <form action="delete.php" method="post" onsubmit="return confirmDelete()">
-                <input type="hidden" name="deletes" value="<?php echo $_SESSION['id']?>">
-                <button type="submit" >Delete profile</button>
-            </form>
-            
-            
-                <script>
-                    function confirmDelete(){
-                        return confirm("Delete your account? cant undo this.....");
-                    }
-                </script>
+            <input type="hidden" name="change_password" value="1">
+
+            <div class="mb-3">
+                <label for="old_password" class="form-label">Current Password</label>
+                <input type="password" id="old_password" name="old_password" class="form-control bg-dark text-light"
+                    required>
+            </div>
+            <div class="mb-3">
+                <label for="new_password" class="form-label">New Password</label>
+                <input type="password" id="new_password" name="new_password" class="form-control bg-dark text-light"
+                    required>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </div>
+        </form>
+        <form action="delete.php" method="post" onsubmit="return confirmDelete()">
+            <input type="hidden" name="deletes" value="<?php echo $_SESSION['id'] ?>">
+            <button type="submit">Delete profile</button>
+        </form>
+
+
+        <script>
+            function confirmDelete() {
+                return confirm("Delete your account? cant undo this.....");
+            }
+        </script>
     </div>
 
 

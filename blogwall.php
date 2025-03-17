@@ -237,8 +237,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             </div>
         </div>
         <div class="sorting">
+
             <?php
-            if ($_SESSION['blogflow'] == 1 ||  $_SESSION['blogflow'] == null) { ?>
+        
+            if ($_SESSION['blogflow'] == 1) { ?>
                 <form action="change_blogflow.php" method="POST">
                     <input type="hidden" name="change_view" value="1" ;>
                     <button class="comment-btn blogflow" type="submit">Sort by followers</button>
@@ -312,7 +314,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     $stmt->execute([$post['id']]);
                     $like_count = $stmt->fetchColumn();
                     ?>
-                    <button class="like-btn" data-post-id="<?= $post['id']; ?>">
+                    <button  class="like-btn" data-post-id="<?= $post['id']; ?>">
                     ❤️ <span class="like-count"><?= $like_count; ?></span>
                      </button>
 
