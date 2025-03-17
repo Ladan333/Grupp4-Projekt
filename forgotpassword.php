@@ -4,6 +4,7 @@ session_start();
 require 'navbar.php';
 require_once 'PDO.php';
 require "UserDAO.php";
+require_once "userEntity.php";
 require './PHPMailer/src/PHPMailer.php';
 require './PHPMailer/src/SMTP.php';
 require './PHPMailer/src/Exception.php';

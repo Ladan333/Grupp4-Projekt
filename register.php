@@ -9,7 +9,7 @@ $cookie_time = time() + 3600;
 
 setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
-
+require_once "userEntity.php";
 require "PDO.php";
 require "UserDAO.php";
 

@@ -2,8 +2,10 @@
     // require 'user.php';
     require_once 'UserDAO.php';
     require "PDO.php";
-    require_once('display_count.php');
-if (session_status() == PHP_SESSION_NONE) {
+    // require_once('display_count.php');
+    // require_once('userEntity.php');
+    
+    if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
@@ -64,7 +66,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <ul class="submenu">
     <?php if (isset($_SESSION['user'])): ?>
         <?php 
-        // Unserialisera användarobjektet från sessionen
+        
       
         ?>
         <li><a href="profile.php">Profile</a></li>

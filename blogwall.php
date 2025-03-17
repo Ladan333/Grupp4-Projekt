@@ -8,6 +8,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require 'PDO.php';
+// var_dump($_SESSION);
 
 if ($_SESSION['user'] == null) {
     header("Location: index.php");
@@ -162,7 +163,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 </head>
 
 <body>
-    <?php require "navbar.php"; ?>
+<?php require "navbar.php"; ?>
 
     <div class="container">
         <div class="welcome-box">

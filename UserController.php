@@ -1,5 +1,5 @@
 <?php
-
+require_once "userEntity.php";
 
 class UserController{
     private $dao;
