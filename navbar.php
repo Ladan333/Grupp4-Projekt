@@ -66,7 +66,7 @@
         <ul class="submenu">
     <?php if (isset($_SESSION['user'])): ?>
         <?php 
-        // Unserialisera användarobjektet från sessionen
+        
       
         ?>
         <li><a href="profile.php">Profile</a></li>
