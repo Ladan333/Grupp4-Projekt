@@ -1,6 +1,9 @@
 <?php
 session_start();
 session_destroy();
+require_once "userEntity.php";
+require "PDO.php";
+require "UserDAO.php";
 session_start();
 
 $cookie_name = "user_session";
@@ -9,9 +12,6 @@ $cookie_time = time() + 3600;
 
 setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
-require_once "userEntity.php";
-require "PDO.php";
-require "UserDAO.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // $recaptcha_secret = "6LdPze8qAAAAAD8w9IMR2K8rnET4AdxIyviyy3z-"; 

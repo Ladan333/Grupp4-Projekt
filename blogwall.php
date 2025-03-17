@@ -66,9 +66,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
 
 } else if ($_SESSION["blogflow"] == 2) {
-    $id = $_SESSION['id'];
+    $user = $_SESSION['user'];
+    $user_id = $user->getId(); 
     $followDao = new FollowDAO($pdo);
-    $followed_results = $followDao->getAllFollowsByUserId($id);
+    $followed_results = $followDao->getAllFollowsByUserId($user_id);
     $followed_users = [];
     foreach ($followed_results as $result) {
         array_push($followed_users, $result["follow_id"]);
@@ -330,7 +331,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
-                    <?php if ($post['user_id'] == $_SESSION['id']): ?>
+                    <?php
+                    $user = $_SESSION['user'];
+                    $user_id = $user->getId();                         
+                    if ($post['user_id'] == $user_id): ?>
                         <button class="update-btn">Edit post</button>
                     <?php endif; ?>
                     <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
