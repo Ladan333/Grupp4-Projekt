@@ -1,4 +1,5 @@
 <?php
+require_once "UserDAO.php";
 require_once "postsDAO.php";
 require_once "FollowDAO.php";
 require_once 'PostCont.php';
@@ -24,21 +25,13 @@ $_SESSION['last_page'] = basename($_SERVER['PHP_SELF']);
 
 
 if (isset($_GET["user_name"])) {
-    $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name, profile_image,  profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
-    $stmt->bindParam(":user", $_GET["user_name"]);
-
-    $stmt->execute();
+    $userDAO = new UserDAO($pdo);
+    $result = $userDAO->getUserByUserName($_GET["user_name"]);
 } else {
-
-
-    $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name, profile_image,  profileContent  FROM users WHERE user_name = :user");
-    $stmt->bindParam(":user", $_SESSION["username"]);
-
-    $stmt->execute();
+    $userDAO = new UserDAO($pdo);
+    $result = $userDAO->getUserByUsername($_SESSION["username"]);
 }
 
-
-$result = $stmt->fetch(PDO::FETCH_ASSOC);
 $_SESSION['profile_id'] = $result['id'];
 $_SESSION['follow_username'] = $result['user_name'];
 
@@ -238,10 +231,8 @@ $_SESSION['follow_username'] = $result['user_name'];
             <div class="profile-sidebar">
                 <?php
 
-                $stmt = $pdo->prepare("SELECT profile_image FROM users WHERE user_name = :user");
-                $stmt->bindParam(":user", $profile_username);
-                $stmt->execute();
-                $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+                $userDAO = new UserDAO($pdo);
+                $userData = $userDAO->getProfilePicture($profile_username);
 
 
                 $profile_img = !empty($userData['profile_image']) ? "data:image/png;base64," . htmlspecialchars($userData['profile_image']) : "./files/no_picture.jpg";
@@ -254,11 +245,8 @@ $_SESSION['follow_username'] = $result['user_name'];
                 <div class="edit-profile">
                     <?php
 
-                    $stmt = $pdo->prepare("SELECT * FROM follows WHERE user_id = :user_id AND follow_id = :follow_id");
-                    $stmt->bindParam(":user_id", $_SESSION['id']);
-                    $stmt->bindParam(':follow_id', $_SESSION['profile_id']);
-                    $stmt->execute();
-                    $follow_result = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $followDAO = new FollowDAO($pdo);
+                    $follow_result = $followDAO->getallFollows($_SESSION['id'], $_SESSION['profile_id']);
 
                     if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
                         <button><a href="edituser.php">Edit profile</a></button>

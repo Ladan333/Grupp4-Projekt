@@ -97,6 +97,16 @@ public function forgottPassword($username, $email)
     
     return false;  
 }
+
+public function getProfilePicture($username) 
+{
+    $stmt = $this->pdo->prepare("SELECT profile_image FROM users WHERE user_name = :username");
+    $stmt->bindParam(":username", $username);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result;
+}
+
 }
 ?>
 
