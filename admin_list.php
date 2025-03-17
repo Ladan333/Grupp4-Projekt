@@ -6,6 +6,7 @@ session_start();
 
 // Inkluderar databaskopplingen
 require 'PDO.php';
+require_once 'UserDAO.php';
 
 // Kolla om användaren är inloggad och har rollen "admin"
 if (!isset($_SESSION['role']) || $_SESSION['role'] != '1') {
@@ -19,13 +20,9 @@ unset($_SESSION['message']);
 // Kollar om en sökning har gjorts (via URL)
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-// SQL-fråga för att hämta användare (filtrerar om vi söker på något)
-$query = "SELECT * FROM users WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ?";
-$stmt = $pdo->prepare($query);
-$stmt->execute(["%$search%", "%$search%", "%$search%"]);
-
-// Hämtar en lista av användare
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Hämtar alla användare från databasen (filtrerar om vi söker på något)
+$userDAO = new UserDAO($pdo);
+$users = $userDAO->searchUsersByLikeNameOrEmail($search);
 
 
 

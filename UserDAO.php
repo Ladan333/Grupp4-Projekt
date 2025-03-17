@@ -107,6 +107,16 @@ public function getProfilePicture($username)
     return $result;
 }
 
+public function searchUsersByLikeNameOrEmail($search)
+{
+    // SQL-fråga för att hämta användare (filtrerar om vi söker på något)
+$stmt = $this->pdo->prepare("SELECT * FROM users WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ?");
+$stmt->execute(["%$search%", "%$search%", "%$search%"]);
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+return $result;
+}
+
 }
 ?>
 
