@@ -21,16 +21,12 @@ if (isset($_SESSION["username"])) {
     exit();
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
     $userDAO = new UserDAO($pdo);
     $userInfo = $userDAO->getUserByUsername($username);
-
-
-
 
     if (!$userInfo) {
         echo '<h3 style="text-align:center; color:red;">Invalid username or password</h3>';
