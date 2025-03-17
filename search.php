@@ -3,6 +3,8 @@
 // ini_set('display_errors', 1);
 
 session_start();
+require_once("PostsDAO.php");
+require_once("UserDAO.php");
 require "PDO.php";
 if ($_SESSION['id'] == null) {
     header("Location: index.php");
@@ -27,32 +29,16 @@ $result = [];
 if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'] == 1) {
     $searchUser = $_GET['search'];
     $_SESSION['search'] = $searchUser;
-    
-    $stmt = $pdo->prepare("
-    SELECT * FROM users 
-    WHERE user_name LIKE :searchuser 
-    OR first_name LIKE :searchfirst 
-    OR last_name LIKE :searchlast
-    ");    $searchUser = "%" . $searchUser . "%";
-    
-    $stmt->bindParam(":searchuser", $searchUser, PDO::PARAM_STR);
-    $stmt->bindParam(":searchfirst", $searchUser, PDO::PARAM_STR);
-    $stmt->bindParam(":searchlast", $searchUser, PDO::PARAM_STR);
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $userDAO = new UserDAO($pdo);
+    $result = $userDAO->searchUsersByLikeNameOrEmail($searchUser);
+
 } else if (isset($_GET["search"]) && !empty($_GET["search"]) && $_SESSION["search_sort"] == 2) {
     $searchPost = $_GET["search"];
     $_SESSION["search"] = $searchPost;
 
-    $stmt = $pdo->prepare("SELECT * FROM blogposts AS bp 
-    JOIN users AS u ON bp.user_id = u.id 
-    WHERE title LIKE :searchTitle OR blogContent LIKE :searchContent");
-    
-    $searchPost = "%". $searchPost . "%";
-    $stmt->bindParam(":searchTitle", $searchPost, PDO::PARAM_STR);
-    $stmt->bindParam(":searchContent", $searchPost, PDO::PARAM_STR);
-    $stmt->execute();
-    $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $postsDAO = new PostsDAO($pdo);
+    $posts = $postsDAO->searchPosts($searchPost);
 }
 // Fetch profile image from the database
 
@@ -141,20 +127,8 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                         <h4>comment</h4>
                         <?php
 
-
-                        $commentSql = "SELECT c.commentContent, c.CreatedDate, u.user_name, u.profile_image
-
-                       
-
-                                   FROM comments c
-                                   JOIN users u ON c.user_id = u.id
-                                   WHERE c.blog_id = :blog_id
-                                   ORDER BY c.CreatedDate DESC";
-                        $commentStmt = $pdo->prepare($commentSql);
-                        $commentStmt->bindParam(':blog_id', $post['id'], PDO::PARAM_INT);
-                        $commentStmt->execute();
-                        $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
-                        $comments = array_reverse($comments);
+                        $postsDAO = new PostsDAO($pdo);
+                        $comments = $postsDAO->getComments($post['id']);
 
                         foreach ($comments as $comment): ?>
                             <div class="comment">

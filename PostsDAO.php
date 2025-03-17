@@ -88,4 +88,18 @@ class PostsDao
     //     return $stmt->fetchColumn();
     // }
 
+    public function searchPosts($searchPost){
+        $stmt = $this->pdo->prepare("SELECT * FROM blogposts AS bp 
+        JOIN users AS u ON bp.user_id = u.id 
+        WHERE title LIKE :searchTitle OR blogContent LIKE :searchContent");
+        
+        $searchPost = "%". $searchPost . "%";
+        $stmt->bindParam(":searchTitle", $searchPost, PDO::PARAM_STR);
+        $stmt->bindParam(":searchContent", $searchPost, PDO::PARAM_STR);
+        $stmt->execute();
+        $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $posts;
+    }
+
 }
