@@ -1,4 +1,6 @@
 <?php
+require_once "userEntity.php";
+
 class UserDAO{
     private $pdo; 
 
@@ -60,7 +62,22 @@ public function getUserByUserName($username){
     $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_name = :username");
     $stmt->bindParam(":username", $username);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($userInfo){
+        return new User(
+            $userInfo["id"],
+            $userInfo["first_name"],
+            $userInfo["last_name"],
+            $userInfo["user_name"],
+            $userInfo["pwd"],
+            $userInfo["email"],
+            $userInfo["role"],
+            $userInfo["profileContent"],
+            $userInfo["profile_image"],
+            $userInfo["createdDate"]
+
+        );
+    }
 
 }
 
