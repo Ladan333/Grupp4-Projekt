@@ -7,9 +7,14 @@ require_once 'PostCont.php';
 session_start();
 
 // var_dump($userInfo);
-var_dump($_SESSION['user']) . PHP_EOL;
-$profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : unserialize($_SESSION['user']);
-require("PDO.php");
+// var_dump($_SESSION['user']) . PHP_EOL;
+// $profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : unserialize($_SESSION['user']);
+// require("PDO.php");
+
+if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+}
 
 if ($_SESSION['user'] == null) {
     header("Location: index.php");
