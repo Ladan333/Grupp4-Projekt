@@ -7,6 +7,7 @@ session_start();
 // Inkluderar databaskopplingen
 require 'PDO.php';
 require_once 'UserDAO.php';
+require_once 'userEntity.php';
 
 // Kolla om användaren är inloggad och har rollen "admin"
 if (!isset($_SESSION['role']) || $_SESSION['role'] != '1') {
