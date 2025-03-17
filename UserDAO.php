@@ -6,6 +6,18 @@ class UserDAO{
         $this->pdo = $pdo;
 }
 
+public function changePicture($first_name, $last_name, $email, $profileContent, $user_id)
+{
+    $stmt = $this->pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ? WHERE id = ?");
+    $stmt->execute([$first_name, $last_name, $email, $profileContent, $user_id]);
+    
+}
+public function dontChangePicture($first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id)
+{
+    $stmt = $this->pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ?, profile_image = ? WHERE id = ?");
+    $stmt->execute([$first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id]);
+}
+
 public function findUserWhoWantToChangePassword($user_id)
 {
     $stmt = $this->pdo->prepare("SELECT pwd FROM users WHERE id = ?");

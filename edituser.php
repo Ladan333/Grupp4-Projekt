@@ -14,6 +14,7 @@ session_start();
 
 require 'PDO.php'; // Kopplar till databasen
 require'userDAO.php';
+require'UserController.php';
 
 // Kollar om användaren är inloggad, skickas till login
 if (!isset($_SESSION['id'])) {
@@ -102,28 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
 
     //bildhantering sparad via den globala variabeln $_FILES
-    if (!empty($_FILES['profile_image']['tmp_name'])) {
-        $imageData = file_get_contents($_FILES['profile_image']['tmp_name']);
-        $imageBase64 = base64_encode($imageData);  //konvertering av bild
 
-        if (empty($email)) {
-            die("Error: Email field cannot be empty!");
-        }
-        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ?, profile_image = ? WHERE id = ?");
-        $stmt->execute([$first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id]);
-    } else {
-
-        $stmt = $pdo->prepare("UPDATE users SET first_name = ?, last_name = ?, email = ?, profileContent = ? WHERE id = ?");
-        $stmt->execute([$first_name, $last_name, $email, $profileContent, $user_id]);
-    }
-
-    // skicka tillbaks till rätt sida beroende på vart du ändrar någons uppgifter. Ändrar du dig själv i adminpanelen så kommer du till din egen profil
-    if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != $_SESSION['id']) {
-        header("Location: admin_list.php");
-    } else {
-        header("Location: profile.php");
-    }
-    exit;
+    //Anropar controller som kör querys i DAO
+    $change = new UserController($pdo);
+    $change->changeOrNot($first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id);
     
 
 

@@ -21,21 +21,7 @@ if (isset($_SESSION['last_page']) && $_SESSION['last_page'] !== 'profile.php' &&
 
 $_SESSION['last_page'] = basename($_SERVER['PHP_SELF']);
 
-// if (!$_SESSION['blogflow'] == null) {
-//     $_SESSION['blogflow'] = 1;
-// }
 
-// if (!$_SESSION['sorting'] == null) {
-//     $_SESSION['sorting'] = 1;
-// }
-
-
-// if(isset($_GET["source"]) && $_GET["source"] == "search"){
-// $stmt = $pdo->prepare("SELECT `name`, user_name, pwd, email, profileContent  FROM users WHERE user_name = :user");
-// $stmt->bindParam(":user", $_GET["user_name"]);
-
-// $stmt->execute();
-// }
 
 if (isset($_GET["user_name"])) {
     $stmt = $pdo->prepare("SELECT id, `first_name`, `last_name`, user_name, profile_image,  profileContent  FROM users WHERE user_name = :user"); //När inte GET source eller SESSION skickar något
@@ -55,10 +41,6 @@ if (isset($_GET["user_name"])) {
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
 $_SESSION['profile_id'] = $result['id'];
 $_SESSION['follow_username'] = $result['user_name'];
-//     echo "<br>";
-// var_dump($_SESSION);
-//     echo "<br>";
-// echo "<br>";
 
 ?>
 
@@ -137,30 +119,30 @@ $_SESSION['follow_username'] = $result['user_name'];
             </div>
 
             <?php
-                    $postController = new PostController($pdo);
-                    $posts = $postController->getProfileSortedBlogPosts();
-                               
+            $postController = new PostController($pdo);
+            $posts = $postController->getProfileSortedBlogPosts();
+
             ?>
 
             <div class="posts">
-            <style>
-                .empty_feed {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100%;
-                    font-size: 1.5rem;
-                }
-            </style>
-            <?php if (empty($posts) && $_SESSION['profile_id'] == $_SESSION['id']) : ?>
-                <p class="empty_feed">No posts could be found<br></p>
-                <p class="empty_feed">Try adding some posts for others to see!</p>
-            <?php endif; ?>
+                <style>
+                    .empty_feed {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100%;
+                        font-size: 1.5rem;
+                    }
+                </style>
+                <?php if (empty($posts) && $_SESSION['profile_id'] == $_SESSION['id']): ?>
+                    <p class="empty_feed">No posts could be found<br></p>
+                    <p class="empty_feed">Try adding some posts for others to see!</p>
+                <?php endif; ?>
 
-            <?php if (empty($posts) && $_SESSION['profile_id'] != $_SESSION['id']) : ?>
-                <p class="empty_feed">No posts could be found<br></p>
-                <p class="empty_feed">This user has made no posts matching the criteria!</p>
-            <?php endif; ?>
+                <?php if (empty($posts) && $_SESSION['profile_id'] != $_SESSION['id']): ?>
+                    <p class="empty_feed">No posts could be found<br></p>
+                    <p class="empty_feed">This user has made no posts matching the criteria!</p>
+                <?php endif; ?>
 
                 <?php
 
@@ -191,42 +173,36 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <h4>comment</h4>
                             <?php
 
-                            $commentSql = "SELECT c.id, c.commentContent, c.CreatedDate , u.user_name, u.profile_image
-                                       FROM comments c
-                                       JOIN users u ON c.user_id = u.id
-                                       WHERE c.blog_id = :blog_id
-                                       ORDER BY c.CreatedDate DESC";
-                            $commentStmt = $pdo->prepare($commentSql);
-                            $commentStmt->bindParam(':blog_id', $post['id'], PDO::PARAM_INT);
-                            $commentStmt->execute();
-                            $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
-                            $comments = array_reverse($comments);
+                            $PostDAO = new PostsDAO($pdo);
+                            $comments = $PostDAO->getComments($post['id']);
 
                             foreach ($comments as $comment): ?>
                                 <div class="comment">
-                                <div class="comment-header">
-                                <div id="user">
-                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
-                                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
-                                        style="border-radius:50%;"><strong><a
-                                            href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
-                                            <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
-                                            <?php echo "&nbsp;&nbsp;" . htmlspecialchars($comment['CreatedDate']) ?>
+                                    <div class="comment-header">
+                                        <div id="user">
+                                            <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
+                                            <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                                style="border-radius:50%;"><strong><a
+                                                    href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>"
+                                                    class="profile-link">
+                                                    <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
+                                                    <?php echo "&nbsp;&nbsp;" . htmlspecialchars($comment['CreatedDate']) ?>
 
-                                        </a></strong>
-                                </div>
-                                <div id="comment-delete-btn">
+                                                </a></strong>
+                                        </div>
+                                        <div id="comment-delete-btn">
 
-                                        <!-- Only allow the user who created the post or admins to delete -->
-                                        <form action="delete_comment.php" method="POST" style="display: inline;">
-                                            <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
-                                            <button type="submit" class="delete-btn">X</button>
-                                        </form>
+                                            <!-- Only allow the user who created the post or admins to delete -->
+                                            <form action="delete_comment.php" method="POST" style="display: inline;">
+                                                <input type="hidden" name="delete_comment"
+                                                    value="<?php echo $comment['id']; ?>">
+                                                <button type="submit" class="delete-btn">X</button>
+                                            </form>
 
+                                        </div>
+                                    </div>
+                                    <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
                                 </div>
-                                </div>
-                                <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
-                            </div>
                             <?php endforeach; ?>
                         </div>
 
@@ -291,16 +267,18 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                 <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
                             </form>
-                           
-                            <button><a href="m2m.php?user_name=<?php echo urlencode($result['user_name']); ?>">Send Messages</a></button>
-                            <?php } else if ($follow_result) { ?>
+
+                            <button><a href="m2m.php?user_name=<?php echo urlencode($result['user_name']); ?>">Send
+                                    Messages</a></button>
+                    <?php } else if ($follow_result) { ?>
                                 <form action="follow_user.php" method="GET" name="follow" style="display: inline;">
                                     <button type="submit" name="id" value="<?php echo $result['id']; ?>">Unfollow</button>
-                                    <button><a href="m2m.php?user_name=<?php echo urlencode($result['user_name']); ?>">Send Messages</a></button>
+                                    <button><a href="m2m.php?user_name=<?php echo urlencode($result['user_name']); ?>">Send
+                                            Messages</a></button>
 
-                                    <?php } ?>
+                        <?php } ?>
 
-                                </form>
+                    </form>
 
                 </div>
                 <div class="profile-info">
@@ -360,25 +338,6 @@ $_SESSION['follow_username'] = $result['user_name'];
                     }
                 });
 
-                // const deleteBtn = post.querySelector(".delete-btn");
-                // if (deleteBtn) {
-                //     deleteBtn.addEventListener("click", function(event) {
-
-                //         event.preventDefault();
-
-
-                //         const confirmed = confirm("Are you sure you want to delete this post?");
-
-
-                //         if (confirmed) {
-
-                //             const form = post.querySelector("form");
-                //             if (form) {
-                //                 form.submit(); 
-                //             }
-                //         }
-                //     });
-                // }
             });
             document.getElementById("postImage").addEventListener("change", function (event) {
                 const fileInput = event.target;
