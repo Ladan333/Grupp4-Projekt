@@ -305,7 +305,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     </p>
                     <button class="toggle-btn">Show more</button>
                     
-                     <!-- kod för gilla-knapp -->
+                    <!-- Gilla-knapp -->
                     <?php
                     // Hämta antalet gillningar för inlägget
                     $stmt = $pdo->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ?");
@@ -313,12 +313,12 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     $like_count = $stmt->fetchColumn();
                     ?>
                     <button class="like-btn" data-post-id="<?= $post['id']; ?>">
-                    ❤️ <span class="like-count"><?= $like_count; ?></span>
-                     </button>
-
-                    
-                    <!-- Comment Section -->
-                    <div class="comments-section">
+                        ❤️ <span class="like-count"><?= $like_count; ?></span>
+                    </button>
+                     <!-- Länka till JavaScript-filen -->
+                     <script src="js/blogwall_java.js"></script>
+                     <!-- Comment Section -->
+                     <div class="comments-section">
                         <h4>comment</h4>
                         <?php
 

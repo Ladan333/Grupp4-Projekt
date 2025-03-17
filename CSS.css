@@ -1186,3 +1186,15 @@ th {
   justify-content: center;
   padding-top: .5rem;
 }
+/* Admin_List */
+.like-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: grey;
+}
+
+.like-btn.liked {
+  color: red;
+}
