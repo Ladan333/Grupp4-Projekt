@@ -2,61 +2,33 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+require_once "userEntity.php";
 require_once('PDO.php');
+require_once "DmDAO.php";
+
 session_start();
 
 
-if (!isset($_SESSION['id'])) {
-    die("❌ ERROR: No user logged in.");
+
+if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+}else{
+    header('Location: index.php');
 }
 
-$user_id = (int) $_SESSION['id'];
+
 
 $conversations = [];
 
+$dmDao = new DmDAO($pdo);
+$messages = $dmDao->getMessages($user_id);
 
-$stmt = $pdo->prepare("
-    SELECT dms.id AS message_id,
-
-           dms.message_content,
-           dms.CreatedDate,
-           dms.unread_status,
-           dms.user1_id,
-           dms.user2_id,
-           user1.*,
-           user2.*,
-           CASE 
-               WHEN dms.user1_id = :user_id THEN user2.user_name 
-               ELSE user1.user_name 
-           END AS conversation_partner
-    FROM dms
-    JOIN users user1 ON user1.id = dms.user1_id
-    JOIN users user2 ON user2.id = dms.user2_id
-    WHERE dms.id IN (
-        SELECT MAX(id) FROM dms 
-        WHERE user1_id = :user_id1 OR user2_id = :user_id2
-        GROUP BY LEAST(user1_id, user2_id), GREATEST(user1_id, user2_id)
-    )
-    ORDER BY dms.CreatedDate DESC
-");
-
-$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-$stmt->bindParam(':user_id1', $user_id, PDO::PARAM_INT);
-$stmt->bindParam(':user_id2', $user_id, PDO::PARAM_INT);
-$stmt->execute();
-$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $_SESSION['display_count'] = $unreadCount ?? 0;
 
-$unreadStmt = $pdo->prepare("
-    SELECT COUNT(DISTINCT user1_id) AS unread_count 
-    FROM dms 
-    WHERE unread_status = 1 
-    AND user2_id = :user_id
-");
-$unreadStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-$unreadStmt->execute();
-$unreadCount = $unreadStmt->fetch(PDO::FETCH_ASSOC)['unread_count'];
+
+$dmDao = new DmDAO($pdo);
+$unreadCount = $dmDao->unreadMessages($user_id);
 
 ?>
 

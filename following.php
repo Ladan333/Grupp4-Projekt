@@ -1,19 +1,22 @@
 <?php 
+require_once 'userEntity.php';
 session_start(); 
 require_once("PDO.php");
-$id = $_SESSION['id']; // Current logged-in user
+require_once "followDAO.php";
 
-$query = "SELECT u.id, u.first_name, u.last_name, u.user_name
-          FROM follows f
-          JOIN users u ON f.follow_id = u.id
-          WHERE f.user_id = :id
-          ORDER BY u.first_name DESC";
+if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+}else{
+    header('Location: index.php');
+} // Current logged-in user
 
-$stmt = $pdo->prepare($query);
-$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-$stmt->execute();
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$followDao = new FollowDAO($pdo);
+$result = $followDao->showFollowers($user_id);
 
+if(!$result){
+    header("Location: profile.php");
+}
 
 
 
@@ -29,7 +32,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 <?php require "navbar.php"?>     
 
-<ul>
+<ul class="searching-list">
 <?php foreach ($result as $row): ?>
     <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "./files/no_picture.jpg"; ?>
     <li class="searchResult">
@@ -46,7 +49,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php endforeach; ?>
 
 
-</ul>
+</>
 
 </body>
 </html>

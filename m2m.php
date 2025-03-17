@@ -2,16 +2,18 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+require_once "userEntity.php";
 require_once('PDO.php');
+require_once "DmDAO.php";
 session_start();
 
 
-if (!isset($_SESSION['id'])) {
-    die(" ERROR: No user logged in.");
+if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+}else{
+    header('Location: index.php');
 }
-
-$user_id = (int) $_SESSION['id'];
 $other_user_name = isset($_GET['user_name']) ? trim($_GET['user_name']) : null;
 
 if (!$other_user_name) {
@@ -19,32 +21,21 @@ if (!$other_user_name) {
 }
 
 
-$stmt = $pdo->prepare("SELECT id FROM users WHERE user_name = :user_name");
-$stmt->bindParam(':user_name', $other_user_name, PDO::PARAM_STR);
-$stmt->execute();
-$other_user = $stmt->fetch(PDO::FETCH_ASSOC);
+$dmDao = new DmDAO($pdo);
+$other_user = $dmDao->idOtherUser($other_user_name);
 
 if (!$other_user) {
     die(" ERROR: User not found.");
 }
 
 $other_user_id = (int) $other_user['id'];
-
+$dmDao = new DmDAO($pdo);
+$dmDao->updateStmt($user_id, $other_user_id);
 
 error_log("User ID: $user_id, Other User ID: $other_user_id");
 
 
-$updateStmt = $pdo->prepare("
-    UPDATE dms 
-    SET unread_status = 0 
-    WHERE unread_status = 1 
-    AND user2_id = :user_id 
-    AND user1_id = :other_user_id
-");
 
-$updateStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-$updateStmt->bindParam(':other_user_id', $other_user_id, PDO::PARAM_INT);
-$updateStmt->execute();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
     $message_content = !empty($_POST['message']) ? trim($_POST['message']) : NULL;
@@ -59,55 +50,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
         die(" ERROR: Cannot send an empty message.");
     }
     $true = 1; 
-    $stmt = $pdo->prepare("
-    INSERT INTO dms (unread_status, message_content, message_image, CreatedDate, user1_id, user2_id)
-    VALUES (:true, :message_content, :message_image, NOW(), :user_id, :other_user_id)
-");
-
-    $stmt->bindParam(':message_content', $message_content, PDO::PARAM_STR);
-    $stmt->bindParam(':message_image', $message_image, PDO::PARAM_LOB);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':other_user_id', $other_user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':true', $true, PDO::PARAM_INT);
+    $dmDao = new DmDAO($pdo);
+    $dmDao->insertMessages($message_content, $message_image, $user_id, $other_user_id, $true);
 
 
-    if (!$stmt->execute()) {
-        die(" INSERT Failed: " . print_r($stmt->errorInfo(), true));
-    } else {
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit();
-    }
 }
 
 
-$stmt = $pdo->prepare("
-SELECT 
-    dms.id AS message_id,
-    dms.message_content,
-    dms.message_image,
-    dms.CreatedDate,
-    dms.unread_status,
-    dms.user1_id,
-    dms.user2_id,
-    user1.user_name AS user1_name,  -- Hämtar användarnamn för user1
-    user2.user_name AS user2_name   -- Hämtar användarnamn för user2
-FROM dms
-JOIN users user1 ON user1.id = dms.user1_id  
-JOIN users user2 ON user2.id = dms.user2_id  
-WHERE 
-    (dms.user1_id = :user_id1 AND dms.user2_id = :other_user_id1)
-    OR (dms.user1_id = :other_user_id2 AND dms.user2_id = :user_id2)
-ORDER BY dms.CreatedDate ASC;
-");
-
-// Bind parametrarna
-$stmt->bindParam(':user_id1', $user_id, PDO::PARAM_INT);
-$stmt->bindParam(':other_user_id1', $other_user_id, PDO::PARAM_INT);
-$stmt->bindParam(':other_user_id2', $other_user_id, PDO::PARAM_INT);
-$stmt->bindParam(':user_id2', $user_id, PDO::PARAM_INT);
-
-$stmt->execute();
-$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$dmDao = new DmDAO($pdo);
+$messages = $dmDao->getConversation($user_id, $other_user_id);
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,33 +1,39 @@
 <?php
 
+require_once "userEntity.php";
 session_start();
-require 'PDO.php'; 
+require 'PDO.php';
+require 'FollowDAO.php';  
 
-
-if (!isset($_SESSION['username'])) {
-    header("Location: index.php");
-    exit();
+if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+}else{
+    header('Location: index.php');
+    exit;
 }
 
-$stmt = $pdo ->prepare("SELECT * FROM follows WHERE user_id = :user_id AND follow_id = :follow_id");
-$stmt->bindParam(":user_id", $_SESSION['id']);
-$stmt->bindParam(':follow_id', $_SESSION['profile_id']);
 
-$stmt->execute();
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$profile_id = $_SESSION['profile_id'];
 
-if (isset($_SESSION['profile_id'])) {
-    if ($_SESSION['profile_id'] != $_SESSION['id'] && empty($results)) {
-        $stmt = $pdo -> prepare('INSERT INTO follows (user_id, follow_id) VALUES (:user_id, :follow_id)');
-        $stmt->bindParam(":user_id", $_SESSION['id']);
-        $stmt->bindParam(':follow_id', $_SESSION['profile_id']);
-        $stmt->execute();
+$followDao = new FollowDAO($pdo);
+
+
+$results = $followDao->getallFollows($id, $profile_id);
+
+if ($_SESSION['profile_id'] != $user_id && empty($results)) {
+   
+    if ($followDao->follow($user_id, $profile_id)) {
+        echo "You are now following this user!";
+    } else {
+        echo "Failed to follow the user!";
     }
-    else if ($_GET['user_id'] != $_SESSION['id'] && !empty($results)) {
-        $stmt = $pdo -> prepare('DELETE FROM follows WHERE user_id = :user_id AND follow_id = :follow_id');
-        $stmt->bindParam(":user_id", $_SESSION['id']);
-        $stmt->bindParam(':follow_id', $_SESSION['profile_id']);
-        $stmt->execute();
+} else if ($_GET['user_id'] != $user_id && !empty($results)) {
+    
+    if ($followDao->unfollow($id, $profile_id)) {
+        echo "You have unfollowed this user.";
+    } else {
+        echo "Failed to unfollow the user!";
     }
 }
 

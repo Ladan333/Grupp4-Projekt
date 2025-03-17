@@ -1,11 +1,11 @@
 <?php
+session_start();
 $cookie_name = "user_session";
 $cookie_value = session_id();
 $cookie_time = time() + 3600;
 
 setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
-session_start();
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
 
@@ -29,21 +29,39 @@ if(!$userId){
 
 
 
-    $stmt = $pdo->prepare("SELECT d.message_image, d.message_content, d.CreatedDate, u.user_name
-FROM dms as d JOIN users as u on d.user1_id = u.id OR d.user2_id = u.id
+    $stmt = $pdo->prepare("SELECT u.id, d.message_image, d.message_content, d.CreatedDate, u.user_name
+FROM dms as d JOIN users as u on d.user2_id = u.id
 WHERE (d.user1_id = :thisUser AND d.user2_id = :user) OR (d.user1_id = :user AND d.user2_id = :thisUser)
-ORDER BY d.CreatedDate ASC");
+ORDER BY d.CreatedDate DESC");
 $stmt->bindParam(":user", $userId, PDO::PARAM_INT);
 $stmt->bindParam(":thisUser", $_SESSION['id'], PDO::PARAM_INT);
 
 $stmt->execute();
 $result = $stmt->fetchall(PDO::FETCH_ASSOC);
 
+
+
 }
 else{
 
 }
+if( isset($_POST['message_input']) && $_POST ){
+    $message = $_POST['message_input'];
 
+    $sendMessage = $pdo->prepare("INSERT INTO dms (message_content, user1_id, user2_id)
+    VALUES(:mess_dm, :sender, :receiver)");
+    $sendMessage->bindParam(":mess_dm", $message, PDO::PARAM_STR);
+    $sendMessage->bindParam(":sender", $_SESSION['id'], PDO::PARAM_INT);
+    $sendMessage->bindParam(":receiver", $userId, PDO::PARAM_INT);
+
+    if($sendMessage->execute()){
+
+        header("Location: conversations.php?user_name=" . urlencode($user));
+        exit();
+
+    }
+
+}
 
 ?>
 
@@ -65,18 +83,18 @@ else{
 
     <main class="index">
 
-    <form action="AddComments.php" id="addComments-form" method="POST">
+    <form action="" id="addComments-form" method="POST">
 
-<input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
+<!-- <input type="hidden" name="blog_id" value="<?php //echo $post['id']; ?>"> -->
 <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 
-<textarea class="comment-input" name="comment_input"  cols="40" placeholder="message" required></textarea>
+<input class="comment-input" name="message_input" method="POST" placeholder="message" required>
 
 <button class="comment-btn" type="submit">Send message</button>
 </form>
 
     <?php foreach ($result as $results): ?>
-        
+                        <?php if(true): ?>
                             <div class="results">
                                 <span id="user">
                                     <strong><a
@@ -89,12 +107,14 @@ else{
                                 </span>
                                 <?php echo htmlspecialchars($results['message_content']); ?>
                                 <p><?php echo htmlspecialchars($results['CreatedDate']) ?></p>
-                                <?php if ($isAdmin == $_SESSION['id']): ?>
-                        <!-- Only allow the user who created the post or admins to delete -->
-                        <!-- <form action="delete_results.php" method="POST" style="display: inline;">
+                            </div>
+                            <?php endif ?>
+                            <?php if ($isAdmin == $_SESSION['id']): ?>
+                            <!-- Only allow the user who created the post or admins to delete -->
+                            <!-- <form action="delete_results.php" method="POST" style="display: inline;">
                             <input type="hidden" name="delete_results" value="<?php echo $results['id']; ?>">
                             <button type="submit" class="delete-btn">X</button>
-                        </form> -->
+                            </form> -->
 
                     <?php endif; ?>
 
