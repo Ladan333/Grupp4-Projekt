@@ -66,6 +66,22 @@ class PostsDao
 
     }
 
+    public function getPic($id){
+        $stmt = $this->pdo->prepare("SELECT image_base64 FROM blogposts where id = :id"); 
+        $stmt->bindParam(":id", $id); 
+        $stmt->execute(); 
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
+
+    public function updatePost($id, $title, $content, $image){
+
+   $stmt = $this->pdo->prepare("UPDATE blogposts SET title = :title, blogContent = :content, image_base64 = :image_base64  WHERE id = :id ");
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt->bindParam(":title", $title, PDO::PARAM_STR);
+    $stmt->bindParam(":content", $content, PDO::PARAM_STR);
+    $stmt->bindParam(":image_base64", $image, PDO::PARAM_STR);
+    $stmt->execute();
+    }
     // public function getlikes($post_id){
     //     $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ?");
     //     $stmt->execute([$post_id]);

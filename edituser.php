@@ -13,8 +13,8 @@ session_start();
 
 
 require 'PDO.php'; // Kopplar till databasen
-require'userDAO.php';
-require'UserController.php';
+require 'userDAO.php';
+require 'UserController.php';
 
 // Kollar om användaren är inloggad, skickas till login
 if (!isset($_SESSION['id'])) {
