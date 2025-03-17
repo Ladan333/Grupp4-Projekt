@@ -1,16 +1,19 @@
 <?php
+    require_once "userEntity.php";
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-require_once'PDO.php';
+require_once 'PDO.php';
 require_once "DmDAO.php";
 require_once "userEntity.php";
 
 
-if(isset($_SESSION['user'])){
+
+    if(isset($_SESSION["user"])) {
     $user = $_SESSION['user'];
     $user_id = $user->getId();
-}
+    }
+
 
 if ($user_id) {
 $dmDao = new DmDAO($pdo);

@@ -3,6 +3,7 @@ session_start();
 require_once("PDO.php");
 require_once("UserDAO.php");
 require_once ('UserController.php');
+require_once "userEntity.php";
 
 
 
