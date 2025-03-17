@@ -13,6 +13,7 @@ session_start();
 
 
 require 'PDO.php'; // Kopplar till databasen
+require'userDAO.php';
 
 // Kollar om användaren är inloggad, skickas till login
 if (!isset($_SESSION['id'])) {
@@ -43,18 +44,19 @@ if (!$user) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
-    require 'PDO.php';
-
-
     if (isset($_POST['change_password'])) {
         $user_id = $_SESSION['id'];
         $old_password = $_POST['old_password'];
         $new_password = $_POST['new_password'];
 
 
-        $stmt = $pdo->prepare("SELECT pwd FROM users WHERE id = ?");
-        $stmt->execute([$user_id]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        // $stmt = $pdo->prepare("SELECT pwd FROM users WHERE id = ?");
+        // $stmt->execute([$user_id]);
+        // $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        //Ersätter koden ovan med Dao
+        $userDao = new UserDao($pdo);
+        $user = $userDao->findUserWhoWantToChangePassword($user_id);
 
         if (!$user) {
             $_SESSION['password_error'] = "Error: User not found.";
@@ -70,11 +72,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
 
-        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+        // $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
 
-        $stmt = $pdo->prepare("UPDATE users SET pwd = ? WHERE id = ?");
-        if ($stmt->execute([$hashed_password, $user_id])) {
+        // $stmt = $pdo->prepare("UPDATE users SET pwd = ? WHERE id = ?");
+
+        //Ersätter koden ovan med Dao
+        $changePassword = $userDao->changePassword($new_password, $user_id);
+
+        if ($changePassword) {
             $_SESSION['password_updated'] = "Password updated successfully.";
         } else {
             $_SESSION['password_error'] = "Failed to update password. Try again.";
