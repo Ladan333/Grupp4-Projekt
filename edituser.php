@@ -17,7 +17,7 @@ require 'userDAO.php';
 require 'UserController.php';
 
 // Kollar om användaren är inloggad, skickas till login
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['user'])) {
     header("Location: index.php");
     exit;
 }

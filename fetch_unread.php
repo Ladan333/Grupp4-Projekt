@@ -4,7 +4,10 @@
 session_start();
 require_once('PDO.php');
 require_once "DmDAO.php";
-$user_id = $_SESSION['id'] ?? null;
+if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+}
 
 if ($user_id) {
 

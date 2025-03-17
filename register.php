@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $userInfo = $userDAO->getUserByUserName($username);
             if ($userInfo) {
                 $_SESSION['user'] = $userInfo;
+                $_SESSION['role'] = $userInfo->getRole();
                 $_SESSION['login_time'] = time();
                 $_SESSION['blogflow'] = 1;
                 $_SESSION['sorting'] = 1;
