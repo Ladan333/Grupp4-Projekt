@@ -269,7 +269,6 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                     </p>
                     <button class="toggle-btn">Show more</button>
-<<<<<<< HEAD
                     
                     <!-- Gilla-knapp -->
                     <?php
@@ -285,23 +284,6 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                      <script src="js/blogwall_java.js"></script>
                      <!-- Comment Section -->
                      <div class="comments-section">
-=======
-
-                    <!-- kod för gilla-knapp -->
-                    <?php
-                    // Hämta antalet gillningar för inlägget
-                    // $PostDAO = new PostsDAO($pdo);
-
-                    // $like_count = $postsDAO->getlikes($_POST['id'])
-                                         ?>
-                    <button class="like-btn" data-post-id="<?= $post['id']; ?>">
-                        ❤️ <span class="like-count">0</span>
-                    </button>
-
-
-                    <!-- Comment Section -->
-                    <div class="comments-section">
->>>>>>> 2ff0e876c94ad389094e2a1a7c21a02a00136003
                         <h4>comment</h4>
                         <?php
                         $PostDAO = new PostsDAO($pdo);
