@@ -1,7 +1,8 @@
 <?php
 session_start();
-require 'PDO.php';
-require 'UserController';
+require_once("PDO.php");
+require_once("UserDAO.php");
+require_once ('UserController.php');
 
 
 
