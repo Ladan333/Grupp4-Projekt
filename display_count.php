@@ -1,10 +1,10 @@
 <?php
+    require_once "userEntity.php";
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 require_once('PDO.php');
 require_once "DmDAO.php";
-
 
 if(isset($_SESSION['user'])){
     $user = $_SESSION['user'];

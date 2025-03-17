@@ -3,7 +3,9 @@
     require_once 'UserDAO.php';
     require "PDO.php";
     require_once('display_count.php');
-if (session_status() == PHP_SESSION_NONE) {
+    require_once('userEntity');
+    
+    if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
