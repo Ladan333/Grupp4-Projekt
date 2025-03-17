@@ -36,6 +36,39 @@ public function changeOrNot($first_name, $last_name,  $email, $profileContent ,$
 
     //bildhantering sparad via den globala variabeln $_FILES
 }
+
+public function adminDeleteUser($user_id)
+{
+    if (!isset($_POST['id'])) {
+        $_SESSION['message'] = "Ingen användare vald.";
+        header("Location: admin_list.php");
+        exit;
+    }
+
+$user = $this->dao->getUserById($user_id);
+
+    if (!$user) {
+        $_SESSION['message'] = "Användaren hittades inte.";
+        header("Location: admin_list.php");
+        exit;
+    }
+    
+    $full_name = htmlspecialchars($user['first_name'] . ' ' . $user['last_name']);
+    
+    // Radera användaren
+    $this->dao->DeleteUserById($user_id);
+
+    // Spara meddelande för users.php
+    $_SESSION['message'] = "Användaren $full_name är nu borttagen.";
+    
+    // Skicka tillbaka till users.php
+    header("Location: admin_list.php");
+    exit;
+}
+
+
+
+
 }
 
 ?>
