@@ -265,7 +265,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                     }
 
                     // Change form action for editing
-                    form.action = "edit_post.php";
+                    form.action = "../övrigt/edit_post.php";
                     form.insertAdjacentHTML("beforeend", `<input type="hidden" name="post_id" value="${postId}">`);
 
                     // Update modal appearance
