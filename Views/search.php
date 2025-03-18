@@ -2,13 +2,13 @@
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 
-require_once "userEntity.php";
+require_once "../Entity/userEntity.php";
 session_start();
-require_once("PostsDAO.php");
-require_once("UserDAO.php");
-require "PDO.php";
+require_once("../Dao/PostsDAO.php");
+require_once("../Dao/UserDAO.php");
+require "../övrigt/PDO.php";
 if ($_SESSION['user'] == null) {
-    header("Location: index.php");
+    header("Location: ../Views/index.php");
     exit();
 }
 //fungerar nu så att om du söker posts men inte hittar det du söker och söker igen så kommer den fortsätta söka på posts. 

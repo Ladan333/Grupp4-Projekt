@@ -1,11 +1,11 @@
 <?php
 
-require_once "userEntity.php";
+require_once "../Views/userEntity.php";
 if (session_status() == PHP_SESSION_NONE) session_start();
-require 'PDO.php'; 
+require '../övrigt/PDO.php'; 
 
 if (!isset($_SESSION['user'])) {
-    header("Location: index.php");
+    header("Location: ../Views/index.php");
     exit();
 }
 
@@ -17,5 +17,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sort_recent"])) {
     $_SESSION['sorting'] = 3;
 }
 
-header("Location: blogwall.php");
+header("Location: ../Views/blogwall.php");
 exit();

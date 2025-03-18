@@ -1,8 +1,8 @@
 <?php
-require_once 'userEntity.php';
+require_once '../Entity/userEntity.php';
 session_start();
-require_once("PDO.php");
-require_once "postsDAO.php";
+require_once("../övrigt/PDO.php");
+require_once "../Dao/postsDAO.php";
 $source = $_SESSION['last_page'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_comment"])) {

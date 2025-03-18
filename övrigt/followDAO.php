@@ -16,7 +16,7 @@ class FollowDAO
         $stmt->bindParam(":user_id", $id);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        
     }
     public function getallFollows($id, $profile_id)
     {
