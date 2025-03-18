@@ -1,7 +1,7 @@
 <?php     
-require "PDO.php";
+require "../PDO.php";
 require "postsDAO.php";
-require_once 'userEntity.php';
+require_once '../Entity/userEntity.php';
 session_start(); 
 
 //Kommentarer till inlägg
@@ -16,7 +16,7 @@ session_start();
                         $comment = $_POST["comment_input"];
                       
                         $blog_id = $_POST["blog_id"];
-                        $source = $_POST['source'] ?? 'blogwall.php';
+                        $source = $_POST['source'] ?? '../Views/blogwall.php';
 
                         if ($source == 'profile.php' && isset($_SESSION['follow_username'])) {
                             $source = 'profile.php?user_name=' . urlencode($_SESSION['follow_username']);

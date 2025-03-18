@@ -1,15 +1,15 @@
 <?php
 
-require_once "userEntity.php";
+require_once "../Entity/userEntity.php";
 session_start();
-require 'PDO.php';
-require 'FollowDAO.php';  
+require '../övrigt/PDO.php';
+require '../Dao/FollowDAO.php';  
 
 if(isset($_SESSION['user'])){
     $user = $_SESSION['user'];
     $user_id = $user->getId();
 }else{
-    header('Location: index.php');
+    header('Location: ../Views/index.php');
     exit;
 }
 
@@ -37,7 +37,7 @@ if ($_SESSION['profile_id'] != $user_id && empty($results)) {
     }
 }
 
-$location = "Location: profile.php?user_name=" . $_SESSION['follow_username'];
+$location = "Location: ../Views/profile.php?user_name=" . $_SESSION['follow_username'];
 
 header($location);
 exit();
