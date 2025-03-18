@@ -1,12 +1,12 @@
 <?php
+require_once "../Entity/userEntity.php";
+require_once "../Dao/UserDAO.php";
+require_once "../övrigt/PDO.php";
 require_once "../Dao/postsDAO.php";
 require_once "../Dao/FollowDAO.php";
 require_once '../Controller/PostCont.php';
-require_once '../Entity/userEntity.php';
-require_once '../övrigt/PDO.PHP';
 
 session_start();
-require_once "../Dao/UserDAO.php";
 
 // var_dump($userInfo);
 // var_dump($_SESSION['user']) . PHP_EOL;
@@ -37,6 +37,7 @@ $_SESSION['last_page'] = basename($_SERVER['PHP_SELF']);
 
 
 if (isset($_GET["user_name"])) {
+    
     $userDAO = new UserDAO($pdo);
     $differentUser = $_GET['user_name'];
     $result = $userDAO->getUserByUserByNameForProfile($differentUser);
@@ -160,7 +161,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     <div class="post">
                         <p class="post-username">
                             <!-- hämta ut bilderna innuti loopen på -->
-                            <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "./files/no_picture.jpg"; ?>
+                            <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "../files/no_picture.jpg"; ?>
 
                             <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
                                 style="border-radius:50%;"><strong><a
