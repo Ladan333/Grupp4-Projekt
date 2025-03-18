@@ -1,12 +1,12 @@
 <?php
-require_once "../Dao/UserDAO.php";
 require_once "../Dao/postsDAO.php";
 require_once "../Dao/FollowDAO.php";
-require_once '../Entity/PostCont.php';
+require_once '../Controller/PostCont.php';
 require_once '../Entity/userEntity.php';
-require_once '../Entity/PDO.PHP';
+require_once '../övrigt/PDO.PHP';
 
 session_start();
+require_once "../Dao/UserDAO.php";
 
 // var_dump($userInfo);
 // var_dump($_SESSION['user']) . PHP_EOL;

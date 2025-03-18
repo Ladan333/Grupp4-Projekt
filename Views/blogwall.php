@@ -2,7 +2,7 @@
 require_once "../Dao/postsDAO.php";
 require_once "../Dao/FollowDAO.php";
 require_once "../Controller/PostCont.php";
-require_once '../Entity/userEntity.php';
+require_once "../Entity/userEntity.php";
 
 session_start();
 ini_set('display_errors', 1);
@@ -12,7 +12,7 @@ require '../övrigt/PDO.php';
 // var_dump($_SESSION);
 
 if ($_SESSION['user'] == null) {
-    header("Location: ../Veiws/index.php");
+    header("Location: ../Views/index.php");
     exit();
 }
 // Sessioncookie för auto-utloggnuing efter en timme. 
