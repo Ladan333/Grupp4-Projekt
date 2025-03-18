@@ -337,7 +337,6 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <button class="update-btn">Edit post</button>
                     <?php endif; ?>
                     <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
-                    <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
                         <form action="../övrigt/delete.php" method="POST" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
