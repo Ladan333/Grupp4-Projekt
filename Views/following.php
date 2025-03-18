@@ -2,7 +2,7 @@
 require_once '../Entity/userEntity.php';
 session_start(); 
 require_once("../övrigt/PDO.php");
-require_once "../övrigt/followDAO.php";
+require_once "../Dao/followDAO.php";
 
 if(isset($_SESSION['user'])){
     $user = $_SESSION['user'];
