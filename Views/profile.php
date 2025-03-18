@@ -230,7 +230,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
 
 
-                        <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $_SESSION['id']): ?>
+                        <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $user_id): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
                             <form action="delete.php" method="POST" style="display: inline;">
                                 <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
