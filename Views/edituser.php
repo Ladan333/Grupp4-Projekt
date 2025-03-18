@@ -10,13 +10,18 @@
 // Startar session för att veta vilken användare som är inloggad
 require_once '../Entity/userEntity.php';
 require_once "../config.php";
-session_start();
-// Get the user ID from URL or default to logged-in user
 
+require_once "../Dao/postsDAO.php";
+require_once "../Dao/followDAO.php";
+require_once "../Controller/PostCont.php";
 
 require '../övrigt/PDO.php'; // Kopplar till databasen
 require_once '../Dao/userDAO.php';
 require '../Controller/UserController.php';
+session_start();
+// Get the user ID from URL or default to logged-in user
+
+
 
 // Kollar om användaren är inloggad, skickas till login
 if (!isset($_SESSION['user'])) {
@@ -36,6 +41,9 @@ if (isset($_SESSION['user'])){
     $user = $_SESSION['user'];
     $user_id = isset($_GET['id']) ? $_GET['id'] : $user->getId();
 }
+var_dump($user_id); //4
+
+
 
 
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
@@ -43,7 +51,7 @@ $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
-    die(" Error: User not found.");
+    die(" Error: User not found."); //neppp
 }
 
 
@@ -51,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     if (isset($_POST['change_password'])) {
-        $user_id = $_SESSION['id'];
+        // $user_id = $_SESSION['id'];
         $old_password = $_POST['old_password'];
         $new_password = $_POST['new_password'];
 
