@@ -13,6 +13,8 @@ if (session_status() == PHP_SESSION_NONE) {
     error_log("Fetchcount: " . print_r($fetchcount, true));
 }
 
+$user = $_SESSION['user'];
+$userrole = $user->getrole();
 
 ?>
 
@@ -77,7 +79,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 <li><a href="../övrigt/logout.php">Logout</a></li>
                 <li><a href="messages.php">Messages</a></li>
 
-                <?php if (isset($_SESSION['role']) == 1): ?>
+                <?php if ($userrole == 1): ?>
                     <li><a href="admin_list.php">Admin</a></li>
                 <?php endif; ?>
             <?php endif; ?>

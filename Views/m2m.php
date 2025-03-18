@@ -36,10 +36,10 @@ error_log("User ID: $user_id, Other User ID: $other_user_id");
 
 
 
-
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
     $message_content = !empty($_POST['message']) ? trim($_POST['message']) : NULL;
     $message_image = NULL;
+
 
     if (!empty($_FILES['message_image']['tmp_name'])) {
         $imageData = file_get_contents($_FILES['message_image']['tmp_name']);
