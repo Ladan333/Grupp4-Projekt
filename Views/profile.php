@@ -114,17 +114,17 @@ $_SESSION['follow_username'] = $result['user_name'];
                 </div>
             <?php } ?>
             <div class="sorting">
-                <form action="sort_blogwall_profile.php" method="POST">
+                <form action="../övrigt/sort_blogwall_profile.php" method="POST">
                     <input type="hidden" name="sort_recent" value="2" ;>
                     <button class="comment-btn blogflow" type="submit">Sort by recent posts</button>
                 </form>
 
-                <form action="sort_blogwall_profile.php" method="POST">
+                <form action="../övrigt/sort_blogwall_profile.php" method="POST">
                     <input type="hidden" name="sort_comment_count" value="3" ;>
                     <button class="comment-btn blogflow" type="submit">Sort by most comments</button>
                 </form>
 
-                <form action="sort_blogwall_profile.php" method="POST">
+                <form action="../övrigt/sort_blogwall_profile.php" method="POST">
                     <input type="hidden" name="sort_activity" value="4" ;>
                     <button class="comment-btn blogflow" type="submit">Sort by recent activity</button>
                 </form>
@@ -271,7 +271,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                     if (isset($user_id) && strcasecmp($user_name, $profile_username) === 0) { ?>
                         <button><a href="edituser.php">Edit profile</a></button>
-                        <button><a href="../övrigt/following.php">Follows</a></button>
+                        <button><a href="following.php">Follows</a></button>
                     <?php } else if (!$follow_result) { ?>
                             <form action="../övrigt/follow_user.php" method="GET" name="follow" style="display: inline;">
                                 <button type="submit" value="<?php echo $result['id']; ?>">Follow</button>
