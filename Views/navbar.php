@@ -61,7 +61,7 @@ $userrole = $user->getrole();
             <a href="messages.php">&#9993;</a>
 
             <p id="unread-count" style="font-weight: bold; color: rgb(66, 135, 245);">
-                <?= (isset($_SESSION['display_count']) && $_SESSION['display_count'] > 0) ? $_SESSION['display_count'] : '0' ?>
+                <?= (isset($_SESSION['display_count']) && $_SESSION['display_count'] > 0) ? $_SESSION['display_count'] : '' ?>
             </p>
         </div>
         <div class="burger" onclick="toggleMenu()">
@@ -110,7 +110,7 @@ $userrole = $user->getrole();
             let unreadElement = document.getElementById("unread-count");
 
             if (unreadElement) {
-                unreadElement.textContent = count > 0 ? count : '0';
+                unreadElement.textContent = count > 0 ? count : '';
             } else {
                 console.error("Elementet #unread-count hittades inte i DOM!");
             }
