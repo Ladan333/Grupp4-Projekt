@@ -6,7 +6,7 @@ require_once '../Entity/userEntity.php';
 session_start();
 
 // Inkluderar databaskopplingen
-require 'PDO.php';
+require '../övrigt/PDO.php';
 require_once '../Dao/UserDAO.php';
 
 // Kolla om användaren är inloggad och har rollen "admin"

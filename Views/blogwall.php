@@ -305,7 +305,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                             </a></strong>
                                     </div>
                                     <div id="comment-delete-btn">
-                                        <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
+                                        <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
                                             <!-- Only allow the user who created the post or admins to delete -->
                                             <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
                                                 <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
@@ -338,7 +338,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     if ($post['user_id'] == $user_id): ?>
                         <button class="update-btn">Edit post</button>
                     <?php endif; ?>
-                    <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
+                    <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
                         <form action="../övrigt/delete.php" method="POST" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
