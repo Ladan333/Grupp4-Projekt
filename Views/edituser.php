@@ -15,9 +15,9 @@ require_once "../Dao/postsDAO.php";
 require_once "../Dao/followDAO.php";
 require_once "../Controller/PostCont.php";
 
-require '../övrigt/PDO.php'; // Kopplar till databasen
+require_once '../övrigt/PDO.php'; // Kopplar till databasen
 require_once '../Dao/userDAO.php';
-require '../Controller/UserController.php';
+require_once '../Controller/UserController.php';
 session_start();
 // Get the user ID from URL or default to logged-in user
 
