@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
@@ -20,7 +20,7 @@ class Chat implements MessageComponentInterface {
         $data = json_decode($msg, true);
 
         if (isset($data['user_id']) && isset($data['other_user_id'])) {
-            require 'PDO.php';
+            require '../övrigt/PDO.php';
 
             $messageContent = isset($data['message']) ? $data['message'] : '';
             $base64Image = isset($data['message_image']) ? $data['message_image'] : null;
