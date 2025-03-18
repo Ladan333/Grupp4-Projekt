@@ -3,7 +3,7 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-require "../övrigt/PDO.php";
+require_once "../övrigt/PDO.php";
 require_once "../Dao/DmDAO.php";
 require_once "../Dao/UserDAO.php";
 

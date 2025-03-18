@@ -1,6 +1,6 @@
 <?php     
-require "../PDO.php";
-require "postsDAO.php";
+require_once "./PDO.php";
+require_once "../Dao/postsDAO.php";
 require_once '../Entity/userEntity.php';
 session_start(); 
 
@@ -16,7 +16,7 @@ session_start();
                         $comment = $_POST["comment_input"];
                       
                         $blog_id = $_POST["blog_id"];
-                        $source = $_POST['source'] ?? '../Views/blogwall.php';
+                        $source = isset($_POST['source']) ? '/Grupp4-Projekt/Views/' . basename($_POST['source']) : '/Grupp4-Projekt/Views/blogwall.php';
 
                         if ($source == 'profile.php' && isset($_SESSION['follow_username'])) {
                             $source = 'profile.php?user_name=' . urlencode($_SESSION['follow_username']);

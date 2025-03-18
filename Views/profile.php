@@ -214,7 +214,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <?php endforeach; ?>
                         </div>
 
-                        <form action="Addcomments.php" method="post">
+                        <form action="../övrigt/Addcomments.php" method="post">
 
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
 

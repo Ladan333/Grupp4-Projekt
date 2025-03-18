@@ -10,7 +10,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$search = "Location: search.php?search=" . $_SESSION['search'] . "&search_sort=" . $_SESSION['search_sort'];
+$search = "Location: ../Views/search.php?search=" . $_SESSION['search'] . "&search_sort=" . $_SESSION['search_sort'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["change_view"])) {
 
