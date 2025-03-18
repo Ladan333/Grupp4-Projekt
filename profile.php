@@ -68,6 +68,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
 <body>
     <?php require "navbar.php"; ?>
+    
     <main class="profile-main">
         <section class="posts-section">
             <?php if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
@@ -222,7 +223,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <button class="comment-btn" type="submit">Comment</button>
                         </form>
 
-                        <?php if ($post['user_id'] == $_SESSION['id']): ?>
+                        <?php if ($post['user_id'] == $user_id): ?>
                             <button class="update-btn">Edit post</button>
                         <?php endif; ?>
 
@@ -261,7 +262,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     $followDAO = new FollowDAO($pdo);
                     $follow_result = $followDAO->getallFollows($user_id, $_SESSION['profile_id']);
 
-                    if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
+                    if (isset($user_id) && strcasecmp($user_name, $profile_username) === 0) { ?>
                         <button><a href="edituser.php">Edit profile</a></button>
                         <button><a href="following.php">Follows</a></button>
                     <?php } else if (!$follow_result) { ?>
