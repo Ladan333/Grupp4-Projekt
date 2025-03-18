@@ -9,6 +9,7 @@
 // var_dump($_POST);
 // Startar session för att veta vilken användare som är inloggad
 require_once '../Entity/userEntity.php';
+require_once "../config.php";
 session_start();
 // Get the user ID from URL or default to logged-in user
 
@@ -225,7 +226,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <h2 class="text-center mb-4">Edit Profile</h2>
         <form action="edituser.php?id=<?= $user_id ?>" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+        <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+
             <?php
 
 
@@ -266,6 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="text-center">
 
+            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
             <input type="submit" name="save" class="btn btn-primary" value="Save Changes">
 
@@ -286,6 +289,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     required>
             </div>
             <div class="text-center">
+            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+
                 <button type="submit" class="btn btn-primary">Change Password</button>
             </div>
         </form>
