@@ -1,13 +1,13 @@
 <?php
 
-require_once "../Entity/userEntity.php";
+// require_once "../Entity/userEntity.php";
 session_start();
-require '../Views/navbar.php';
+// require '../Views/navbar.php';
 require_once '../övrigt/PDO.php';
 require "../Dao/UserDAO.php";
-require './PHPMailer/src/PHPMailer.php';
-require './PHPMailer/src/SMTP.php';
-require './PHPMailer/src/Exception.php';
+require '../PHPMailer/src/PHPMailer.php';
+require '../PHPMailer/src/SMTP.php';
+require '../PHPMailer/src/Exception.php';
 
 
 use PHPMailer\PHPMailer\PHPMailer;

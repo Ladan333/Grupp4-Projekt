@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
 
                 <!-- Forgot Password Form -->
-                <form class="form-side forgot-password" action="forgotpassword.php" method="POST">
+                <form class="form-side forgot-password" action="../övrigt/forgotpassword.php" method="POST">
                     <h2>Forgot Password?</h2>
                     <label for="username">Username</label>
                     <input class="email_Input" name="username" id="username" type="text"
