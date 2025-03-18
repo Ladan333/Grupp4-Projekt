@@ -1,4 +1,6 @@
 <?php
+require_once '../Entity/userEntity.php';
+
 class PostController {
     private $pdo;
     private $PostDao;
@@ -11,13 +13,14 @@ class PostController {
    
     public function getProfileSortedBlogPosts() {
         $sql = $this->getProfileSortingSql();
-
+        $user = $_SESSION['user'];
+        $user_id = $user->getId();
+        
         
         $posts = $this->PostDao->getBlogPosts($sql);
 
- 
-        if (!empty($posts) && $_SESSION['profile_id'] == $_SESSION['id']) {
-            for ($x = 0; $x <= count($posts); $x++) {  
+        if (!empty($posts) && $_SESSION['profile_id'] == $user_id) {
+            for ($x = 0; $x < count($posts); $x++) {  
                 if ($posts[$x]["user_id"] != $_SESSION["profile_id"]) {
                     unset($posts[$x]);
                 }
