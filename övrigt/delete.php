@@ -4,7 +4,7 @@ session_start();
 require '../övrigt/PDO.php';
 require_once '../Controller/UserController.php';
 require_once '../Dao/UserDAO.php';
-
+require_once '../config.php';
 //Delete post - ligger i blogwall
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
     $post_id = $_POST['post_id'];
@@ -63,10 +63,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])){
     $query = $pdo->prepare('DELETE FROM comments WHERE id = :userid');
     $query->bindParam(':userid', $_POST['delete-comment']);
     
-
+    $source = $_POST['source'] ?? '/Views/blogwall.php';
     if(!empty($_POST['delete-comment'])){
         $query->execute();
-        header('location: ../Views/blogwall.php');
+        header("Location: " . BASE_URL . $source);
         exit();
     }
         else{

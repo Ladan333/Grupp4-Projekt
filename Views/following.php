@@ -34,9 +34,9 @@ if(!$result){
 
 <ul class="searching-list">
 <?php foreach ($result as $row): ?>
-    <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "./files/no_picture.jpg"; ?>
+    <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "../files/no_picture.jpg"; ?>
     <li class="searchResult">
-        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
+        <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="50" height="50">
         <a href="profile.php?user_name=<?php echo urlencode($row['user_name']); ?>" class="profile-link">
 
             <span

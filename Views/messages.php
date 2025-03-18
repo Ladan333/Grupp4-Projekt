@@ -54,9 +54,9 @@ $unreadCount = $dmDao->unreadMessages($user_id);
                 <?php
                 $profile_img = !empty($msg['profile_image'])
                     ? "data:image/png;base64," . htmlspecialchars($msg['profile_image'], ENT_QUOTES, 'UTF-8')
-                    : "./files/no_picture.jpg";
+                    : "../files/no_picture.jpg";
                 ?>
-                <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
+                <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="50" height="50">
                 <a href="m2m.php?user_name=<?= urlencode($msg['conversation_partner'] ?? '') ?>">
                     <strong><?= htmlspecialchars($msg['conversation_partner'] ?? '', ENT_QUOTES, 'UTF-8') ?></strong>
                     <br>

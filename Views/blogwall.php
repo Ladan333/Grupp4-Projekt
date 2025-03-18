@@ -303,9 +303,15 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                             </a></strong>
                                     </div>
                                     <div id="comment-delete-btn">
-                                        <?php if ($isAdmin || $comment['id'] == $user_id): ?>
+
+                                        <?php 
+                               
+
+                                         if ($isAdmin || $comment['id'] == $user_id): ?>
+
                                             <!-- Only allow the user who created the post or admins to delete -->
                                             <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
+                                             <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                                                 <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
                                                 <button type="submit" class="delete-btn">X</button>
                                             </form>
@@ -324,7 +330,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     <form action="../övrigt/AddComments.php" id="addComments-form" method="POST">
 
                         <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
-                        <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+                        <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
                         <input class="comment-input" type="text" name="comment_input" placeholder="comment" required>
 

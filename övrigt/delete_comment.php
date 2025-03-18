@@ -3,7 +3,8 @@ require_once '../Entity/userEntity.php';
 session_start();
 require_once("../övrigt/PDO.php");
 require_once "../Dao/postsDAO.php";
-$source = $_SESSION['last_page'];
+require_once '../config.php';
+$source = $_POST['source'] ?? '/Views/blogwall.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_comment"])) {
     $id = $_POST["delete_comment"];
@@ -22,5 +23,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_comment"])) {
     }
 }
 
-header("Location: $source");
+header("Location: " . BASE_URL . $source);
 exit;
