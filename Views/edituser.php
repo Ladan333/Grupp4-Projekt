@@ -231,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-            $profile_img = !empty($user['profile_image']) ? "data:image/png;base64," . htmlspecialchars($user['profile_image']) : "./files/no_picture.jpg"; ?>
+            $profile_img = !empty($user['profile_image']) ? "data:image/png;base64," . htmlspecialchars($user['profile_image']) : "../files/no_picture.jpg"; ?>
             <div class="text-center mb-3">
                 <img src="<?= $profile_img ?>" alt="Profile picture" class="profile-img">
             </div>

@@ -167,7 +167,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <!-- hämta ut bilderna innuti loopen på -->
                             <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "../files/no_picture.jpg"; ?>
 
-                            <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
+                            <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="50" height="50"
                                 style="border-radius:50%;"><strong><a
                                     href="profile.php?user_name=<?= urlencode($post['user_name']) ?>" class="profile-link">
                                     <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($post['user_name']))) ?>
@@ -192,8 +192,8 @@ $_SESSION['follow_username'] = $result['user_name'];
                                 <div class="comment">
                                     <div class="comment-header">
                                         <div id="user">
-                                            <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
-                                            <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                            <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "../files/no_picture.jpg"; ?>
+                                            <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="30" height="30"
                                                 style="border-radius:50%;"><strong><a
                                                     href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>"
                                                     class="profile-link">
@@ -254,7 +254,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                 $userData = $userDAO->getProfilePicture($profile_username);
 
 
-                $profile_img = !empty($userData['profile_image']) ? "data:image/png;base64," . htmlspecialchars($userData['profile_image']) : "./files/no_picture.jpg";
+                $profile_img = !empty($userData['profile_image']) ? "data:image/png;base64," . htmlspecialchars($userData['profile_image']) : "../files/no_picture.jpg";
                 ?>
                 <div class="profile-picture">
                     <img src="<?= $profile_img ?>" alt="Profile picture">

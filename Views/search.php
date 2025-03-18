@@ -86,7 +86,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                 <?php foreach ($result as $row): ?>
                     <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "../files/no_picture.jpg"; ?>
                     <li class="searchResult">
-                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
+                        <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="50" height="50">
                         <a href="profile.php?user_name=<?php echo urlencode($row['user_name']); ?>" class="profile-link">
 
                             <span
@@ -108,7 +108,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                     <p class="post-username">
                         <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "../files/no_picture.jpg"; ?>
 
-                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
+                        <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="50" height="50"
                             style="border-radius:50%;"> <a href="profile.php?user_name=<?= urlencode($post['user_name']) ?>"
                             class="profile-link">
                             <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($post['user_name']))) ?>
@@ -137,8 +137,8 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                         foreach ($comments as $comment): ?>
                             <div class="comment">
                                 <span id="user">
-                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
-                                    <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                    <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "../files/no_picture.jpg"; ?>
+                                    <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="30" height="30"
                                         style="border-radius:50%;"><strong><a
                                         href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>" class="profile-link">
                                         <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
