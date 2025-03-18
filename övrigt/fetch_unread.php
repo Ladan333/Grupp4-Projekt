@@ -1,10 +1,10 @@
 <?php
 
 
-require_once "userEntity.php";
+require_once "../Entity/userEntity.php";
 session_start();
-require_once('PDO.php');
-require_once "DmDAO.php";
+require_once('../övrigt/PDO.php');
+require_once "../Dao/DmDAO.php";
 if(isset($_SESSION['user'])){
     $user = $_SESSION['user'];
     $user_id = $user->getId();

@@ -12,7 +12,7 @@ require '../övrigt/PDO.php';
 // var_dump($_SESSION);
 
 if ($_SESSION['user'] == null) {
-    header("Location: index.php");
+    header("Location: ../Veiws/index.php");
     exit();
 }
 // Sessioncookie för auto-utloggnuing efter en timme. 
@@ -22,12 +22,12 @@ if (isset($_SESSION['login_time'])) {
     if (time() - $_SESSION['login_time'] > $session_lifetime) {
 
         session_destroy();
-        header("Location: index.php");
+        header("Location: ../Views/index.php");
         exit();
     }
 } else {
 
-    header("Location: index.php");
+    header("Location: ../Views/index.php");
     exit();
 }
 
@@ -98,8 +98,8 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="CSS.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/CSS.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css" />
     <title>Home Page</title>
     <style>

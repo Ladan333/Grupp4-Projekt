@@ -8,18 +8,18 @@
 
 // var_dump($_POST);
 // Startar session för att veta vilken användare som är inloggad
-require_once 'userEntity.php';
+require_once '../Entity/userEntity.php';
 session_start();
 // Get the user ID from URL or default to logged-in user
 
 
-require 'PDO.php'; // Kopplar till databasen
-require 'userDAO.php';
-require 'UserController.php';
+require '../övrigt/PDO.php'; // Kopplar till databasen
+require '../Dao/userDAO.php';
+require '../Controller/UserController.php';
 
 // Kollar om användaren är inloggad, skickas till login
 if (!isset($_SESSION['user'])) {
-    header("Location: index.php");
+    header("Location: ../Views/index.php");
     exit;
 }
 if (isset($_SESSION['password_updated'])) {
