@@ -1,7 +1,7 @@
 <?php 
     // require 'user.php';
-    require "../Dao/UserDAO.php";
-    require "../övrigt/PDO.php";
+    require_once "../Dao/UserDAO.php";
+    require_once  "../övrigt/PDO.php";
    
     require_once('../övrigt/display_count.php');
     require_once '../Entity/userEntity.php';
@@ -75,7 +75,7 @@ error_log("Fetchcount: " . print_r($fetchcount, true));
         ?>
         <li><a href="profile.php">Profile</a></li>
         <li><a href="blogwall.php">Wall</a></li>
-        <li><a href="logout.php">Logout</a></li>
+        <li><a href="../övrigt/logout.php">Logout</a></li>
         <li><a href="messages.php">Messages</a></li>
         
         <?php if (isset($_SESSION['role']) == 1): ?>
