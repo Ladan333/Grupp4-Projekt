@@ -5,7 +5,7 @@ require_once '../Entity/userEntity.php';
 
 session_start();
 
-$source = $_SESSION['last_page'];
+$source = isset($_POST['source']) ? '/Grupp4-Projekt/Views/' . basename($_POST['source']) : '/Grupp4-Projekt/Views/blogwall.php';
 
 if ($_SERVER['REQUEST_METHOD'] && isset($_POST)) {
     $id = $_POST['post_id'];

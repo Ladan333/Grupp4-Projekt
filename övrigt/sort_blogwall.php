@@ -1,6 +1,6 @@
 <?php
 
-require_once "../Views/userEntity.php";
+require_once "../Entity/userEntity.php";
 if (session_status() == PHP_SESSION_NONE) session_start();
 require '../övrigt/PDO.php'; 
 

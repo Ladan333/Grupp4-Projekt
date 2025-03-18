@@ -214,7 +214,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                             <?php endforeach; ?>
                         </div>
 
-                        <form action="Addcomments.php" method="post">
+                        <form action="../övrigt/Addcomments.php" method="post">
 
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
 
@@ -232,7 +232,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                         <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $user_id): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
-                            <form action="delete.php" method="POST" style="display: inline;">
+                            <form action="../övrigt/delete.php" method="POST" style="display: inline;">
                                 <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                                 <button type="submit" class="delete-btn">Delete post</button>
                             </form>
@@ -400,7 +400,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     }
 
                     // Change form action for editing
-                    form.action = "edit_post.php";
+                    form.action = "../övrigt/edit_post.php";
                     form.insertAdjacentHTML("beforeend", `<input type="hidden" name="post_id" value="${postId}">`);
 
                     // Update modal appearance
