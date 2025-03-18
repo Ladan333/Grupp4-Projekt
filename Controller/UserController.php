@@ -14,8 +14,10 @@ class UserController{
 
 
 public function changeOrNot($first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id)
-{
-
+{   
+    $source = $_POST['source'] ?? '/Views/edituser.php';
+    $user = $_SESSION['user'];
+    $userid = $user->getId();
     if (!empty($_FILES['profile_image']['tmp_name'])) {
         $imageData = file_get_contents($_FILES['profile_image']['tmp_name']);
         $imageBase64 = base64_encode($imageData);  //konvertering av bild
@@ -27,9 +29,9 @@ public function changeOrNot($first_name, $last_name,  $email, $profileContent ,$
     } else {
         $this->dao->changePicture($first_name, $last_name, $email, $profileContent, $user_id);
     }
-    
+
     // skicka tillbaks till rätt sida beroende på vart du ändrar någons uppgifter. Ändrar du dig själv i adminpanelen så kommer du till din egen profil
-    if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != $_SESSION['id']) {
+    if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != $userid) {
         header("Location: admin_list.php");
     } else {
         header("Location: profile.php");
