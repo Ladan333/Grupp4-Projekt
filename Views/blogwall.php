@@ -1,6 +1,6 @@
 <?php
 require_once "../Dao/postsDAO.php";
-require_once "../Dao/FollowDAO.php";
+require_once "../Dao/followDAO.php";
 require_once "../Controller/PostCont.php";
 require_once "../Entity/userEntity.php";
 
