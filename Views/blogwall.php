@@ -559,6 +559,15 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         }
                     },
                     {
+                        element: ".like-btn",
+                        popover: {
+                            title: "Like Post",
+                            description: "Press here to like the post",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
                         element: "#addComments-form",
                         popover: {
                             title: "Commenting section",
