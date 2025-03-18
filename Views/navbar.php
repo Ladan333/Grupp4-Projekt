@@ -1,10 +1,11 @@
 <?php 
     // require 'user.php';
-    require_once 'UserDAO.php';
-    require "PDO.php";
+    require "../Dao/UserDAO.php";
+    require "../övrigt/PDO.php";
    
-    require_once('display_count.php');
-    require_once('userEntity.php');
+    require_once('../övrigt/display_count.php');
+    require_once '../Entity/userEntity.php';
+
     
     if (session_status() == PHP_SESSION_NONE) {
     session_start();

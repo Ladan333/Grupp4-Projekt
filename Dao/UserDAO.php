@@ -1,5 +1,5 @@
 <?php
-require_once "userEntity.php";
+require_once '../Entity/userEntity.php';
 
 class UserDAO{
     private $pdo; 
