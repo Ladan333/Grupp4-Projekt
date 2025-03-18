@@ -49,6 +49,7 @@ if (isset($_GET["user_name"])) {
 $_SESSION['profile_id'] = $result['id'];
 $_SESSION['follow_username'] = $result['user_name'];
 
+
 ?>
 
 
