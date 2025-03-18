@@ -2,9 +2,9 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-require_once "userEntity.php";
-require_once('PDO.php');
-require_once "DmDAO.php";
+require_once "../Entity/userEntity.php";
+require_once('../övrigt/PDO.php');
+require_once "../Entity/DmDAO.php";
 session_start();
 
 
