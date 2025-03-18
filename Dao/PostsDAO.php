@@ -13,7 +13,7 @@ class PostsDao
     public function getComments($post_id)
     {
 
-        $commentSql = "SELECT c.id, c.commentContent, c.CreatedDate, u.user_name, u.profile_image
+        $commentSql = "SELECT c.id, c.user_id, c.commentContent, c.CreatedDate, u.user_name, u.profile_image
 
                        
 

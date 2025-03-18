@@ -31,9 +31,10 @@ if (isset($_SESSION['login_time'])) {
     exit();
 }
 
-
-$user_id = $_SESSION['user']->getId();
-
+$user = $_SESSION['user'];
+$user_id = $user->getId();
+// var_dump($user_id);
+// exit;
 if (!isset($_SESSION['sorting'])) {
     $_SESSION['sorting'] = 1;
 }
@@ -306,8 +307,9 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                                         <?php 
                                
+                           
 
-                                         if ($isAdmin || $comment['id'] == $user_id): ?>
+                                         if ($isAdmin || $comment['user_id'] == $user_id): ?>
 
                                             <!-- Only allow the user who created the post or admins to delete -->
                                             <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">

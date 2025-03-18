@@ -51,6 +51,7 @@ if (isset($_GET["user_name"])) {
 
 $_SESSION['profile_id'] = $result['id'];
 $_SESSION['follow_username'] = $result['user_name'];
+$isAdmin = $_SESSION["role"] ?? false;
 
 
 ?>
@@ -203,7 +204,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                                                 </a></strong>
                                         </div>
                                         <div id="comment-delete-btn">
-
+                                            <?php if ($isAdmin || $comment['user_id'] == $user_id): ?>
                                             <!-- Only allow the user who created the post or admins to delete -->
                                             <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
                                             <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
@@ -211,7 +212,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                                                     value="<?php echo $comment['id']; ?>">
                                                 <button type="submit" class="delete-btn">X</button>
                                             </form>
-
+                                             <?php endif; ?>
                                         </div>
                                     </div>
                                     <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
@@ -235,7 +236,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
 
 
-                        <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $user_id): ?>
+                        <?php  if ($isAdmin || $post['user_id'] == $user_id): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
                             <form action="../övrigt/delete.php" method="POST" style="display: inline;">
                             <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
