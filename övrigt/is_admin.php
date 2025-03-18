@@ -18,7 +18,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $userDAO->changeRole($isAdmin, $user_id);
 
    
-    header("Location: admin_list.php");
+    header("Location: ../Views/admin_list.php");
     exit;
 } else {
     echo "Invalid request. User ID is missing.";

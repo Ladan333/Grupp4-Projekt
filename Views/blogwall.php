@@ -305,7 +305,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                             </a></strong>
                                     </div>
                                     <div id="comment-delete-btn">
-                                        <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
+                                        <?php 
+                               
+                                            if ($isAdmin || $post['user_id'] == $user_id):
+                                             ?>
                                             <!-- Only allow the user who created the post or admins to delete -->
                                             <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
                                                 <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
