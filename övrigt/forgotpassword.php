@@ -1,10 +1,10 @@
 <?php
 
-require_once "userEntity.php";
+require_once "../Entity/userEntity.php";
 session_start();
-require 'navbar.php';
-require_once 'PDO.php';
-require "UserDAO.php";
+require '../Views/navbar.php';
+require_once '../övrigt/PDO.php';
+require "../Dao/UserDAO.php";
 require './PHPMailer/src/PHPMailer.php';
 require './PHPMailer/src/SMTP.php';
 require './PHPMailer/src/Exception.php';
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "Det gick inte att skicka e-post. Kontakta support.";
             }
 
-            echo "<br><a href='index.php'>Logga in med ditt nya lösenord</a>";
+            echo "<br><a href='../Views/index.php'>Logga in med ditt nya lösenord</a>";
 
         } catch (Exception $e) {
             echo "E-post kunde inte skickas. Fel: {$mail->ErrorInfo}";

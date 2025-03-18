@@ -12,7 +12,7 @@ require '../övrigt/PDO.php';
 // var_dump($_SESSION);
 
 if ($_SESSION['user'] == null) {
-    header("Location: index.php");
+    header("Location: ../Veiws/index.php");
     exit();
 }
 // Sessioncookie för auto-utloggnuing efter en timme. 
@@ -22,12 +22,12 @@ if (isset($_SESSION['login_time'])) {
     if (time() - $_SESSION['login_time'] > $session_lifetime) {
 
         session_destroy();
-        header("Location: index.php");
+        header("Location: ../Views/index.php");
         exit();
     }
 } else {
 
-    header("Location: index.php");
+    header("Location: ../Views/index.php");
     exit();
 }
 

@@ -6,9 +6,12 @@ require_once "../Entity/userEntity.php";
 session_start();
 require_once("../Dao/PostsDAO.php");
 require_once("../Dao/UserDAO.php");
-require "PDO.php";
+
+require "../övrigt/PDO.php";
+
+
 if ($_SESSION['user'] == null) {
-    header("Location: index.php");
+    header("Location: ../Views/index.php");
     exit();
 }
 //fungerar nu så att om du söker posts men inte hittar det du söker och söker igen så kommer den fortsätta söka på posts. 

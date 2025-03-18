@@ -1,11 +1,14 @@
 <?php
-require 'PDO.php'; 
-require_once 'userEntity.php';
+
+require_once '../Entity/userEntity.php';
 session_start();
+require '../övrigt/PDO.php'; 
+
+
 
 
 if (!isset($_SESSION['user'])) {
-    header("Location: index.php");
+    header("Location: ../Views/index.php");
     exit();
 }
 $user = $_SESSION['user'];
@@ -17,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['title'] ?? 'Untitled';
     $imageBase64 = null;
 
-    $source = $_POST['source'] ?? 'blogwall.php';
+    $source = $_POST['source'] ?? '../Views/blogwall.php';
         
     if (empty($content)) {
         $_SESSION['error'] = 'Content cannot be empty.';

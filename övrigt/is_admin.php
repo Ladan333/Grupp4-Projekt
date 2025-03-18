@@ -1,8 +1,8 @@
 <?php
-require_once 'userEntity.php';
+require_once '../Entity/userEntity.php';
 session_start(); 
-require 'PDO.php';
-require_once "userDAO.php";
+require '../övrigt/PDO.php';
+require_once "../Dao/userDAO.php";
 
 if ($_SESSION['role'] != 1) {  
     die("Unauthorized access!");

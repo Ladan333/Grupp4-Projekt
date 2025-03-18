@@ -1,9 +1,9 @@
 <?php
-require_once 'userEntity.php';
+require_once '../Entity/userEntity.php';
 session_start();
-require 'PDO.php';
-require_once 'UserController.php';
-require_once 'UserDAO.php';
+require '../övrigt/PDO.php';
+require_once '../Controller/UserController.php';
+require_once '../Dao/UserDAO.php';
 
 //Delete post - ligger i blogwall
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
@@ -14,13 +14,13 @@ $stmt->bindParam(':post_id', $post_id);
 
 if($stmt->execute()){
     $_SESSION['success'] = 'Post deleted successfully!';
-    header("Location: blogwall.php ");
+    header("Location: ../Views/blogwall.php ");
     exit();
 }
 
 else{
     $_SESSION['error'] = "You dont have permission to delete this post";
-    header("Location: blogwall.php");
+    header("Location: ../Views/blogwall.php");
     exit();
 }
 
@@ -41,7 +41,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
         unset($_SESSION[""]);
         session_destroy();
         setcookie(session_name(), '', time() - 3600, '/'); 
-        header("Location: index.php");
+        header("Location: ../Views/index.php");
         
         exit();
      }
@@ -66,7 +66,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])){
 
     if(!empty($_POST['delete-comment'])){
         $query->execute();
-        header('location: blogwall.php');
+        header('location: ../Views/blogwall.php');
         exit();
     }
         else{
