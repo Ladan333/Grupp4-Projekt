@@ -3,11 +3,23 @@ require_once "UserDAO.php";
 require_once "postsDAO.php";
 require_once "FollowDAO.php";
 require_once 'PostCont.php';
-session_start();
-$profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : $_SESSION["username"];
-require("PDO.php");
+require_once 'userEntity.php';
+require_once 'PDO.PHP';
 
-if ($_SESSION['id'] == null) {
+session_start();
+
+// var_dump($userInfo);
+// var_dump($_SESSION['user']) . PHP_EOL;
+// require("PDO.php");
+
+if(isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+    $user_name = $user->getUserName();
+}
+$profile_username = isset($_GET["user_name"]) ? $_GET["user_name"] : ($user_name);
+
+if ($user_id == null) {
     header("Location: index.php");
     exit();
 }
@@ -26,10 +38,11 @@ $_SESSION['last_page'] = basename($_SERVER['PHP_SELF']);
 
 if (isset($_GET["user_name"])) {
     $userDAO = new UserDAO($pdo);
-    $result = $userDAO->getUserByUserName($_GET["user_name"]);
+    $differentUser = $_GET['user_name'];
+    $result = $userDAO->getUserByUserByNameForProfile($differentUser);
 } else {
     $userDAO = new UserDAO($pdo);
-    $result = $userDAO->getUserByUsername($_SESSION["username"]);
+    $result = $userDAO->getUserByUserByNameForProfile($user_name);
 }
 
 $_SESSION['profile_id'] = $result['id'];
@@ -127,12 +140,12 @@ $_SESSION['follow_username'] = $result['user_name'];
                         font-size: 1.5rem;
                     }
                 </style>
-                <?php if (empty($posts) && $_SESSION['profile_id'] == $_SESSION['id']): ?>
+                <?php if (empty($posts) && $_SESSION['profile_id'] == $user_id): ?>
                     <p class="empty_feed">No posts could be found<br></p>
                     <p class="empty_feed">Try adding some posts for others to see!</p>
                 <?php endif; ?>
 
-                <?php if (empty($posts) && $_SESSION['profile_id'] != $_SESSION['id']): ?>
+                <?php if (empty($posts) && $_SESSION['profile_id'] != $user_id): ?>
                     <p class="empty_feed">No posts could be found<br></p>
                     <p class="empty_feed">This user has made no posts matching the criteria!</p>
                 <?php endif; ?>
@@ -246,7 +259,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     <?php
 
                     $followDAO = new FollowDAO($pdo);
-                    $follow_result = $followDAO->getallFollows($_SESSION['id'], $_SESSION['profile_id']);
+                    $follow_result = $followDAO->getallFollows($user_id, $_SESSION['profile_id']);
 
                     if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
                         <button><a href="edituser.php">Edit profile</a></button>

@@ -1,10 +1,11 @@
 <?php
 
+require_once "userEntity.php"; 
 if (session_status() == PHP_SESSION_NONE) session_start();
 
-require 'PDO.php'; 
+require 'PDO.php';
 
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['user'])) {
     header("Location: index.php");
     exit();
 }

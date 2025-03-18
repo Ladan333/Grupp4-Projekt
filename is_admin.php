@@ -1,4 +1,5 @@
 <?php
+require_once 'userEntity.php';
 session_start(); 
 require 'PDO.php';
 require_once "userDAO.php";

@@ -2,6 +2,7 @@
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 // Starta session för att kunna kolla vem som är inloggad
+require_once 'userEntity.php';
 session_start();
 
 // Inkluderar databaskopplingen

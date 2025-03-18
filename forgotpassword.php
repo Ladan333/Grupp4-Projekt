@@ -1,5 +1,6 @@
 <?php
 
+require_once "userEntity.php";
 session_start();
 require 'navbar.php';
 require_once 'PDO.php';

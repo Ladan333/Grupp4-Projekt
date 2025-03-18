@@ -2,13 +2,15 @@
 require_once "postsDAO.php";
 require_once "FollowDAO.php";
 require_once "PostCont.php";
+require_once 'userEntity.php';
 session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require 'PDO.php';
+// var_dump($_SESSION);
 
-if ($_SESSION['id'] == null) {
+if ($_SESSION['user'] == null) {
     header("Location: index.php");
     exit();
 }
@@ -64,9 +66,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
 
 } else if ($_SESSION["blogflow"] == 2) {
-    $id = $_SESSION['id'];
+    $user = $_SESSION['user'];
+    $user_id = $user->getId(); 
     $followDao = new FollowDAO($pdo);
-    $followed_results = $followDao->getAllFollowsByUserId($id);
+    $followed_results = $followDao->getAllFollowsByUserId($user_id);
     $followed_users = [];
     foreach ($followed_results as $result) {
         array_push($followed_users, $result["follow_id"]);
@@ -161,7 +164,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 </head>
 
 <body>
-    <?php require "navbar.php"; ?>
+<?php require "navbar.php"; ?>
 
     <div class="container">
         <div class="welcome-box">
@@ -328,7 +331,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
-                    <?php if ($post['user_id'] == $_SESSION['id']): ?>
+                    <?php
+                    $user = $_SESSION['user'];
+                    $user_id = $user->getId();                         
+                    if ($post['user_id'] == $user_id): ?>
                         <button class="update-btn">Edit post</button>
                     <?php endif; ?>
                     <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>

@@ -1,4 +1,6 @@
 <?php
+require_once "userEntity.php";
+
 class UserDAO{
     private $pdo; 
 
@@ -6,10 +8,22 @@ class UserDAO{
         $this->pdo = $pdo;
 }
 
+public function DeleteBlogPostBy($post_id)
+{
+    $stmt = $this->pdo->prepare("DELETE FROM blogposts WHERE id = :post_id ");
+    $stmt->bindParam(':post_id', $post_id);
+    if(!$stmt->execute()){
+        return false;
+    }
+   
+     
+}
+
 public function DeleteUserById($user_id)
 {
     $deleteStmt = $this->pdo->prepare("DELETE FROM users WHERE id = ?");
     $deleteStmt->execute([$user_id]);
+    
 }
 public function getUserById($user_id)
 {
@@ -48,9 +62,34 @@ public function getUserByUserName($username){
     $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_name = :username");
     $stmt->bindParam(":username", $username);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($userInfo){
+        return new User(
+            $userInfo["id"],
+            $userInfo["first_name"],
+            $userInfo["last_name"],
+            $userInfo["user_name"],
+            $userInfo["pwd"],
+            $userInfo["email"],
+            $userInfo["role"],
+            $userInfo["profileContent"],
+            $userInfo["profile_image"],
+            createdDate: $userInfo["CreatedDate"]
+
+        );
+    }
 
 }
+
+public function getUserByUserByNameForProfile($username){
+    $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_name = :username");
+    $stmt->bindParam(":username", $username);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+    
+    
+ 
 
 public function registerUser($username, $password,$email, $first_name, $last_name){
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);

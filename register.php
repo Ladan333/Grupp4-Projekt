@@ -1,6 +1,9 @@
 <?php
 session_start();
 session_destroy();
+require_once "userEntity.php";
+require "PDO.php";
+require "UserDAO.php";
 session_start();
 
 $cookie_name = "user_session";
@@ -9,9 +12,6 @@ $cookie_time = time() + 3600;
 
 setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
-
-require "PDO.php";
-require "UserDAO.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // $recaptcha_secret = "6LdPze8qAAAAAD8w9IMR2K8rnET4AdxIyviyy3z-"; 
@@ -27,7 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //     exit(); 
     // }
     
-    $username = $_POST["username"];
+    
+    $user = $_SESSION['user'];
+   
+    $username = $user->getId();
+        
+    
+    }
     $password = $_POST["password"];
     $email = $_POST["email"];
     $first_name = $_POST["first_name"];
@@ -41,14 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($userDAO->registerUser($username, $password, $email, $first_name, $last_name)) {
             $userInfo = $userDAO->getUserByUserName($username);
             if ($userInfo) {
-                $_SESSION['id'] = $userInfo['id'];
-                $_SESSION['username'] = $userInfo['user_name'];
-                $_SESSION['first_name'] = $userInfo['first_name'];
-                $_SESSION['last_name'] = $userInfo['last_name'];
-                $_SESSION['email'] = $userInfo['email'];
-                $_SESSION['role'] = $userInfo['role'];
+                $_SESSION['user'] = $userInfo;
+                $_SESSION['role'] = $userInfo->getRole();
                 $_SESSION['login_time'] = time();
                 $_SESSION['blogflow'] = 1;
+                $_SESSION['sorting'] = 1;
 
                 header("Location: blogwall.php");
                 exit();

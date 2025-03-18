@@ -1,7 +1,18 @@
-<?php if (session_status() == PHP_SESSION_NONE) {
+<?php 
+    // require 'user.php';
+    require_once 'UserDAO.php';
+    require "PDO.php";
+   
+    require_once('display_count.php');
+    require_once('userEntity.php');
+    
+    if (session_status() == PHP_SESSION_NONE) {
     session_start();
+    error_log("User ID: " . $user_id);
+error_log("Fetchcount: " . print_r($fetchcount, true));
 }
-require_once('display_count.php');
+
+
 ?>
 
 
@@ -22,7 +33,7 @@ require_once('display_count.php');
 <body>
     <nav>
         <ul class="the-wall">
-            <?php if (isset($_SESSION['username'])): ?>
+            <?php if (isset($_SESSION['user'])): ?>
                 <a href="blogwall.php" class="wall-link">
                     <h2>The Wall</h2>
                 </a>
@@ -56,16 +67,21 @@ require_once('display_count.php');
         </div>
 
         <ul class="submenu">
-            <?php if (isset($_SESSION['username'])): ?>
-                <li><a href="profile.php">Profile</a></li>
-                <li><a href="blogwall.php">Wall</a></li>
-                <li><a href="logout.php">Logout</a></li>
-                <li><a href="messages.php">Messages</a></li>
-                <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 1): ?>
-                    <li><a href="admin_list.php">Admin</a></li>
-                <?php endif; ?>
-            <?php endif; ?>
-        </ul>
+    <?php if (isset($_SESSION['user'])): ?>
+        <?php 
+        
+      
+        ?>
+        <li><a href="profile.php">Profile</a></li>
+        <li><a href="blogwall.php">Wall</a></li>
+        <li><a href="logout.php">Logout</a></li>
+        <li><a href="messages.php">Messages</a></li>
+        
+        <?php if (isset($_SESSION['role']) == 1): ?>
+            <li><a href="admin_list.php">Admin</a></li>
+        <?php endif; ?>
+    <?php endif; ?>
+</ul>
 
 
     </nav>

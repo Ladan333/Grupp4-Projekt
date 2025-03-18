@@ -2,11 +2,12 @@
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 
+require_once "userEntity.php";
 session_start();
 require_once("PostsDAO.php");
 require_once("UserDAO.php");
 require "PDO.php";
-if ($_SESSION['id'] == null) {
+if ($_SESSION['user'] == null) {
     header("Location: index.php");
     exit();
 }

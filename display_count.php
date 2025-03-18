@@ -1,18 +1,28 @@
 <?php
+    require_once "userEntity.php";
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-require_once('PDO.php');
+require_once 'PDO.php';
 require_once "DmDAO.php";
+require_once "UserDAO.php";
 
 
-$user_id = $_SESSION['id'] ?? null;
+if (isset($_SESSION["user"]) && $_SESSION["user"] instanceof User) {
+    $user = $_SESSION['user'];
+    $user_id = $user->getId();
+} else {
+    // Hantera fallet när sessionen inte har ett korrekt User-objekt
+    echo "User session is not valid.";
+}
+
 
 if ($user_id) {
 $dmDao = new DmDAO($pdo);
 $fetchcount = $dmDao->displayDmCount($user_id);
 
     $_SESSION['display_count'] = $fetchcount['unread_count'];
+    
 } else {
     $_SESSION['display_count'] = 0;
 }

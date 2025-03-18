@@ -9,14 +9,14 @@ $cookie_time = time() + 3600;
 setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
 
-session_start();
-$_SESSION['sorting'] = 1;
-$_SESSION['blogflow'] = 1;
+require_once 'userEntity.php';
 require "PDO.php";
 require "UserDAO.php";
+session_start();
 
 
-if (isset($_SESSION["username"])) {
+
+if (isset($_SESSION["user"])) {
     header("Location: blogwall.php");
     exit();
 }
@@ -31,13 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!$userInfo) {
         echo '<h3 style="text-align:center; color:red;">Invalid username or password</h3>';
     } else {
-        $hashed_password = $userInfo['pwd'];
-    
+        $hashed_password = $userInfo->getPassword();
+
         if (password_verify($password, $hashed_password)) {
-            $_SESSION['username'] = $username;
-            $_SESSION['role'] = $userInfo['role'];
-            $_SESSION['id'] = $userInfo['id'];
+            $_SESSION['user'] = $userInfo;
+            $_SESSION['role'] = $userInfo->getRole();
             $_SESSION['login_time'] = time();
+            $_SESSION['sorting'] = 1;
+            $_SESSION['blogflow'] = 1;
             header("Location: blogwall.php");
             exit();
         } else {
@@ -74,10 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <form class="form-side login" action="index.php" method="POST">
                     <h2>Welcome to <br>The Wall</h2>
                     <label for="username">Username</label>
-                    <input class="login_Input" name="username" id="username" type="text" placeholder="Input username" required>
+                    <input class="login_Input" name="username" id="username" type="text" placeholder="Input username"
+                        required>
 
                     <label for="password">Password</label>
-                    <input class="login_Input" name="password" id="password" type="password" placeholder="Input password" required>
+                    <input class="login_Input" name="password" id="password" type="password"
+                        placeholder="Input password" required>
 
                     <button class="button" type="submit">Login</button>
                     <a class="forgotpass" href="forg" id="forgotPassLink">Forgot password?</a>
@@ -88,10 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <form class="form-side forgot-password" action="forgotpassword.php" method="POST">
                     <h2>Forgot Password?</h2>
                     <label for="username">Username</label>
-                    <input class="email_Input" name="username" id="username" type="text" placeholder="Enter your username" required>
+                    <input class="email_Input" name="username" id="username" type="text"
+                        placeholder="Enter your username" required>
 
                     <label for="email">Email</label>
-                    <input class="email_Input" name="email" id="email" type="text" placeholder="Enter your email" required>
+                    <input class="email_Input" name="email" id="email" type="text" placeholder="Enter your email"
+                        required>
 
                     <button class="button" type="submit">Send Reset Link</button>
                     <a href="index.php" id="backToLogin">Back to Login</a>
@@ -100,13 +105,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <!-- Register Form -->
                 <form class="form-side register" action="register.php" method="POST">
                     <label class="label_register" for="username">Username:</label>
-                    <input class="login_Input" name="username" id="username" type="text" placeholder="Username" required>
+                    <input class="login_Input" name="username" id="username" type="text" placeholder="Username"
+                        required>
                     <label class="label_register" for="password">Password:</label>
-                    <input class="login_Input" name="password" id="password" type="text" placeholder="Password" required>
+                    <input class="login_Input" name="password" id="password" type="text" placeholder="Password"
+                        required>
                     <label class="label_register" for="first_name">First name:</label>
-                    <input class="login_Input" name="first_name" id="first_name" type="text" placeholder="First_name" required>
+                    <input class="login_Input" name="first_name" id="first_name" type="text" placeholder="First_name"
+                        required>
                     <label class="label_register" for="last_name">Last name:</label>
-                    <input class="login_Input" name="last_name" id="last_name" type="text" placeholder="Last_name" required>
+                    <input class="login_Input" name="last_name" id="last_name" type="text" placeholder="Last_name"
+                        required>
                     <label class="label_register" for="email">Email:</label>
                     <input class="login_Input" name="email" id="email" type="text" placeholder="Email" required>
 
@@ -125,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
     <script>
-        document.getElementById("forgotPassLink").addEventListener("click", function(event) {
+        document.getElementById("forgotPassLink").addEventListener("click", function (event) {
             event.preventDefault();
             document.getElementById("flipCard").classList.add("flipped");
             document.querySelector(".login").style.transform = "rotateY(0deg)";
@@ -133,14 +142,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.querySelector(".forgot-password").style.display = 'flex';
         });
 
-        document.getElementById("backToLogin").addEventListener("click", function(event) {
+        document.getElementById("backToLogin").addEventListener("click", function (event) {
             event.preventDefault();
             document.getElementById("flipCard").classList.remove("flipped");
             document.querySelector(".login").style.transform = "rotateY(0deg)";
 
         });
 
-        document.getElementById("registerLink").addEventListener("click", function(event) {
+        document.getElementById("registerLink").addEventListener("click", function (event) {
             event.preventDefault();
             document.getElementById("flipCard").classList.add("flipped");
             document.querySelector(".login").style.transform = "rotateY(0deg)";
@@ -148,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             document.querySelector(".register").style.display = 'flex';
         });
 
-        document.getElementById("backToLoginPage").addEventListener("click", function(event) {
+        document.getElementById("backToLoginPage").addEventListener("click", function (event) {
             event.preventDefault();
             document.getElementById("flipCard").classList.remove("flipped");
             document.querySelector(".login").style.transform = "rotateY(0deg)";
