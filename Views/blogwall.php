@@ -32,7 +32,7 @@ if (isset($_SESSION['login_time'])) {
 }
 
 
-
+$user_id = $_SESSION['user']->getId();
 
 if (!isset($_SESSION['sorting'])) {
     $_SESSION['sorting'] = 1;
@@ -64,11 +64,9 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
     $postController = new PostController($pdo);
     $posts = $postController->getWallSortedBlogPosts();
-
-
 } else if ($_SESSION["blogflow"] == 2) {
     $user = $_SESSION['user'];
-    $user_id = $user->getId(); 
+    $user_id = $user->getId();
     $followDao = new FollowDAO($pdo);
     $followed_results = $followDao->getAllFollowsByUserId($user_id);
     $followed_users = [];
@@ -165,7 +163,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 </head>
 
 <body>
-<?php require "navbar.php"; ?>
+    <?php require "navbar.php"; ?>
 
     <div class="container">
         <div class="welcome-box">
@@ -251,8 +249,9 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 <div class="post">
                     <p class="post-username">
                         <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "../files/no_picture.jpg"; ?>
+                        <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "../files/no_picture.jpg"; ?>
 
-                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
+                        <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="50" height="50"
                             style="border-radius:50%;"> <a href="profile.php?user_name=<?= urlencode($post['user_name']) ?>"
                             class="profile-link">
                             <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($post['user_name']))) ?>
@@ -270,7 +269,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                     </p>
                     <button class="toggle-btn">Show more</button>
-                    
+
                     <!-- Gilla-knapp -->
                     <?php
                     // Hämta antalet gillningar för inlägget
@@ -281,10 +280,9 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     <button class="like-btn" data-post-id="<?= $post['id']; ?>">
                         ❤️ <span class="like-count"><?= $like_count; ?></span>
                     </button>
-                     <!-- Länka till JavaScript-filen -->
-                     <script src="js/blogwall_java.js"></script>
-                     <!-- Comment Section -->
-                     <div class="comments-section">
+
+                    <!-- Comment Section -->
+                    <div class="comments-section">
                         <h4>comment</h4>
                         <?php
                         $PostDAO = new PostsDAO($pdo);
@@ -295,7 +293,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                 <div class="comment-header">
                                     <div id="user">
                                         <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "../files/no_picture.jpg"; ?>
-                                        <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
+                                        <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="30" height="30"
                                             style="border-radius:50%;"><strong><a
                                                 href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>"
                                                 class="profile-link">
@@ -305,10 +303,12 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                             </a></strong>
                                     </div>
                                     <div id="comment-delete-btn">
+
                                         <?php 
                                
-                                            if ($isAdmin || $post['user_id'] == $user_id):
-                                             ?>
+
+                                        <?php if ($isAdmin || $comment['id'] == $user_id): ?>
+
                                             <!-- Only allow the user who created the post or admins to delete -->
                                             <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
                                              <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
@@ -338,7 +338,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     </form>
                     <?php
                     $user = $_SESSION['user'];
-                    $user_id = $user->getId();                         
+                    $user_id = $user->getId();
                     if ($post['user_id'] == $user_id): ?>
                         <button class="update-btn">Edit post</button>
                     <?php endif; ?>
@@ -367,8 +367,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
+    <!-- Länka till JavaScript-filen -->
+    <script src="../JS/blogwall_java.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".post").forEach(post => {
                 let content = post.querySelector(".content");
                 let button = post.querySelector(".toggle-btn");
@@ -380,7 +382,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     button.style.display = "none";
                 }
 
-                button.addEventListener("click", function () {
+                button.addEventListener("click", function() {
                     if (content.classList.contains("short")) {
                         content.classList.remove("short");
                         this.textContent = "Show less";
@@ -410,7 +412,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 //     });
                 // }
             });
-            document.getElementById("postImage").addEventListener("change", function (event) {
+            document.getElementById("postImage").addEventListener("change", function(event) {
                 const fileInput = event.target;
                 const fileNameDisplay = document.getElementById("image-names");
 
@@ -448,7 +450,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 }
             });
             document.querySelectorAll(".update-btn").forEach(button => {
-                button.addEventListener("click", function () {
+                button.addEventListener("click", function() {
                     const post = this.closest(".post"); // Get the parent post element
                     const postId = post.querySelector("input[name='post_id']")?.value; // Get post ID
                     const title = post.querySelector(".post-title").textContent.trim();
@@ -513,80 +515,80 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 });
             });
         });
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const driver = window.driver.js.driver;
 
             const driverObj = driver({
                 showProgress: true,
                 steps: [{
-                    element: ".container",
-                    popover: {
-                        title: "BlogWall page",
-                        description: "Here you can see all the blogs that has been posted by different users.",
-                        side: "left",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".add-post-btn",
-                    popover: {
-                        title: "Add Post",
-                        description: "Add post modal, displays a modal so that the user can add posts.",
-                        side: "bottom",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".sorting",
-                    popover: {
-                        title: "Sorting Posts",
-                        description: "Click here to filter posts based on what you would like.",
-                        side: "bottom",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".post",
-                    popover: {
-                        title: "Post",
-                        description: "Posts added by users displayed here.",
-                        side: "bottom",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: "#addComments-form",
-                    popover: {
-                        title: "Commenting section",
-                        description: "Here you can add comments to each post.",
-                        side: "top",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".update-btn",
-                    popover: {
-                        title: "Edit Post",
-                        description: "Click here to opent the Edit post modal in order to edit your posts.",
-                        side: "top",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".delete-btn",
-                    popover: {
-                        title: "Delete Post",
-                        description: "Click here to delete posts.",
-                        side: "left",
-                        align: 'start'
-                    }
-                },
+                        element: ".container",
+                        popover: {
+                            title: "BlogWall page",
+                            description: "Here you can see all the blogs that has been posted by different users.",
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".add-post-btn",
+                        popover: {
+                            title: "Add Post",
+                            description: "Add post modal, displays a modal so that the user can add posts.",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".sorting",
+                        popover: {
+                            title: "Sorting Posts",
+                            description: "Click here to filter posts based on what you would like.",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".post",
+                        popover: {
+                            title: "Post",
+                            description: "Posts added by users displayed here.",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: "#addComments-form",
+                        popover: {
+                            title: "Commenting section",
+                            description: "Here you can add comments to each post.",
+                            side: "top",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".update-btn",
+                        popover: {
+                            title: "Edit Post",
+                            description: "Click here to opent the Edit post modal in order to edit your posts.",
+                            side: "top",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".delete-btn",
+                        popover: {
+                            title: "Delete Post",
+                            description: "Click here to delete posts.",
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
 
                 ]
             });
 
             // Start the tour when the help icon is clicked
-            document.getElementById("start-tour").addEventListener("click", function () {
+            document.getElementById("start-tour").addEventListener("click", function() {
                 driverObj.drive();
             });
         });
