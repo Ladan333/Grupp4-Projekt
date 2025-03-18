@@ -5,8 +5,11 @@ require_once "../övrigt/PDO.php";
 require_once "../Dao/postsDAO.php";
 require_once "../Dao/FollowDAO.php";
 require_once '../Controller/PostCont.php';
+require_once "../övrigt/add_post.php";
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // var_dump($userInfo);
 // var_dump($_SESSION['user']) . PHP_EOL;
@@ -73,7 +76,7 @@ $_SESSION['follow_username'] = $result['user_name'];
     
     <main class="profile-main">
         <section class="posts-section">
-            <?php if (isset($_SESSION["id"]) && strcasecmp($_SESSION["username"], $profile_username) === 0) { ?>
+            <?php if (isset($user_id) && strcasecmp($user_name, $profile_username) === 0) { ?>
                 <div class="welcome-box">
                     <!-- <h2>W elcome to </h2> -->
                     <!-- Add Post Button -->
@@ -87,7 +90,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                         <span class="close-btn">&times;</span>
                         <h2>Add a new post</h2>
 
-                        <form class="add-post-form" action="add_post.php" method="POST" enctype="multipart/form-data">
+                        <form class="add-post-form" action="../övrigt/add_post.php" method="POST" enctype="multipart/form-data">
 
                             <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
 
