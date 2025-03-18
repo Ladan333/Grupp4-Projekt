@@ -1,7 +1,7 @@
 <?php
+require 'PDO.php'; 
 require_once 'userEntity.php';
 session_start();
-require 'PDO.php'; 
 
 
 if (!isset($_SESSION['user'])) {

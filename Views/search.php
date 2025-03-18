@@ -2,10 +2,10 @@
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 
-require_once "userEntity.php";
+require_once "../Entity/userEntity.php";
 session_start();
-require_once("PostsDAO.php");
-require_once("UserDAO.php");
+require_once("../Dao/PostsDAO.php");
+require_once("../Dao/UserDAO.php");
 require "PDO.php";
 if ($_SESSION['user'] == null) {
     header("Location: index.php");
@@ -291,7 +291,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                     editPostId = null;
                 }
 
-                form.action = "add_post.php";
+                form.action = "../övrigt/add_post.php";
             }
             const images = document.querySelectorAll(".post-img");
             const overlay = document.getElementById("overlay");
