@@ -303,8 +303,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
         <form action="../övrigt/delete.php" method="post" onsubmit="return confirmDelete()">
-            <input type="hidden" name="deletes" value="<?php echo $user_id ?>">
-            <button type="submit">Delete profile</button>
+            <div class="text-center">
+                <input type="hidden" name="deletes" value="<?php echo $user_id ?>">
+                <button class="btn btn-danger" type="submit">Delete profile</button>
+            </div>
+
         </form>
 
 
