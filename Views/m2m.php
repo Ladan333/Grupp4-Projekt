@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once "../Entity/userEntity.php";
 require_once('../övrigt/PDO.php');
-require_once "../Entity/DmDAO.php";
+require_once "../Dao/DmDAO.php";
 session_start();
 
 

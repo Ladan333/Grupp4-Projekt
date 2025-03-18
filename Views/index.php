@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!$userInfo) {
         echo '<h3 style="text-align:center; color:red;">Invalid username or password</h3>';
     } else {
+
         $hashed_password = $userInfo->getPassword();
 
         if (password_verify($password, $hashed_password)) {
