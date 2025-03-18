@@ -250,7 +250,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <p class="post-username">
-                        <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "./files/no_picture.jpg"; ?>
+                        <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "../files/no_picture.jpg"; ?>
 
                         <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
                             style="border-radius:50%;"> <a href="profile.php?user_name=<?= urlencode($post['user_name']) ?>"
@@ -294,7 +294,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                             <div class="comment">
                                 <div class="comment-header">
                                     <div id="user">
-                                        <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "./files/no_picture.jpg"; ?>
+                                        <?php $profile_img = !empty($comment['profile_image']) ? "data:image/png;base64," . htmlspecialchars($comment['profile_image']) : "../files/no_picture.jpg"; ?>
                                         <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="30" height="30"
                                             style="border-radius:50%;"><strong><a
                                                 href="profile.php?user_name=<?= urlencode($comment['user_name']) ?>"
