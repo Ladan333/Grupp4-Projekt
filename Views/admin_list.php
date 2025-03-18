@@ -2,12 +2,12 @@
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 // Starta session för att kunna kolla vem som är inloggad
-require_once 'userEntity.php';
+require_once '../Entity/userEntity.php';
 session_start();
 
 // Inkluderar databaskopplingen
 require 'PDO.php';
-require_once 'UserDAO.php';
+require_once '../Dao/UserDAO.php';
 
 // Kolla om användaren är inloggad och har rollen "admin"
 if (!isset($_SESSION['role']) || $_SESSION['role'] != '1') {

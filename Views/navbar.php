@@ -24,7 +24,7 @@ error_log("Fetchcount: " . print_r($fetchcount, true));
 <head>
     <meta charset="UTF-8">
 
-    <link rel="stylesheet" type="text/css" href="CSS.css">
+    <link rel="stylesheet" type="text/css" href="../css/CSS.css">
     <meta name="viewport" content="width=420, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <!-- <meta http-equiv="refresh" content="1"> -->

@@ -59,8 +59,8 @@ $_SESSION['follow_username'] = $result['user_name'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" type="text/css" href="CSS.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/CSS.css">
 
     <!-- <meta http-equiv="refresh" content="2"> -->
     <title>Document</title>
