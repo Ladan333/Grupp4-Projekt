@@ -10,8 +10,8 @@ setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
 
 require_once '../Entity/userEntity.php';
-require "../övrigt/PDO.php";
-require "../Dao/UserDAO.php";
+require_once "../övrigt/PDO.php";
+require_once "../Dao/UserDAO.php";
 session_start();
 
 

@@ -2,8 +2,8 @@
 session_start();
 session_destroy();
 require_once "../Entity/userEntity.php";
-require "../övrigt/PDO.php";
-require "../Dao/UserDAO.php";
+require_once "../övrigt/PDO.php";
+require_once "../Dao/UserDAO.php";
 session_start();
 
 $cookie_name = "user_session";

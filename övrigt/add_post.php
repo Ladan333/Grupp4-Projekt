@@ -2,7 +2,7 @@
 
 require_once '../Entity/userEntity.php';
 session_start();
-require '../övrigt/PDO.php'; 
+require_once '../övrigt/PDO.php'; 
 
 
 
