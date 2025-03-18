@@ -18,9 +18,8 @@ class PostController {
         
         $posts = $this->PostDao->getBlogPosts($sql);
 
- 
         if (!empty($posts) && $_SESSION['profile_id'] == $user_id) {
-            for ($x = 0; $x <= count($posts); $x++) {  
+            for ($x = 0; $x < count($posts); $x++) {  
                 if ($posts[$x]["user_id"] != $_SESSION["profile_id"]) {
                     unset($posts[$x]);
                 }
