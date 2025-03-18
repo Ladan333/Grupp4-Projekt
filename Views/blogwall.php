@@ -181,7 +181,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             <div class="modal-content">
                 <span class="close-btn">&times;</span>
                 <h2>Add a new post</h2>
-                <form class="add-post-form" action="add_post.php" method="POST" enctype="multipart/form-data">
+                <form class="add-post-form" action="../övrigt/add_post.php" method="POST" enctype="multipart/form-data">
                     <label for="add-post-title">Title:</label>
                     <input type="text" id="add-post-title" name="title" required placeholder="Amazing blogwall...">
 
@@ -205,28 +205,28 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             <?php
 
             if ($_SESSION['blogflow'] == 1) { ?>
-                <form action="change_blogflow.php" method="POST">
+                <form action="../övrigt/change_blogflow.php" method="POST">
                     <input type="hidden" name="change_view" value="1" ;>
                     <button class="comment-btn blogflow" type="submit">Sort by followers</button>
                 </form>
             <?php } else { ?>
-                <form action="change_blogflow.php" method="POST">
+                <form action="../övrigt/change_blogflow.php" method="POST">
                     <input type="hidden" name="change_view" value="2" ;>
                     <button class="comment-btn blogflow" type="submit">Sort by all posts</button>
                 </form>
             <?php } ?>
 
-            <form action="sort_blogwall.php" method="POST">
+            <form action="../övrigt/sort_blogwall.php" method="POST">
                 <input type="hidden" name="sort_recent" value="1" ;>
                 <button class="comment-btn blogflow" type="submit">Sort by recent posts</button>
             </form>
 
-            <form action="sort_blogwall.php" method="POST">
+            <form action="../övrigt/sort_blogwall.php" method="POST">
                 <input type="hidden" name="sort_comment_count" value="2" ;>
                 <button class="comment-btn blogflow" type="submit">Sort by most comments</button>
             </form>
 
-            <form action="sort_blogwall.php" method="POST">
+            <form action="../övrigt/sort_blogwall.php" method="POST">
                 <input type="hidden" name="sort_activity" value="3" ;>
                 <button class="comment-btn blogflow" type="submit">Sort by most recent activity</button>
             </form>
@@ -307,7 +307,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                     <div id="comment-delete-btn">
                                         <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
                                             <!-- Only allow the user who created the post or admins to delete -->
-                                            <form action="delete_comment.php" method="POST" style="display: inline;">
+                                            <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
                                                 <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
                                                 <button type="submit" class="delete-btn">X</button>
                                             </form>
@@ -323,7 +323,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <?php endforeach; ?>
                     </div>
 
-                    <form action="AddComments.php" id="addComments-form" method="POST">
+                    <form action="../övrigt/AddComments.php" id="addComments-form" method="POST">
 
                         <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
                         <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
@@ -340,7 +340,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     <?php endif; ?>
                     <?php if ($isAdmin || $post['user_id'] == $_SESSION['id']): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
-                        <form action="delete.php" method="POST" style="display: inline;">
+                        <form action="../övrigt/delete.php" method="POST" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <button type="submit" class="delete-btn">Delete post</button>
                         </form>
@@ -471,7 +471,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     submitButton.textContent = "Update Post";
                     editMode = true;
                     editPostId = postId;
-                    form.action = "edit_post.php";
+                    form.action = "../övrigt/edit_post.php";
 
                     // Open modal
                     modal.style.display = "flex";
@@ -493,7 +493,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     editPostId = null;
                 }
 
-                form.action = "add_post.php";
+                form.action = "../övrigt/add_post.php";
             }
             const images = document.querySelectorAll(".post-img");
             const overlay = document.getElementById("overlay");
