@@ -92,7 +92,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                         <form class="add-post-form" action="../övrigt/add_post.php" method="POST" enctype="multipart/form-data">
 
-                            <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+                        <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
                             <label for="add-post-title">Title:</label>
                             <input type="text" id="add-post-title" name="title" required placeholder="Amazing blogwall...">
@@ -435,7 +435,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     editPostId = null;
                 }
 
-                form.action = "add_post.php";
+                form.action = "../övrigt/add_post.php";
             }
             const images = document.querySelectorAll(".post-img");
             const overlay = document.getElementById("overlay");
