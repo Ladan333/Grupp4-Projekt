@@ -31,7 +31,10 @@ if (isset($_SESSION['password_updated'])) {
 }
 
 // Hämtar användarens data från databas
-$user_id = isset($_GET['id']) ? $_GET['id'] : $_SESSION['id'];
+if (isset($_SESSION['user'])){
+    $user = $_SESSION['user'];
+    $user_id = isset($_GET['id']) ? $_GET['id'] : $user->getId();
+}
 
 
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
