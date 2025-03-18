@@ -7,9 +7,9 @@
 
 @font-face {
   font-family: "Leche Frita";
-  src: url("files/Leche_Frita.woff2") format("woff2"),
-    url("files/Leche_Frita.woff") format("woff"),
-    url("files/Leche_Frita.ttf") format("truetype");
+  src: url("../files/Leche_Frita.woff2") format("woff2"),
+    url("../files/Leche_Frita.woff") format("woff"),
+    url("../files/Leche_Frita.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

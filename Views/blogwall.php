@@ -249,6 +249,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 <div class="post">
                     <p class="post-username">
                         <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "../files/no_picture.jpg"; ?>
+                        <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "../files/no_picture.jpg"; ?>
 
                         <img src="<?= $profile_img ?>" alt="../files/no_picture.jpg" width="50" height="50"
                             style="border-radius:50%;"> <a href="profile.php?user_name=<?= urlencode($post['user_name']) ?>"
@@ -335,6 +336,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     if ($post['user_id'] == $user_id): ?>
                         <button class="update-btn">Edit post</button>
                     <?php endif; ?>
+                    <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
                     <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
                         <!-- Only allow the user who created the post or admins to delete -->
                         <form action="../övrigt/delete.php" method="POST" style="display: inline;">

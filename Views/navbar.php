@@ -1,16 +1,16 @@
-<?php 
-    // require 'user.php';
-    require_once "../Dao/UserDAO.php";
-    require_once  "../övrigt/PDO.php";
-   
-    require_once('../övrigt/display_count.php');
-    require_once '../Entity/userEntity.php';
+<?php
+// require 'user.php';
+require_once "../Dao/UserDAO.php";
+require_once "../övrigt/PDO.php";
 
-    
-    if (session_status() == PHP_SESSION_NONE) {
+require_once '../övrigt/display_count.php';
+require_once '../Entity/userEntity.php';
+
+
+if (session_status() == PHP_SESSION_NONE) {
     session_start();
     error_log("User ID: " . $user_id);
-error_log("Fetchcount: " . print_r($fetchcount, true));
+    error_log("Fetchcount: " . print_r($fetchcount, true));
 }
 
 
@@ -51,38 +51,37 @@ error_log("Fetchcount: " . print_r($fetchcount, true));
         <ul>
             <form action="search.php" method="GET" name="search">
                 <input class="searchbar" type="text" placeholder="Search for user or post content" name="search">
-             
+
             </form>
         </ul>
 
         <div class="display-messages">
             <a href="messages.php">&#9993;</a>
-            <?php
-            if ($_SESSION['display_count'] > 0) {?>
-              <p id="unread-count" style="font-weight: bold; color: rgb(66, 135, 245);"></p>
 
-            <?php } ?>
+            <p id="unread-count" style="font-weight: bold; color: rgb(66, 135, 245);">
+                <?= (isset($_SESSION['display_count']) && $_SESSION['display_count'] > 0) ? $_SESSION['display_count'] : '0' ?>
+            </p>
         </div>
         <div class="burger" onclick="toggleMenu()">
             <p>☰</p>
         </div>
 
         <ul class="submenu">
-    <?php if (isset($_SESSION['user'])): ?>
-        <?php 
-        
-      
-        ?>
-        <li><a href="profile.php">Profile</a></li>
-        <li><a href="blogwall.php">Wall</a></li>
-        <li><a href="../övrigt/logout.php">Logout</a></li>
-        <li><a href="messages.php">Messages</a></li>
-        
-        <?php if (isset($_SESSION['role']) == 1): ?>
-            <li><a href="admin_list.php">Admin</a></li>
-        <?php endif; ?>
-    <?php endif; ?>
-</ul>
+            <?php if (isset($_SESSION['user'])): ?>
+                <?php
+
+
+                ?>
+                <li><a href="profile.php">Profile</a></li>
+                <li><a href="blogwall.php">Wall</a></li>
+                <li><a href="../övrigt/logout.php">Logout</a></li>
+                <li><a href="messages.php">Messages</a></li>
+
+                <?php if (isset($_SESSION['role']) == 1): ?>
+                    <li><a href="admin_list.php">Admin</a></li>
+                <?php endif; ?>
+            <?php endif; ?>
+        </ul>
 
 
     </nav>
@@ -100,24 +99,25 @@ error_log("Fetchcount: " . print_r($fetchcount, true));
         }
 
         function fetchUnreadCount() {
-            fetch('fetch_unread.php')
-                .then(response => response.json())
-                .then(data => {
-                    let count = data.unread_count;
-                    let unreadElement = document.getElementById("unread-count");
+    fetch('../övrigt/fetch_unread.php')
+        .then(response => response.json())
+        .then(data => {
+            console.log("Fetched unread count:", data.unread_count); // ✅ Kontrollutskrift
 
-                    if (unreadElement) {
-                        unreadElement.textContent = count > 0 ? count : '';
-                    }
-                })
-                .catch(error => console.error("Error fetching unread count:", error));
-        }
+            let count = data.unread_count;
+            let unreadElement = document.getElementById("unread-count");
 
-        
-        setInterval(fetchUnreadCount, 1000);
+            if (unreadElement) {
+                unreadElement.textContent = count > 0 ? count : '0';
+            } else {
+                console.error("Elementet #unread-count hittades inte i DOM!");
+            }
+        })
+        .catch(error => console.error("Error fetching unread count:", error));
+}
 
-        
-        window.onload = fetchUnreadCount;
+document.addEventListener('DOMContentLoaded', fetchUnreadCount);
+setInterval(fetchUnreadCount, 5000);
     </script>
 </body>
 
