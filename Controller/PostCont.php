@@ -1,5 +1,6 @@
 <?php
-require_once "userEntity.php";
+require_once '../Entity/userEntity.php';
+
 class PostController {
     private $pdo;
     private $PostDao;

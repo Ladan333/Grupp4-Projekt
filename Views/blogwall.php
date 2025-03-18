@@ -1,13 +1,14 @@
 <?php
-require_once "postsDAO.php";
-require_once "FollowDAO.php";
-require_once "PostCont.php";
-require_once 'userEntity.php';
+require_once "../Dao/postsDAO.php";
+require_once "../övrigt/FollowDAO.php";
+require_once "../Controller/PostCont.php";
+require_once '../Entity/userEntity.php';
+
 session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-require 'PDO.php';
+require '../övrigt/PDO.php';
 // var_dump($_SESSION);
 
 if ($_SESSION['user'] == null) {

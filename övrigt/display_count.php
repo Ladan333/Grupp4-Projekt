@@ -1,11 +1,12 @@
 <?php
-    require_once "userEntity.php";
+    require_once '../Entity/userEntity.php';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-require_once 'PDO.php';
+require "../övrigt/PDO.php";
 require_once "DmDAO.php";
-require_once "UserDAO.php";
+require_once "../Dao/UserDAO.php";
+
 
 
 if (isset($_SESSION["user"]) && $_SESSION["user"] instanceof User) {
