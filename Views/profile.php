@@ -1,10 +1,10 @@
 <?php
-require_once "UserDAO.php";
-require_once "postsDAO.php";
-require_once "FollowDAO.php";
-require_once 'PostCont.php';
-require_once 'userEntity.php';
-require_once 'PDO.PHP';
+require_once "../Dao/UserDAO.php";
+require_once "../Dao/postsDAO.php";
+require_once "../Dao/FollowDAO.php";
+require_once '../Entity/PostCont.php';
+require_once '../Entity/userEntity.php';
+require_once '../Entity/PDO.PHP';
 
 session_start();
 

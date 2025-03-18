@@ -6,7 +6,10 @@ require_once "../Entity/userEntity.php";
 session_start();
 require_once("../Dao/PostsDAO.php");
 require_once("../Dao/UserDAO.php");
+
 require "../övrigt/PDO.php";
+
+
 if ($_SESSION['user'] == null) {
     header("Location: ../Views/index.php");
     exit();
@@ -291,7 +294,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                     editPostId = null;
                 }
 
-                form.action = "add_post.php";
+                form.action = "../övrigt/add_post.php";
             }
             const images = document.querySelectorAll(".post-img");
             const overlay = document.getElementById("overlay");
