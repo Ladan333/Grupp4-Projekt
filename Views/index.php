@@ -13,6 +13,7 @@ require_once '../Entity/userEntity.php';
 require_once "../övrigt/PDO.php";
 require_once "../Dao/UserDAO.php";
 session_start();
+define('BASE_URL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . '/');
 
 
 

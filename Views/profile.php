@@ -201,8 +201,9 @@ $_SESSION['follow_username'] = $result['user_name'];
                                         <div id="comment-delete-btn">
 
                                             <!-- Only allow the user who created the post or admins to delete -->
-                                            <form action="delete_comment.php" method="POST" style="display: inline;">
-                                                <input type="hidden" name="delete_comment"
+                                            <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
+                                            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                                            <input type="hidden" name="delete_comment"
                                                     value="<?php echo $comment['id']; ?>">
                                                 <button type="submit" class="delete-btn">X</button>
                                             </form>
@@ -218,7 +219,7 @@ $_SESSION['follow_username'] = $result['user_name'];
 
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
 
-                            <input type="hidden" name="source" value="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+                            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
                             <input class="comment-input" type="text" name="comment_input" placeholder="Comment" required>
                             <button class="comment-btn" type="submit">Comment</button>
@@ -233,6 +234,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                         <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $_SESSION['id']): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
                             <form action="../övrigt/delete.php" method="POST" style="display: inline;">
+                            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                                 <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                                 <button type="submit" class="delete-btn">Delete post</button>
                             </form>
