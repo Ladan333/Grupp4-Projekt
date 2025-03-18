@@ -7,7 +7,7 @@ session_start();
 require_once("../Dao/PostsDAO.php");
 require_once("../Dao/UserDAO.php");
 
-require "../övrigt/PDO.php";
+require_once "../övrigt/PDO.php";
 
 
 if ($_SESSION['user'] == null) {
@@ -74,7 +74,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
 <body>
     <?php require "navbar.php"; ?>
 
-    <form action="change_search_results.php" method="POST">
+    <form action="../övrigt/change_search_results.php" method="POST">
             <input type="hidden" name="change_view" value="1" ;>
             <button class="comment-btn" type="submit"><u>Switch between users and blog content!</u></button>
     </form>
@@ -84,7 +84,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
         <?php if (!empty($result) && $_SESSION['search_sort'] == 1) { ?>
             <ul class="searching-list">
                 <?php foreach ($result as $row): ?>
-                    <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "./files/no_picture.jpg"; ?>
+                    <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "../files/no_picture.jpg"; ?>
                     <li class="searchResult">
                         <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50">
                         <a href="profile.php?user_name=<?php echo urlencode($row['user_name']); ?>" class="profile-link">
@@ -106,7 +106,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
             <?php foreach ($posts as $post): ?>
                 <div class="post">
                     <p class="post-username">
-                        <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "./files/no_picture.jpg"; ?>
+                        <?php $profile_img = !empty($post['profile_image']) ? "data:image/png;base64," . $post['profile_image'] : "../files/no_picture.jpg"; ?>
 
                         <img src="<?= $profile_img ?>" alt="./files/no_picture.jpg" width="50" height="50"
                             style="border-radius:50%;"> <a href="profile.php?user_name=<?= urlencode($post['user_name']) ?>"

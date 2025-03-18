@@ -14,7 +14,7 @@ session_start();
 
 
 require '../övrigt/PDO.php'; // Kopplar till databasen
-require '../Dao/userDAO.php';
+require_once '../Dao/userDAO.php';
 require '../Controller/UserController.php';
 
 // Kollar om användaren är inloggad, skickas till login
