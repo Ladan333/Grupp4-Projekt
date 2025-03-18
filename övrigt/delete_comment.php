@@ -3,7 +3,7 @@ require_once '../Entity/userEntity.php';
 session_start();
 require_once("../övrigt/PDO.php");
 require_once "../Dao/postsDAO.php";
-$source = $_SESSION['last_page'];
+$source = isset($_POST['source']) ? '/Grupp4-Projekt/Views/' . basename($_POST['source']) : '/Grupp4-Projekt/Views/blogwall.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_comment"])) {
     $id = $_POST["delete_comment"];
