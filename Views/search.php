@@ -62,8 +62,8 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="CSS.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/CSS.css">
 
     <title>Document</title>
 </head>
