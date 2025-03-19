@@ -8,6 +8,8 @@ require_once '../config.php';
 
 $do = new UserDAO($pdo); // Instans som man kan använda i filen
 
+//Querys ligger i UserDao
+
 //Delete post - ligger i blogwall
 //Tar in post-id och kör query från metod i UserDao.php
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
@@ -36,7 +38,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
      $user = (int)$_POST['deletes'];
 
      if(!empty($user)){
-        
+
         //använder metod i UserDao
           $do->DeleteUserById($user);
         
