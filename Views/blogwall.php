@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require '../övrigt/PDO.php';
-// var_dump($_SESSION);
+
 
 if ($_SESSION['user'] == null) {
     header("Location: ../Views/index.php");
@@ -33,8 +33,7 @@ if (isset($_SESSION['login_time'])) {
 
 $user = $_SESSION['user'];
 $user_id = $user->getId();
-// var_dump($user_id);
-// exit;
+
 if (!isset($_SESSION['sorting'])) {
     $_SESSION['sorting'] = 1;
 }
@@ -45,17 +44,6 @@ if (isset($_SESSION['last_page']) && $_SESSION['last_page'] !== 'blogwall.php' &
 
 $_SESSION['last_page'] = basename($_SERVER['PHP_SELF']);
 
-
-
-
-
-// if (!$_SESSION['blogflow'] == null) {
-//     $_SESSION['blogflow'] = 1;
-// }
-
-// if (!$_SESSION['sorting'] == null) {
-//     $_SESSION['sorting'] = 1;
-// }
 
 $username = $_SESSION['username'] ?? 'Username';
 $isAdmin = $_SESSION["role"] ?? false;
@@ -75,7 +63,6 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
         array_push($followed_users, $result["follow_id"]);
     }
 
-
     $postController = new PostController($pdo);
     $posts = $postController->getWallSortedBlogPosts();
 
@@ -89,7 +76,6 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -168,12 +154,10 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
 
     <div class="container">
         <div class="welcome-box">
-            <h2>Welcome to our fantastic blog</h2>
+            <h2></h2>
             <!-- Add Post Button -->
             <button id="openModalBtn" class="add-post-btn"><ion-icon name="add-circle"></ion-icon> Add Post</button>
         </div>
-
-
 
         <!-- Add Post Modal -->
         <div id="postModal" class="modal">
@@ -300,17 +284,12 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                                 class="profile-link">
                                                 <?= "&nbsp;&nbsp;" . htmlspecialchars(ucwords(strtolower($comment['user_name']))) ?>
                                                 <?php echo "&nbsp;&nbsp;" . htmlspecialchars($comment['CreatedDate']) ?>
-
                                             </a></strong>
                                     </div>
                                     <div id="comment-delete-btn">
 
                                         <?php
-
-
-
                                         if ($isAdmin || $comment['user_id'] == $user_id): ?>
-
                                             <!-- Only allow the user who created the post or admins to delete -->
                                             <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
                                                 <input type="hidden" name="source"
@@ -318,27 +297,22 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                                 <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
                                                 <button type="submit" class="delete-btn">X</button>
                                             </form>
-
                                         <?php endif; ?>
                                     </div>
                                 </div>
                                 <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
                             </div>
-
-
-
                         <?php endforeach; ?>
                     </div>
-
+                                            <!-- add comments -->
                     <form action="../övrigt/AddComments.php" id="addComments-form" method="POST">
 
                         <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
                         <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
-
                         <input class="comment-input" type="text" name="comment_input" placeholder="comment" required>
-
                         <button class="comment-btn" type="submit">Comment</button>
                     </form>
+                   
                     <?php
                     $user = $_SESSION['user'];
                     $user_id = $user->getId();
@@ -346,6 +320,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         <button class="update-btn">Edit post</button>
                     <?php endif; ?>
                     <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
+                        <!-- Delete post -->
                         <!-- Only allow the user who created the post or admins to delete -->
                         <form action="../övrigt/delete.php" method="POST" style="display: inline;">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
@@ -353,20 +328,16 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         </form>
 
                     <?php endif; ?>
-
-
                 </div>
             <?php endforeach; ?>
-
-
         </div>
-
     </div>
     <div id="overlay"></div>
     <!-- Help Icon -->
     <div class="help-icon" id="start-tour">
         <ion-icon name="help-circle"></ion-icon>
     </div>
+    
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
