@@ -6,34 +6,37 @@ require_once '../Controller/UserController.php';
 require_once '../Dao/UserDAO.php';
 require_once '../config.php';
 //Delete post - ligger i blogwall
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])) {
+//Tar in post-id och kör query från metod i UserDao.php
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
     $post_id = $_POST['post_id'];
 
-    $stmt = $pdo->prepare("DELETE FROM blogposts WHERE id = :post_id ");
-    $stmt->bindParam(':post_id', $post_id);
+    $success = $do->DeleteBlogPostBy($post_id);// returnerar true om query körs
 
-    if ($stmt->execute()) {
-        $_SESSION['success'] = 'Post deleted successfully!';
-        header("Location: ../Views/blogwall.php ");
-        exit();
-    } else {
-        $_SESSION['error'] = "You dont have permission to delete this post";
-        header("Location: ../Views/blogwall.php");
-        exit();
-    }
+
+if($success){
+    $_SESSION['success'] = 'Post deleted successfully!';
+    header("Location: ../Views/blogwall.php ");
+    exit();
+}
+
+else{
+    $_SESSION['error'] = "You dont have permission to delete this post";
+    header("Location: ../Views/blogwall.php");
+    exit();
+}
 
 }
 
 //Delete user - ligger i edituser.php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deletes'])) {
-    $user = (int) $_POST['deletes'];
+//Tar in userid från POST i edituser.php kör deletequery som ligger i metod i UserDao
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
+     $user = (int)$_POST['deletes'];
 
-    if (!empty($user)) {
-
-        $stmt = $pdo->prepare("DELETE FROM users WHERE id = :deleteuser");
-        $stmt->bindParam(':deleteuser', $user, PDO::PARAM_INT);
-
-        if ($stmt->execute()) {
+     if(!empty($user)){
+        //använder metod i UserDao
+          $do = new UserDAO($pdo);
+          $do->DeleteUserById($user);
+        
 
             $_SESSION['success'] = 'User deleted succesful';
             unset($_SESSION[""]);
@@ -54,11 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deletes'])) {
 
 }
 
-//Delete comment - ligger i blogwall rad 298
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])) {
-    $query = $pdo->prepare('DELETE FROM comments WHERE id = :userid');
-    $query->bindParam(':userid', $_POST['delete-comment']);
+//Delete comment - ligger i blogwall rad 311
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])){
+    $deleteComment = $POST['delete-comment'];
 
+    $do->DeleteCommentsByID($deleteComment);
+  
+    
     $source = $_POST['source'] ?? '/Views/blogwall.php';
     if (!empty($_POST['delete-comment'])) {
         $query->execute();

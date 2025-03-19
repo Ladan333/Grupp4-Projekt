@@ -39,7 +39,7 @@ $user = $get->getUserById($user_id);
 
 
 if (!$user) {
-    die(" Error: User not found."); //neppp
+    die(" Error: User not found."); //neppp körs inte
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
