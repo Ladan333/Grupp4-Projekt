@@ -1,43 +1,43 @@
 <?php
 require_once '../Entity/userEntity.php';
 
-class PostController {
+class PostController
+{
     private $pdo;
     private $PostDao;
 
-    public function __construct($pdo) {
+    public function __construct($pdo)
+    {
         $this->pdo = $pdo;
         $this->PostDao = new PostsDAO($pdo);
     }
-
-   
-    public function getProfileSortedBlogPosts() {
+   //Get profile Sorted posts   
+    public function getProfileSortedBlogPosts()
+    {
         $sql = $this->getProfileSortingSql();
         $user = $_SESSION['user'];
         $user_id = $user->getId();
-        
-        
         $posts = $this->PostDao->getBlogPosts($sql);
 
         if (!empty($posts) && $_SESSION['profile_id'] == $user_id) {
-            for ($x = 0; $x < count($posts); $x++) {  
+            for ($x = 0; $x < count($posts); $x++) {
                 if ($posts[$x]["user_id"] != $_SESSION["profile_id"]) {
                     unset($posts[$x]);
                 }
             }
         }
-
         return $posts;
     }
-
-    public function getWallSortedBlogPosts(){
+    //Get sorted wall blogposts
+    public function getWallSortedBlogPosts()
+    {
         $sql = $this->getProfileSortingSql();
         $posts = $this->PostDao->getBlogPosts($sql);
-
         return $posts;
     }
-
-    private function getProfileSortingSql() {
+        // Sorting function for posts.
+    private function getProfileSortingSql()
+    {
         if ($_SESSION['sorting'] == 1) {
             return "SELECT bp.id, bp.title, bp.blogContent, u.user_name, u.profile_image, bp.CreatedDate, bp.image_base64, bp.user_id
                     FROM blogposts bp
@@ -59,11 +59,6 @@ class PostController {
                     GROUP BY c.blog_id
                     ORDER BY COUNT(c.blog_id) DESC, bp.CreatedDate DESC";
         }
-        return ''; 
+        return '';
     }
-
-
-
-
-
 }

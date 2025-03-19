@@ -38,24 +38,22 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
           $do->DeleteUserById($user);
         
 
-        $_SESSION['success'] = 'User deleted succesful';
-        unset($_SESSION[""]);
-        session_destroy();
-        setcookie(session_name(), '', time() - 3600, '/'); 
-        header("Location: ../Views/index.php");
-        
-        exit();
-     }
+            $_SESSION['success'] = 'User deleted succesful';
+            unset($_SESSION[""]);
+            session_destroy();
+            setcookie(session_name(), '', time() - 3600, '/');
+            header("Location: ../Views/index.php");
 
-        else{
+            exit();
+        } else {
             $_SESSION["error"] = "Failed";
         }
-    }else{
+    } else {
         $_SESSION["error"] = "Invalid username";
         header("edituser.php");
         exit();
     }
-    
+
 
 }
 
@@ -67,77 +65,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])){
   
     
     $source = $_POST['source'] ?? '/Views/blogwall.php';
-    if(!empty($_POST['delete-comment'])){
+    if (!empty($_POST['delete-comment'])) {
         $query->execute();
         header("Location: " . BASE_URL . $source);
         exit();
+    } else {
+        $_SESSION['error'] = "Failed";
     }
-        else{
-            $_SESSION['error'] ="Failed";
-        }
 
 }
-   
-
-
-    
-
-
-
-
-
-
-
-
-
-// session_start();
-// require 'PDO.php'; 
-
-
-// if (!isset($_SESSION['username'])) {
-//     header("Location: index.php");
-//     exit();
-// }
-
-
-// if (isset($_POST['post_id'])) {
-//     $post_id = $_POST['post_id'];
-//     $user_id = $_SESSION['id']; 
-
-    
-//     $stmt = $pdo->prepare("SELECT user_id FROM blogposts WHERE id = :post_id");
-//     $stmt->bindParam(':post_id', $post_id);
-//     $stmt->execute();
-//     $post = $stmt->fetch(PDO::FETCH_ASSOC);
-
-//     if ($post) {
-        
-//         if ($post['user_id'] == $user_id || $_SESSION['role'] == 'admin') {
-            
-//             $deleteStmt = $pdo->prepare("DELETE FROM blogposts WHERE id = :post_id");
-//             $deleteStmt->bindParam(':post_id', $post_id);
-//             $deleteStmt->execute();
-
-            
-//             $_SESSION['success'] = 'Post deleted successfully!';
-//             header("Location: blogwall.php");
-//             exit();
-//         } else {
-            
-//             $_SESSION['error'] = 'You do not have permission to delete this post.';
-//             header("Location: blogwall.php");
-//             exit();
-//         }
-//     } else {
-        
-//         $_SESSION['error'] = 'Post not found.';
-//         header("Location: blogwall.php");
-//         exit();
-//     }
-// } else {
-    
-//     $_SESSION['error'] = 'Invalid post ID.';
-//     header("Location: blogwall.php");
-//     exit();
-// }
-
