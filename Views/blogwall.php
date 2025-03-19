@@ -31,9 +31,10 @@ if (isset($_SESSION['login_time'])) {
     exit();
 }
 
-
-$user_id = $_SESSION['user']->getId();
-
+$user = $_SESSION['user'];
+$user_id = $user->getId();
+// var_dump($user_id);
+// exit;
 if (!isset($_SESSION['sorting'])) {
     $_SESSION['sorting'] = 1;
 }
@@ -304,14 +305,16 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                                     </div>
                                     <div id="comment-delete-btn">
 
-                                        <?php 
-                               
+                                        <?php
 
-                                         if ($isAdmin || $comment['id'] == $user_id): ?>
+
+
+                                        if ($isAdmin || $comment['user_id'] == $user_id): ?>
 
                                             <!-- Only allow the user who created the post or admins to delete -->
                                             <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
-                                             <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                                                <input type="hidden" name="source"
+                                                    value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                                                 <input type="hidden" name="delete_comment" value="<?php echo $comment['id']; ?>">
                                                 <button type="submit" class="delete-btn">X</button>
                                             </form>
@@ -370,7 +373,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
     <!-- Länka till JavaScript-filen -->
     <script src="../JS/blogwall_java.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".post").forEach(post => {
                 let content = post.querySelector(".content");
                 let button = post.querySelector(".toggle-btn");
@@ -382,7 +385,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                     button.style.display = "none";
                 }
 
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     if (content.classList.contains("short")) {
                         content.classList.remove("short");
                         this.textContent = "Show less";
@@ -412,7 +415,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 //     });
                 // }
             });
-            document.getElementById("postImage").addEventListener("change", function(event) {
+            document.getElementById("postImage").addEventListener("change", function (event) {
                 const fileInput = event.target;
                 const fileNameDisplay = document.getElementById("image-names");
 
@@ -450,7 +453,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 }
             });
             document.querySelectorAll(".update-btn").forEach(button => {
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     const post = this.closest(".post"); // Get the parent post element
                     const postId = post.querySelector("input[name='post_id']")?.value; // Get post ID
                     const title = post.querySelector(".post-title").textContent.trim();
@@ -515,7 +518,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                 });
             });
         });
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const driver = window.driver.js.driver;
 
             const driverObj = driver({
@@ -557,6 +560,15 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
                         }
                     },
                     {
+                        element: ".like-btn",
+                        popover: {
+                            title: "Like Post",
+                            description: "Press here to like the post",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
                         element: "#addComments-form",
                         popover: {
                             title: "Commenting section",
@@ -588,7 +600,7 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             });
 
             // Start the tour when the help icon is clicked
-            document.getElementById("start-tour").addEventListener("click", function() {
+            document.getElementById("start-tour").addEventListener("click", function () {
                 driverObj.drive();
             });
         });

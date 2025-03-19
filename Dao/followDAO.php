@@ -16,7 +16,7 @@ class FollowDAO
         $stmt->bindParam(":user_id", $id);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
     }
     public function getallFollows($id, $profile_id)
     {
@@ -42,48 +42,50 @@ class FollowDAO
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function follow($id, $profile_id){
-        
+    public function follow($id, $profile_id)
+    {
+
         $stmt = $this->pdo->prepare('SELECT * FROM follows WHERE user_id = :user_id AND follow_id = :follow_id');
         $stmt->bindParam(":user_id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":follow_id", $profile_id, PDO::PARAM_INT);
         $stmt->execute();
-          
+
         if ($stmt->rowCount() > 0) {
-            return false; 
+            return false;
         }
-    
+
         $stmt = $this->pdo->prepare('INSERT INTO follows (user_id, follow_id) VALUES (:user_id, :follow_id)');
         $stmt->bindParam(":user_id", $id, PDO::PARAM_INT);
         $stmt->bindParam(':follow_id', $profile_id, PDO::PARAM_INT);
-        
+
         if ($stmt->execute()) {
-            return true;  
+            return true;
         }
-    
-        return false;  
+
+        return false;
     }
-    public function unfollow($id, $profile_id){
-       
+    public function unfollow($id, $profile_id)
+    {
+
         $stmt = $this->pdo->prepare('SELECT * FROM follows WHERE user_id = :user_id AND follow_id = :follow_id');
         $stmt->bindParam(":user_id", $id, PDO::PARAM_INT);
         $stmt->bindParam(':follow_id', $profile_id, PDO::PARAM_INT);
         $stmt->execute();
-    
-      
+
+
         if ($stmt->rowCount() == 0) {
             return false;
         }
-    
+
         $stmt = $this->pdo->prepare('DELETE FROM follows WHERE user_id = :user_id AND follow_id = :follow_id');
         $stmt->bindParam(":user_id", $id, PDO::PARAM_INT);
         $stmt->bindParam(':follow_id', $profile_id, PDO::PARAM_INT);
-        
+
         if ($stmt->execute()) {
-            return true;  
+            return true;
         }
-    
-        return false;  
+
+        return false;
     }
 
 }

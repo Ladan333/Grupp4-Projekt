@@ -13,6 +13,8 @@ if (session_status() == PHP_SESSION_NONE) {
     error_log("Fetchcount: " . print_r($fetchcount, true));
 }
 
+$user = $_SESSION['user'];
+$userrole = $user->getrole();
 
 ?>
 
@@ -54,14 +56,15 @@ if (session_status() == PHP_SESSION_NONE) {
 
             </form>
         </ul>
-
+                <!-- messages and display count of unread messages -->
         <div class="display-messages">
             <a href="messages.php">&#9993;</a>
 
             <p id="unread-count" style="font-weight: bold; color: rgb(66, 135, 245);">
-                <?= (isset($_SESSION['display_count']) && $_SESSION['display_count'] > 0) ? $_SESSION['display_count'] : '0' ?>
+                <?= (isset($_SESSION['display_count']) && $_SESSION['display_count'] > 0) ? $_SESSION['display_count'] : '' ?>
             </p>
         </div>
+        <!-- sub menu -->
         <div class="burger" onclick="toggleMenu()">
             <p>☰</p>
         </div>
@@ -77,7 +80,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 <li><a href="../övrigt/logout.php">Logout</a></li>
                 <li><a href="messages.php">Messages</a></li>
 
-                <?php if (isset($_SESSION['role']) == 1): ?>
+                <?php if ($userrole == 1): ?>
                     <li><a href="admin_list.php">Admin</a></li>
                 <?php endif; ?>
             <?php endif; ?>
@@ -86,6 +89,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
     </nav>
     <script>
+        // Toggle function for the burger
         function toggleMenu() {
             let menu = document.querySelector(".submenu");
 
@@ -97,27 +101,27 @@ if (session_status() == PHP_SESSION_NONE) {
                 console.log("Menu not found!");
             }
         }
-
+        // function to reload fetchcount for display every third second 
         function fetchUnreadCount() {
-    fetch('../övrigt/fetch_unread.php')
-        .then(response => response.json())
-        .then(data => {
-            console.log("Fetched unread count:", data.unread_count); // ✅ Kontrollutskrift
+            fetch('../övrigt/fetch_unread.php')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched unread count:", data.unread_count); // ✅ Kontrollutskrift
 
-            let count = data.unread_count;
-            let unreadElement = document.getElementById("unread-count");
+                    let count = data.unread_count;
+                    let unreadElement = document.getElementById("unread-count");
 
-            if (unreadElement) {
-                unreadElement.textContent = count > 0 ? count : '0';
-            } else {
-                console.error("Elementet #unread-count hittades inte i DOM!");
-            }
-        })
-        .catch(error => console.error("Error fetching unread count:", error));
-}
+                    if (unreadElement) {
+                        unreadElement.textContent = count > 0 ? count : '';
+                    } else {
+                        console.error("Elementet #unread-count hittades inte i DOM!");
+                    }
+                })
+                .catch(error => console.error("Error fetching unread count:", error));
+        }
 
-document.addEventListener('DOMContentLoaded', fetchUnreadCount);
-setInterval(fetchUnreadCount, 5000);
+        document.addEventListener('DOMContentLoaded', fetchUnreadCount);
+        setInterval(fetchUnreadCount, 3000);
     </script>
 </body>
 

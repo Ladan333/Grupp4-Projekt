@@ -10,23 +10,23 @@ session_start();
 
 
 
-if(isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user_id = $user->getId();
-}else{
+} else {
     header('Location: index.php');
 }
 
 
 
 $conversations = [];
-
+// get messages 
 $dmDao = new DmDAO($pdo);
 $messages = $dmDao->getMessages($user_id);
 
 $_SESSION['display_count'] = $unreadCount ?? 0;
 
-
+// get unread messages
 $dmDao = new DmDAO($pdo);
 $unreadCount = $dmDao->unreadMessages($user_id);
 
@@ -46,7 +46,7 @@ $unreadCount = $dmDao->unreadMessages($user_id);
     <?php require "navbar.php"; ?>
 
 
-
+    <!-- loop throgh messages -->
 
     <ul class="searching-list">
         <?php foreach ($messages as $msg): ?>

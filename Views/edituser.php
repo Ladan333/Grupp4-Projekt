@@ -1,13 +1,5 @@
 <?php
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-// echo "<pre>";
-// print_r($_POST);
-// echo "</pre>";
 
-// var_dump($_POST);
-// Startar session för att veta vilken användare som är inloggad
 require_once '../Entity/userEntity.php';
 require_once "../config.php";
 
@@ -15,9 +7,9 @@ require_once "../Dao/postsDAO.php";
 require_once "../Dao/followDAO.php";
 require_once "../Controller/PostCont.php";
 
-require '../övrigt/PDO.php'; // Kopplar till databasen
+require_once '../övrigt/PDO.php'; // Kopplar till databasen
 require_once '../Dao/userDAO.php';
-require '../Controller/UserController.php';
+require_once '../Controller/UserController.php';
 session_start();
 // Get the user ID from URL or default to logged-in user
 
@@ -37,38 +29,28 @@ if (isset($_SESSION['password_updated'])) {
 }
 
 // Hämtar användarens data från databas
-if (isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user_id = isset($_GET['id']) ? $_GET['id'] : $user->getId();
 }
-var_dump($user_id); //4
 
+$get = new UserDAO($pdo);
+$user = $get->getUserById($user_id); 
 
-
-
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->execute([$user_id]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
     die(" Error: User not found."); //neppp
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     if (isset($_POST['change_password'])) {
-        // $user_id = $_SESSION['id'];
+    
         $old_password = $_POST['old_password'];
         $new_password = $_POST['new_password'];
 
-
-        // $stmt = $pdo->prepare("SELECT pwd FROM users WHERE id = ?");
-        // $stmt->execute([$user_id]);
-        // $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        //Ersätter koden ovan med Dao
+        //find user who is supposed to get updated password
         $userDao = new UserDao($pdo);
         $user = $userDao->findUserWhoWantToChangePassword($user_id);
 
@@ -78,20 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-
         if (!password_verify($old_password, $user['pwd'])) {
             $_SESSION['password_error'] = "Incorrect current password.";
             header("Location: edituser.php");
             exit();
         }
 
-
-        // $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-
-
-        // $stmt = $pdo->prepare("UPDATE users SET pwd = ? WHERE id = ?");
-
-        //Ersätter koden ovan med Dao
+        //Update password
         $changePassword = $userDao->changePassword($new_password, $user_id);
 
         if ($changePassword) {
@@ -109,25 +84,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user_id = $_SESSION['id'];
     }
 
-
     $first_name = $_POST['first_name'] ?? '';
     $last_name = $_POST['last_name'] ?? '';
     $profileContent = $_POST['profileContent'] ?? '';
     $email = $_POST['email'] ?? '';
 
-    //bildhantering sparad via den globala variabeln $_FILES
-
     //Anropar controller som kör querys i DAO
     $change = new UserController($pdo);
-    $change->changeOrNot($first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id);
-    
-
-
+    $change->changeOrNot($first_name, $last_name, $email, $profileContent, $imageBase64, $user_id);
 
 }
-// $user_id = $_GET['id'] ?? $_SESSION['id'];
-
-
 
 // HTML och formulär för redigering börjar här
 ?>
@@ -231,10 +197,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+    <!-- form for edit user -->
     <div class="container">
         <h2 class="text-center mb-4">Edit Profile</h2>
         <form action="edituser.php?id=<?= $user_id ?>" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
             <?php
 
@@ -276,14 +243,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="text-center">
 
-            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
-            <input type="submit" name="save" class="btn btn-primary" value="Save Changes">
+                <input type="submit" name="save" class="btn btn-primary" value="Save Changes">
 
                 <a href="profile.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
-        <form action="edituser.php?id=<?= $user_id ?>" method="POST">
+        <!-- form for change password -->
+        <form action="edituser.php?id=<?= $user_id ?>" id="change-pass-form" method="POST">
             <input type="hidden" name="change_password" value="1">
 
             <div class="mb-3">
@@ -297,14 +265,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     required>
             </div>
             <div class="text-center">
-            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
                 <button type="submit" class="btn btn-primary">Change Password</button>
             </div>
         </form>
+        <!-- delete user -->
         <form action="../övrigt/delete.php" method="post" onsubmit="return confirmDelete()">
-            <input type="hidden" name="deletes" value="<?php echo $user_id ?>">
-            <button type="submit">Delete profile</button>
+            <div class="text-center">
+                <input type="hidden" name="deletes" value="<?php echo $user_id ?>">
+                <button class="btn btn-danger" type="submit">Delete profile</button>
+            </div>
+
         </form>
 
 
@@ -367,6 +339,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 },
                 {
+                    element: "#email",
+                    popover: {
+                        title: "Email",
+                        description: "Update your Email.",
+                        side: "bottom",
+                        align: 'start'
+                    }
+                },
+                {
                     element: "#profileContent",
                     popover: {
                         title: "Bio",
@@ -398,6 +379,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     popover: {
                         title: "Cancel",
                         description: "Click here to return to the profile page.",
+                        side: "right",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: "#change-pass-form",
+                    popover: {
+                        title: "Change Password Section",
+                        description: "You can change your password here.",
+                        side: "right",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: ".btn-danger",
+                    popover: {
+                        title: "Delete Profile",
+                        description: "Delete the profile permanently.",
                         side: "right",
                         align: 'start'
                     }

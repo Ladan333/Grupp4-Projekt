@@ -13,7 +13,7 @@ class PostsDao
     public function getComments($post_id)
     {
 
-        $commentSql = "SELECT c.id, c.commentContent, c.CreatedDate, u.user_name, u.profile_image
+        $commentSql = "SELECT c.id, c.user_id, c.commentContent, c.CreatedDate, u.user_name, u.profile_image
 
                        
 
@@ -40,55 +40,62 @@ class PostsDao
         $stmt->bindParam(":userid", $userid);
         $stmt->bindParam(":blog_id", $blog_id, PDO::PARAM_INT);
 
-        if(!$stmt->execute());{
+        if (!$stmt->execute())
+            ; {
             return false;
 
         }
-        
+
 
 
     }
 
-    public function deleteComments($id){
+    public function deleteComments($id)
+    {
         $stmt = $this->pdo->prepare("DELETE FROM comments WHERE id = :id ");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        
-        if(!$stmt->execute());{
+
+        if (!$stmt->execute())
+            ; {
             return false;
         }
 
     }
 
-    public function getBlogPosts($sql){
+    public function getBlogPosts($sql)
+    {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }
 
-    public function getPic($id){
-        $stmt = $this->pdo->prepare("SELECT image_base64 FROM blogposts where id = :id"); 
-        $stmt->bindParam(":id", $id); 
-        $stmt->execute(); 
+    public function getPic($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT image_base64 FROM blogposts where id = :id");
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_COLUMN);
     }
 
-    public function updatePost($id, $title, $content, $image){
+    public function updatePost($id, $title, $content, $image)
+    {
 
-   $stmt = $this->pdo->prepare("UPDATE blogposts SET title = :title, blogContent = :content, image_base64 = :image_base64  WHERE id = :id ");
-    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-    $stmt->bindParam(":title", $title, PDO::PARAM_STR);
-    $stmt->bindParam(":content", $content, PDO::PARAM_STR);
-    $stmt->bindParam(":image_base64", $image, PDO::PARAM_STR);
-    $stmt->execute();
+        $stmt = $this->pdo->prepare("UPDATE blogposts SET title = :title, blogContent = :content, image_base64 = :image_base64  WHERE id = :id ");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":title", $title, PDO::PARAM_STR);
+        $stmt->bindParam(":content", $content, PDO::PARAM_STR);
+        $stmt->bindParam(":image_base64", $image, PDO::PARAM_STR);
+        $stmt->execute();
     }
 
-    public function searchPosts($searchPost){
+    public function searchPosts($searchPost)
+    {
         $stmt = $this->pdo->prepare("SELECT * FROM blogposts AS bp 
         JOIN users AS u ON bp.user_id = u.id 
         WHERE title LIKE :searchTitle OR blogContent LIKE :searchContent");
-        
-        $searchPost = "%". $searchPost . "%";
+
+        $searchPost = "%" . $searchPost . "%";
         $stmt->bindParam(":searchTitle", $searchPost, PDO::PARAM_STR);
         $stmt->bindParam(":searchContent", $searchPost, PDO::PARAM_STR);
         $stmt->execute();

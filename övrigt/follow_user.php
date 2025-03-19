@@ -3,12 +3,12 @@
 require_once "../Entity/userEntity.php";
 session_start();
 require '../övrigt/PDO.php';
-require '../Dao/FollowDAO.php';  
+require '../Dao/FollowDAO.php';
 
-if(isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user_id = $user->getId();
-}else{
+} else {
     header('Location: ../Views/index.php');
     exit;
 }
@@ -22,14 +22,14 @@ $followDao = new FollowDAO($pdo);
 $results = $followDao->getallFollows($id, $profile_id);
 
 if ($_SESSION['profile_id'] != $user_id && empty($results)) {
-   
+
     if ($followDao->follow($user_id, $profile_id)) {
         echo "You are now following this user!";
     } else {
         echo "Failed to follow the user!";
     }
 } else if ($_GET['user_id'] != $user_id && !empty($results)) {
-    
+
     if ($followDao->unfollow($id, $profile_id)) {
         echo "You have unfollowed this user.";
     } else {

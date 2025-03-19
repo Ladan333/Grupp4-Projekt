@@ -11,11 +11,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// var_dump($userInfo);
-// var_dump($_SESSION['user']) . PHP_EOL;
-// require("PDO.php");
-
-if(isset($_SESSION['user'])){
+// set user
+if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user_id = $user->getId();
     $user_name = $user->getUserName();
@@ -38,9 +35,9 @@ if (isset($_SESSION['last_page']) && $_SESSION['last_page'] !== 'profile.php' &&
 $_SESSION['last_page'] = basename($_SERVER['PHP_SELF']);
 
 
-
+//get everything from user on other_user or user
 if (isset($_GET["user_name"])) {
-    
+
     $userDAO = new UserDAO($pdo);
     $differentUser = $_GET['user_name'];
     $result = $userDAO->getUserByUserByNameForProfile($differentUser);
@@ -51,12 +48,8 @@ if (isset($_GET["user_name"])) {
 
 $_SESSION['profile_id'] = $result['id'];
 $_SESSION['follow_username'] = $result['user_name'];
-
-
+$isAdmin = $_SESSION["role"] ?? false;
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -66,33 +59,33 @@ $_SESSION['follow_username'] = $result['user_name'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel="stylesheet" type="text/css" href="../css/CSS.css">
-
-    <!-- <meta http-equiv="refresh" content="2"> -->
-    <title>Document</title>
+    <title>Profile</title>
 </head>
 
 <body>
     <?php require "navbar.php"; ?>
-    
+
     <main class="profile-main">
         <section class="posts-section">
             <?php if (isset($user_id) && strcasecmp($user_name, $profile_username) === 0) { ?>
                 <div class="welcome-box">
-                    <!-- <h2>W elcome to </h2> -->
+                   
                     <!-- Add Post Button -->
                     <button id="openModalBtn" class="add-post-btn"><ion-icon name="add-circle"></ion-icon> Add Post</button>
                 </div>
 
 
-
+                <!-- Postmodal for new post -->
                 <div id="postModal" class="modal">
                     <div class="modal-content">
                         <span class="close-btn">&times;</span>
                         <h2>Add a new post</h2>
 
-                        <form class="add-post-form" action="../övrigt/add_post.php" method="POST" enctype="multipart/form-data">
+                        <form class="add-post-form" action="../övrigt/add_post.php" method="POST"
+                            enctype="multipart/form-data">
 
-                        <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                            <input type="hidden" name="source"
+                                value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
                             <label for="add-post-title">Title:</label>
                             <input type="text" id="add-post-title" name="title" required placeholder="Amazing blogwall...">
@@ -113,6 +106,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     </div>
                 </div>
             <?php } ?>
+            <!-- sorting of the posts in profile -->
             <div class="sorting">
                 <form action="../övrigt/sort_blogwall_profile.php" method="POST">
                     <input type="hidden" name="sort_recent" value="2" ;>
@@ -135,7 +129,7 @@ $_SESSION['follow_username'] = $result['user_name'];
             $posts = $postController->getProfileSortedBlogPosts();
 
             ?>
-
+            <!-- post empty feed -->
             <div class="posts">
                 <style>
                     .empty_feed {
@@ -162,6 +156,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     <?php if ($post['user_id'] != $_SESSION['profile_id']) {
                         continue;
                     } ?>
+                    <!-- loop the blogPosts -->
                     <div class="post">
                         <p class="post-username">
                             <!-- hämta ut bilderna innuti loopen på -->
@@ -203,27 +198,29 @@ $_SESSION['follow_username'] = $result['user_name'];
                                                 </a></strong>
                                         </div>
                                         <div id="comment-delete-btn">
-
-                                            <!-- Only allow the user who created the post or admins to delete -->
-                                            <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
-                                            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
-                                            <input type="hidden" name="delete_comment"
-                                                    value="<?php echo $comment['id']; ?>">
-                                                <button type="submit" class="delete-btn">X</button>
-                                            </form>
-
+                                            <?php if ($isAdmin || $comment['user_id'] == $user_id): ?>
+                                                <!-- Only allow the user who created the post or admins to delete -->
+                                                <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="source"
+                                                        value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                                                    <input type="hidden" name="delete_comment"
+                                                        value="<?php echo $comment['id']; ?>">
+                                                    <button type="submit" class="delete-btn">X</button>
+                                                </form>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                     <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
                                 </div>
                             <?php endforeach; ?>
                         </div>
-
+                                                <!-- add comments -->
                         <form action="../övrigt/Addcomments.php" method="post">
 
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
 
-                            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                            <input type="hidden" name="source"
+                                value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
                             <input class="comment-input" type="text" name="comment_input" placeholder="Comment" required>
                             <button class="comment-btn" type="submit">Comment</button>
@@ -234,11 +231,12 @@ $_SESSION['follow_username'] = $result['user_name'];
                         <?php endif; ?>
 
 
-
-                        <?php if ($_SESSION['role'] == 1 || $post['user_id'] == $user_id): ?>
+                            <!-- delete comments -->
+                        <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
                             <form action="../övrigt/delete.php" method="POST" style="display: inline;">
-                            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                                <input type="hidden" name="source"
+                                    value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                                 <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                                 <button type="submit" class="delete-btn">Delete post</button>
                             </form>
@@ -251,10 +249,9 @@ $_SESSION['follow_username'] = $result['user_name'];
         <section class="sidebar-section">
             <div class="profile-sidebar">
                 <?php
-
+                // get profile pictrure
                 $userDAO = new UserDAO($pdo);
                 $userData = $userDAO->getProfilePicture($profile_username);
-
 
                 $profile_img = !empty($userData['profile_image']) ? "data:image/png;base64," . htmlspecialchars($userData['profile_image']) : "../files/no_picture.jpg";
                 ?>
@@ -262,7 +259,7 @@ $_SESSION['follow_username'] = $result['user_name'];
                     <img src="<?= $profile_img ?>" alt="Profile picture">
                 </div>
 
-
+                            <!-- edit profile -->
                 <div class="edit-profile">
                     <?php
 
