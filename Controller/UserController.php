@@ -79,8 +79,6 @@ class UserController
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])) {
             $post_id = $_POST['post_id'];
 
-            // $stmt = $pdo->prepare("DELETE FROM blogposts WHERE id = :post_id ");
-// $stmt->bindParam(':post_id', $post_id);
             $deleteBlogPost = $this->dao->DeleteBlogPostBy($post_id);
 
             if ($deleteBlogPost) {
@@ -101,8 +99,6 @@ class UserController
 
             if (!empty($user)) {
 
-                // $stmt = $pdo->prepare("DELETE FROM users WHERE id = :deleteuser");
-                // $stmt->bindParam(':deleteuser', $user, PDO::PARAM_INT);
                 $stmt = $this->dao->DeleteUserById($user);
 
                 if ($stmt) {
