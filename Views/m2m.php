@@ -20,14 +20,14 @@ if (!$other_user_name) {
     die(" ERROR: Missing username.");
 }
 
-
+// get info on sender
 $dmDao = new DmDAO($pdo);
 $other_user = $dmDao->idOtherUser($other_user_name);
 
 if (!$other_user) {
     die(" ERROR: User not found.");
 }
-
+// update messages
 $other_user_id = (int) $other_user['id'];
 $dmDao = new DmDAO($pdo);
 $dmDao->updateStmt($user_id, $other_user_id);
@@ -49,12 +49,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
     if (!$message_content && !$message_image) {
         die(" ERROR: Cannot send an empty message.");
     }
+    // insert new message
     $true = 1;
     $dmDao = new DmDAO($pdo);
     $dmDao->insertMessages($message_content, $message_image, $user_id, $other_user_id, $true);
 }
 
-
+// load full conversation
 $dmDao = new DmDAO($pdo);
 $messages = $dmDao->getConversation($user_id, $other_user_id);
 ?>
@@ -65,7 +66,7 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
-    <title>Document</title>
+    <title>Chat</title>
 </head>
 
 <body>
@@ -74,6 +75,7 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
         <div class="card-header">
             <p>Chat with <?php echo htmlspecialchars($other_user_name); ?></p>
         </div>
+        <!-- loop out chat messages -->
         <div class="chat-messages">
             <?php foreach ($messages as $msg): ?>
                 <?php if ($msg['user1_id'] == $user_id): ?>
@@ -114,7 +116,7 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
             <?php endforeach; ?>
         </div>
 
-
+                            <!-- send messages -->
         <form class="m2m" onsubmit="sendMessage(); return false;" method="POST" enctype="multipart/form-data">
             <div class="file-input-wrapper">
                 <textarea id="messageContent" name="message" rows="4" placeholder="Skriv ditt inlägg här..."></textarea>

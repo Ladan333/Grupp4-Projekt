@@ -198,5 +198,12 @@ class UserDAO
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function getUserbyUserId($user_id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$user_id]);
+        return  $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 ?>

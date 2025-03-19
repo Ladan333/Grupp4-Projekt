@@ -11,10 +11,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// var_dump($userInfo);
-// var_dump($_SESSION['user']) . PHP_EOL;
-// require("PDO.php");
-
+// set user
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user_id = $user->getId();
@@ -38,7 +35,7 @@ if (isset($_SESSION['last_page']) && $_SESSION['last_page'] !== 'profile.php' &&
 $_SESSION['last_page'] = basename($_SERVER['PHP_SELF']);
 
 
-
+//get everything from user on other_user or user
 if (isset($_GET["user_name"])) {
 
     $userDAO = new UserDAO($pdo);
@@ -52,12 +49,7 @@ if (isset($_GET["user_name"])) {
 $_SESSION['profile_id'] = $result['id'];
 $_SESSION['follow_username'] = $result['user_name'];
 $isAdmin = $_SESSION["role"] ?? false;
-
-
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,9 +59,7 @@ $isAdmin = $_SESSION["role"] ?? false;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel="stylesheet" type="text/css" href="../css/CSS.css">
-
-    <!-- <meta http-equiv="refresh" content="2"> -->
-    <title>Document</title>
+    <title>Profile</title>
 </head>
 
 <body>
@@ -79,13 +69,13 @@ $isAdmin = $_SESSION["role"] ?? false;
         <section class="posts-section">
             <?php if (isset($user_id) && strcasecmp($user_name, $profile_username) === 0) { ?>
                 <div class="welcome-box">
-                    <!-- <h2>W elcome to </h2> -->
+                   
                     <!-- Add Post Button -->
                     <button id="openModalBtn" class="add-post-btn"><ion-icon name="add-circle"></ion-icon> Add Post</button>
                 </div>
 
 
-
+                <!-- Postmodal for new post -->
                 <div id="postModal" class="modal">
                     <div class="modal-content">
                         <span class="close-btn">&times;</span>
@@ -116,6 +106,7 @@ $isAdmin = $_SESSION["role"] ?? false;
                     </div>
                 </div>
             <?php } ?>
+            <!-- sorting of the posts in profile -->
             <div class="sorting">
                 <form action="../övrigt/sort_blogwall_profile.php" method="POST">
                     <input type="hidden" name="sort_recent" value="2" ;>
@@ -138,7 +129,7 @@ $isAdmin = $_SESSION["role"] ?? false;
             $posts = $postController->getProfileSortedBlogPosts();
 
             ?>
-
+            <!-- post empty feed -->
             <div class="posts">
                 <style>
                     .empty_feed {
@@ -165,6 +156,7 @@ $isAdmin = $_SESSION["role"] ?? false;
                     <?php if ($post['user_id'] != $_SESSION['profile_id']) {
                         continue;
                     } ?>
+                    <!-- loop the blogPosts -->
                     <div class="post">
                         <p class="post-username">
                             <!-- hämta ut bilderna innuti loopen på -->
@@ -222,7 +214,7 @@ $isAdmin = $_SESSION["role"] ?? false;
                                 </div>
                             <?php endforeach; ?>
                         </div>
-
+                                                <!-- add comments -->
                         <form action="../övrigt/Addcomments.php" method="post">
 
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
@@ -239,7 +231,7 @@ $isAdmin = $_SESSION["role"] ?? false;
                         <?php endif; ?>
 
 
-
+                            <!-- delete comments -->
                         <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
                             <form action="../övrigt/delete.php" method="POST" style="display: inline;">
@@ -257,10 +249,9 @@ $isAdmin = $_SESSION["role"] ?? false;
         <section class="sidebar-section">
             <div class="profile-sidebar">
                 <?php
-
+                // get profile pictrure
                 $userDAO = new UserDAO($pdo);
                 $userData = $userDAO->getProfilePicture($profile_username);
-
 
                 $profile_img = !empty($userData['profile_image']) ? "data:image/png;base64," . htmlspecialchars($userData['profile_image']) : "../files/no_picture.jpg";
                 ?>
@@ -268,7 +259,7 @@ $isAdmin = $_SESSION["role"] ?? false;
                     <img src="<?= $profile_img ?>" alt="Profile picture">
                 </div>
 
-
+                            <!-- edit profile -->
                 <div class="edit-profile">
                     <?php
 

@@ -56,7 +56,7 @@ $userrole = $user->getrole();
 
             </form>
         </ul>
-
+                <!-- messages and display count of unread messages -->
         <div class="display-messages">
             <a href="messages.php">&#9993;</a>
 
@@ -64,6 +64,7 @@ $userrole = $user->getrole();
                 <?= (isset($_SESSION['display_count']) && $_SESSION['display_count'] > 0) ? $_SESSION['display_count'] : '' ?>
             </p>
         </div>
+        <!-- sub menu -->
         <div class="burger" onclick="toggleMenu()">
             <p>☰</p>
         </div>
@@ -88,6 +89,7 @@ $userrole = $user->getrole();
 
     </nav>
     <script>
+        // Toggle function for the burger
         function toggleMenu() {
             let menu = document.querySelector(".submenu");
 
@@ -99,7 +101,7 @@ $userrole = $user->getrole();
                 console.log("Menu not found!");
             }
         }
-
+        // function to reload fetchcount for display every third second 
         function fetchUnreadCount() {
             fetch('../övrigt/fetch_unread.php')
                 .then(response => response.json())
@@ -119,7 +121,7 @@ $userrole = $user->getrole();
         }
 
         document.addEventListener('DOMContentLoaded', fetchUnreadCount);
-        setInterval(fetchUnreadCount, 5000);
+        setInterval(fetchUnreadCount, 3000);
     </script>
 </body>
 
