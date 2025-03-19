@@ -18,7 +18,7 @@ $profile_id = $_SESSION['profile_id'];
 
 $followDao = new FollowDAO($pdo);
 
-
+// Hämtar alla följare och låter oss se om man redan följer en användare eller inte
 $results = $followDao->getallFollows($id, $profile_id);
 
 if ($_SESSION['profile_id'] != $user_id && empty($results)) {

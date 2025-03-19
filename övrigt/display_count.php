@@ -17,7 +17,7 @@ if (isset($_SESSION["user"]) && $_SESSION["user"] instanceof User) {
     echo "User session is not valid.";
 }
 
-
+// Displays the amount of messages the user has that are marked as unread
 if ($user_id) {
     $dmDao = new DmDAO($pdo);
     $fetchcount = $dmDao->displayDmCount($user_id);
