@@ -15,7 +15,7 @@ if (session_status() == PHP_SESSION_NONE) {
 // var_dump($_SESSION['user']) . PHP_EOL;
 // require("PDO.php");
 
-if(isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user_id = $user->getId();
     $user_name = $user->getUserName();
@@ -40,7 +40,7 @@ $_SESSION['last_page'] = basename($_SERVER['PHP_SELF']);
 
 
 if (isset($_GET["user_name"])) {
-    
+
     $userDAO = new UserDAO($pdo);
     $differentUser = $_GET['user_name'];
     $result = $userDAO->getUserByUserByNameForProfile($differentUser);
@@ -74,7 +74,7 @@ $isAdmin = $_SESSION["role"] ?? false;
 
 <body>
     <?php require "navbar.php"; ?>
-    
+
     <main class="profile-main">
         <section class="posts-section">
             <?php if (isset($user_id) && strcasecmp($user_name, $profile_username) === 0) { ?>
@@ -91,9 +91,11 @@ $isAdmin = $_SESSION["role"] ?? false;
                         <span class="close-btn">&times;</span>
                         <h2>Add a new post</h2>
 
-                        <form class="add-post-form" action="../övrigt/add_post.php" method="POST" enctype="multipart/form-data">
+                        <form class="add-post-form" action="../övrigt/add_post.php" method="POST"
+                            enctype="multipart/form-data">
 
-                        <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                            <input type="hidden" name="source"
+                                value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
                             <label for="add-post-title">Title:</label>
                             <input type="text" id="add-post-title" name="title" required placeholder="Amazing blogwall...">
@@ -205,14 +207,15 @@ $isAdmin = $_SESSION["role"] ?? false;
                                         </div>
                                         <div id="comment-delete-btn">
                                             <?php if ($isAdmin || $comment['user_id'] == $user_id): ?>
-                                            <!-- Only allow the user who created the post or admins to delete -->
-                                            <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
-                                            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
-                                            <input type="hidden" name="delete_comment"
-                                                    value="<?php echo $comment['id']; ?>">
-                                                <button type="submit" class="delete-btn">X</button>
-                                            </form>
-                                             <?php endif; ?>
+                                                <!-- Only allow the user who created the post or admins to delete -->
+                                                <form action="../övrigt/delete_comment.php" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="source"
+                                                        value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                                                    <input type="hidden" name="delete_comment"
+                                                        value="<?php echo $comment['id']; ?>">
+                                                    <button type="submit" class="delete-btn">X</button>
+                                                </form>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                     <p><?php echo htmlspecialchars($comment['commentContent']); ?></p>
@@ -224,7 +227,8 @@ $isAdmin = $_SESSION["role"] ?? false;
 
                             <input type="hidden" name="blog_id" value="<?php echo $post['id']; ?>">
 
-                            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                            <input type="hidden" name="source"
+                                value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
                             <input class="comment-input" type="text" name="comment_input" placeholder="Comment" required>
                             <button class="comment-btn" type="submit">Comment</button>
@@ -236,10 +240,11 @@ $isAdmin = $_SESSION["role"] ?? false;
 
 
 
-                        <?php  if ($isAdmin || $post['user_id'] == $user_id): ?>
+                        <?php if ($isAdmin || $post['user_id'] == $user_id): ?>
                             <!-- Only allow the user who created the post or admins to delete -->
                             <form action="../övrigt/delete.php" method="POST" style="display: inline;">
-                            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                                <input type="hidden" name="source"
+                                    value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                                 <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                                 <button type="submit" class="delete-btn">Delete post</button>
                             </form>

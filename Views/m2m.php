@@ -86,10 +86,12 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
                             <p id="your-message" onclick="toggleDate(this)">
                                 <?php echo htmlspecialchars($msg['message_content']) ?>
                             </p>
-                            <p id="your-message-date" class="message-date"><?php echo "&nbsp" . htmlspecialchars($msg['CreatedDate']); ?></p>
+                            <p id="your-message-date" class="message-date">
+                                <?php echo "&nbsp" . htmlspecialchars($msg['CreatedDate']); ?></p>
                         <?php endif; ?>
                         <?php if (!empty($msg['message_image'])): ?>
-                            <img class="message-img" src="data:image/jpeg;base64,<?php echo htmlspecialchars($msg['message_image']); ?>" width="400">
+                            <img class="message-img"
+                                src="data:image/jpeg;base64,<?php echo htmlspecialchars($msg['message_image']); ?>" width="400">
                         <?php endif; ?>
                     </div>
                 <?php else: ?>
@@ -101,7 +103,8 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
                             <p id="his-message" onclick="toggleDate(this)">
                                 <?php echo htmlspecialchars($msg['message_content']) ?>
                             </p>
-                            <p id="his-message-date" class="message-date"><?php echo "&nbsp" . htmlspecialchars($msg['CreatedDate']); ?></p>
+                            <p id="his-message-date" class="message-date">
+                                <?php echo "&nbsp" . htmlspecialchars($msg['CreatedDate']); ?></p>
                         <?php endif; ?>
                         <?php if (!empty($msg['message_image'])): ?>
                             <img src="data:image/jpeg;base64,<?php echo htmlspecialchars($msg['message_image']); ?>" width="150">
@@ -140,24 +143,24 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
             }
         }
 
-        window.onload = function() {
+        window.onload = function () {
             scrollToBottom();
         };
 
-        document.querySelector("form").addEventListener("submit", function() {
+        document.querySelector("form").addEventListener("submit", function () {
             setTimeout(scrollToBottom, 100);
         });
-        document.getElementById("message_image").addEventListener("change", function() {
+        document.getElementById("message_image").addEventListener("change", function () {
             var fileName = this.files[0] ? this.files[0].name : "No file chosen";
             document.getElementById("file-name").textContent = fileName;
         });
         const socket = new WebSocket("ws://localhost:8080");
 
-        socket.onopen = function() {
+        socket.onopen = function () {
             console.log("WebSocket connection established.");
         };
 
-        socket.onmessage = function(event) {
+        socket.onmessage = function (event) {
             const data = JSON.parse(event.data);
             console.log("Received message:", data);
 
@@ -247,11 +250,11 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
         };
 
 
-        socket.onerror = function(error) {
+        socket.onerror = function (error) {
             console.error("WebSocket error:", error);
         };
 
-        socket.onclose = function() {
+        socket.onclose = function () {
             console.log("WebSocket connection closed.");
         };
 
@@ -264,7 +267,7 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
 
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const base64Image = e.target.result.replace(/^data:image\/[a-zA-Z]+;base64,/, '');
 
                     socket.send(JSON.stringify({
@@ -294,7 +297,7 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
             }
         }
         // Add an event listener for the 'Enter' key to submit the form
-        document.getElementById("messageContent").addEventListener("keydown", function(event) {
+        document.getElementById("messageContent").addEventListener("keydown", function (event) {
             if (event.key === "Enter" && !event.shiftKey) {
                 event.preventDefault(); // Prevent new line in textarea
                 sendMessage(); // Call the sendMessage function

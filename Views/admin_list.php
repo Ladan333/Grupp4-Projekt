@@ -69,22 +69,27 @@ $users = $userDAO->searchUsersByLikeNameOrEmail($search);
                     <td><?= htmlspecialchars($user['first_name']) ?></td>
                     <td><?= htmlspecialchars($user['last_name']) ?></td>
                     <td><?= htmlspecialchars($user['email']) ?></td>
-                    <td><div class="edit-buttons">
-                        <?php if ($user['role'] == 0)  { ?>
-                            <a class="edit_user_admin" href="../övrigt/is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Make admin</a>
+                    <td>
+                        <div class="edit-buttons">
+                            <?php if ($user['role'] == 0) { ?>
+                                <a class="edit_user_admin"
+                                    href="../övrigt/is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Make admin</a>
 
-                        <?php } else { ?>
-                            <a class="delete_user" href="../övrigt/is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Delete admin</a>
+                            <?php } else { ?>
+                                <a class="delete_user"
+                                    href="../övrigt/is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Delete
+                                    admin</a>
 
                             <?php } ?>
-                            </div>
+                        </div>
                     </td>
                     <td>
                         <div class="edit-buttons">
                             <a class="edit_user" href="edituser.php?id=<?= $user['id'] ?>">Edit</a>
                             <form method="POST" action="../övrigt/admin_delete_user.php">
                                 <input type="hidden" name="id" value="<?= $user['id'] ?>">
-                                <button class="delete_user" type="submit" onclick="return confirm('Are you sure you want to delete <?= htmlspecialchars($user['first_name']) . ' ' . htmlspecialchars($user['last_name']) ?>?');">Delete</button>
+                                <button class="delete_user" type="submit"
+                                    onclick="return confirm('Are you sure you want to delete <?= htmlspecialchars($user['first_name']) . ' ' . htmlspecialchars($user['last_name']) ?>?');">Delete</button>
                             </form>
 
                         </div>
@@ -92,7 +97,7 @@ $users = $userDAO->searchUsersByLikeNameOrEmail($search);
                 </tr>
             <?php endforeach; ?>
         </table>
-       
+
         <!-- Länk till en separat sida för att hantera alla inlägg -->
         <a class="link_to_blogwall" href="blogwall.php">To posts</a>
 

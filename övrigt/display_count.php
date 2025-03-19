@@ -1,5 +1,5 @@
 <?php
-    require_once '../Entity/userEntity.php';
+require_once '../Entity/userEntity.php';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -19,11 +19,11 @@ if (isset($_SESSION["user"]) && $_SESSION["user"] instanceof User) {
 
 
 if ($user_id) {
-$dmDao = new DmDAO($pdo);
-$fetchcount = $dmDao->displayDmCount($user_id);
+    $dmDao = new DmDAO($pdo);
+    $fetchcount = $dmDao->displayDmCount($user_id);
 
     $_SESSION['display_count'] = $fetchcount['unread_count'];
-    
+
 } else {
     $_SESSION['display_count'] = 0;
 }
