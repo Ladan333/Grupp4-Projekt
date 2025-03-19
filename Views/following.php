@@ -10,15 +10,13 @@ if (isset($_SESSION['user'])) {
 } else {
     header('Location: index.php');
 } // Current logged-in user
-
+// get result of who you follow from DB
 $followDao = new FollowDAO($pdo);
 $result = $followDao->showFollowers($user_id);
 
 if (!$result) {
     header("Location: profile.php");
 }
-
-
 
 ?>
 <!DOCTYPE html>
@@ -28,12 +26,12 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/CSS.css">
-    <title>Document</title>
+    <title>Follow</title>
 </head>
 
 <body>
     <?php require "navbar.php" ?>
-
+    <!-- loop result of who you follow -->
     <ul class="searching-list">
         <?php foreach ($result as $row): ?>
             <?php $profile_img = !empty($row['profile_image']) ? "data:image/png;base64," . htmlspecialchars($row['profile_image']) : "../files/no_picture.jpg"; ?>
@@ -48,10 +46,7 @@ if (!$result) {
                 </a>
             </li>
             <!-- <?php var_dump($row); ?> -->
-        <?php endforeach; ?>
-
-
-        </>
+        <?php endforeach; ?>   
 
 </body>
 

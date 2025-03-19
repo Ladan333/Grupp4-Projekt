@@ -1,7 +1,4 @@
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-
 require_once "../Entity/userEntity.php";
 session_start();
 require_once("../Dao/PostsDAO.php");
@@ -9,18 +6,14 @@ require_once("../Dao/UserDAO.php");
 
 require_once "../övrigt/PDO.php";
 
-
 if ($_SESSION['user'] == null) {
     header("Location: ../Views/index.php");
     exit();
 }
-//fungerar nu så att om du söker posts men inte hittar det du söker och söker igen så kommer den fortsätta söka på posts. 
-// men lämnar den sidan så defaultar den till sökning av användare. 
+ 
 if (!isset($_SESSION['search_sort'])) {
     $_SESSION['search_sort'] = 1;
 }
-
-
 
 if (isset($_SESSION['last_page']) && $_SESSION['last_page'] !== 'search.php' && $_SERVER['PHP_SELF'] === '/search.php') {
     $_SESSION['search_sort'] = 1;
@@ -44,10 +37,10 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
     $postsDAO = new PostsDAO($pdo);
     $posts = $postsDAO->searchPosts($searchPost);
 }
-// Fetch profile image from the database
 
 
-// Set profile image (Base64 or default)
+
+
 
 
 
@@ -68,7 +61,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/CSS.css">
 
-    <title>Document</title>
+    <title>Search</title>
 </head>
 
 <body>
@@ -79,7 +72,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
         <button class="comment-btn" type="submit"><u>Switch between users and blog content!</u></button>
     </form>
 
-
+    <!-- loop over result in searchlist -->
 
     <?php if (!empty($result) && $_SESSION['search_sort'] == 1) { ?>
         <ul class="searching-list">
@@ -100,7 +93,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
 
 
         </ul>
-
+                <!-- PostSection -->
     <?php } else if (!empty($posts) && $_SESSION['search_sort'] == 2) { ?>
             <div class="posts">
             <?php foreach ($posts as $post): ?>
@@ -126,6 +119,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                         <?php echo nl2br(htmlspecialchars($post['blogContent'])); ?>
                         </p>
                         <button class="toggle-btn">Visa mer</button>
+                        
                         <!-- Comment Section -->
                         <div class="comments-section">
                             <h4>comment</h4>
@@ -189,25 +183,7 @@ if (isset($_GET['search']) && !empty($_GET['search']) && $_SESSION['search_sort'
                         }
                     });
 
-                    // const deleteBtn = post.querySelector(".delete-btn");
-                    // if (deleteBtn) {
-                    //     deleteBtn.addEventListener("click", function(event) {
-
-                    //         event.preventDefault();
-
-
-                    //         const confirmed = confirm("Are you sure you want to delete this post?");
-
-
-                    //         if (confirmed) {
-
-                    //             const form = post.querySelector("form");
-                    //             if (form) {
-                    //                 form.submit(); 
-                    //             }
-                    //         }
-                    //     });
-                    // }
+     
                 });
                 document.getElementById("postImage").addEventListener("change", function (event) {
                     const fileInput = event.target;

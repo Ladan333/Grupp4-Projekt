@@ -27,11 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //     exit(); 
     // }
 
-
     $user = $_SESSION['user'];
 
     $username = $user->getId();
-
 
 }
 $password = $_POST["password"];
@@ -40,12 +38,12 @@ $first_name = $_POST["first_name"];
 $last_name = $_POST["last_name"];
 
 $userDAO = new UserDAO($pdo);
-
-
 $checkResult = $userDAO->checkIfUserExists($username, $email);
+//register new user
 if (!$checkResult) {
     if ($userDAO->registerUser($username, $password, $email, $first_name, $last_name)) {
         $userInfo = $userDAO->getUserByUserName($username);
+        // login user
         if ($userInfo) {
             $_SESSION['user'] = $userInfo;
             $_SESSION['role'] = $userInfo->getRole();
@@ -74,11 +72,10 @@ if (!$checkResult) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Document</title>
+    <title>Register</title>
 </head>
 
 <body>
-
 
     <main class="index">
         <form class="login" action="register.php" method="POST">
@@ -112,4 +109,4 @@ if (!$checkResult) {
 
 </body>
 
-</html> -->
+</html> 

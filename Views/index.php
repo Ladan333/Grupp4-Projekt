@@ -21,11 +21,11 @@ if (isset($_SESSION["user"])) {
     header("Location: blogwall.php");
     exit();
 }
-
+// check for username and password
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST["username"];
     $password = $_POST["password"];
-
+    // gett deatails on user
     $userDAO = new UserDAO($pdo);
     $userInfo = $userDAO->getUserByUsername($username);
 
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
 
         $hashed_password = $userInfo->getPassword();
-
+        // verify password and set user if true
         if (password_verify($password, $hashed_password)) {
             $_SESSION['user'] = $userInfo;
             $_SESSION['role'] = $userInfo->getRole();
@@ -63,12 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- <meta http-equiv="refresh" content="20"> -->
     <link rel="stylesheet" type="text/css" href="../css/CSS.css">
     <link preload href="./files/Leche_Frita.ttf" as="font" type="font/ttf" crossorigin>
-    <title>Document</title>
+    <title>Login</title>
 </head>
 
 <body>
 
-
+    
     <main class="index">
         <div class="form-container">
             <div class="flip-card" id="flipCard">
