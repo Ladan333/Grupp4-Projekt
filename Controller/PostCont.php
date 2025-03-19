@@ -11,15 +11,12 @@ class PostController
         $this->pdo = $pdo;
         $this->PostDao = new PostsDAO($pdo);
     }
-
-
+   //Get profile Sorted posts   
     public function getProfileSortedBlogPosts()
     {
         $sql = $this->getProfileSortingSql();
         $user = $_SESSION['user'];
         $user_id = $user->getId();
-
-
         $posts = $this->PostDao->getBlogPosts($sql);
 
         if (!empty($posts) && $_SESSION['profile_id'] == $user_id) {
@@ -29,18 +26,16 @@ class PostController
                 }
             }
         }
-
         return $posts;
     }
-
+    //Get sorted wall blogposts
     public function getWallSortedBlogPosts()
     {
         $sql = $this->getProfileSortingSql();
         $posts = $this->PostDao->getBlogPosts($sql);
-
         return $posts;
     }
-
+        // Sorting function for posts.
     private function getProfileSortingSql()
     {
         if ($_SESSION['sorting'] == 1) {
@@ -66,9 +61,4 @@ class PostController
         }
         return '';
     }
-
-
-
-
-
 }
