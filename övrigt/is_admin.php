@@ -13,7 +13,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 
     $isAdmin = (isset($_GET['role']) && $_GET['role'] == 0) ? 1 : 0;
-
+    //update new role
     $userDAO = new UserDAO($pdo);
     $userDAO->changeRole($isAdmin, $user_id);
 

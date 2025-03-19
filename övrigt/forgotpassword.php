@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($newPassword) {
         $mail = new PHPMailer(true);
-
+        // mailfunction through PHPMailer
         try {
             $mail->isSMTP();
             $mail->Host = 'send.one.com';

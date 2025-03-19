@@ -13,7 +13,7 @@ if (isset($_SESSION['user'])) {
 }
 
 if ($user_id) {
-
+    //Get unread messages for messages
     $dmDao = new DmDAO($pdo);
     $fetchcount = $dmDao->fetchCountDm($user_id);
 
