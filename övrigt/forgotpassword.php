@@ -26,10 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         try {
             $mail->isSMTP();
-            $mail->Host = 'send.one.com';  
+            $mail->Host = 'send.one.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'no-reply@theblogwall.se';  
-            $mail->Password = 'Blog123456';  
+            $mail->Username = 'no-reply@theblogwall.se';
+            $mail->Password = 'Blog123456';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port = 465;
 
@@ -37,11 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->Encoding = 'base64';
 
             $mail->setFrom('no-reply@theblogwall.se', 'The Blog Wall');
-            $mail->addAddress($email, $username);  
+            $mail->addAddress($email, $username);
 
             $mail->isHTML(true);
             $mail->Subject = "Ditt nya lösenord";
-            $mail->Body    = "<p>Hej <strong>{$username}</strong>,</p>
+            $mail->Body = "<p>Hej <strong>{$username}</strong>,</p>
                               <p>Ditt nya lösenord är: <strong>{$newPassword}</strong></p>
                               <p>Logga in här: <a href='https://theblogwall.se'>The Blog Wall</a></p>
                               <p>Vänligen ändra ditt lösenord så snart som möjligt under profilen!</p>";

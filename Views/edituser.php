@@ -37,7 +37,7 @@ if (isset($_SESSION['password_updated'])) {
 }
 
 // Hämtar användarens data från databas
-if (isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user_id = isset($_GET['id']) ? $_GET['id'] : $user->getId();
 }
@@ -119,8 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //Anropar controller som kör querys i DAO
     $change = new UserController($pdo);
-    $change->changeOrNot($first_name, $last_name,  $email, $profileContent ,$imageBase64, $user_id);
-    
+    $change->changeOrNot($first_name, $last_name, $email, $profileContent, $imageBase64, $user_id);
+
 
 
 
@@ -234,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <h2 class="text-center mb-4">Edit Profile</h2>
         <form action="edituser.php?id=<?= $user_id ?>" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
             <?php
 
@@ -276,9 +276,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="text-center">
 
-            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
-            <input type="submit" name="save" class="btn btn-primary" value="Save Changes">
+                <input type="submit" name="save" class="btn btn-primary" value="Save Changes">
 
                 <a href="profile.php" class="btn btn-secondary">Cancel</a>
             </div>
@@ -297,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     required>
             </div>
             <div class="text-center">
-            <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                <input type="hidden" name="source" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
                 <button type="submit" class="btn btn-primary">Change Password</button>
             </div>

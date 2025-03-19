@@ -10,10 +10,10 @@ session_start();
 
 
 
-if(isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user_id = $user->getId();
-}else{
+} else {
     header('Location: index.php');
 }
 

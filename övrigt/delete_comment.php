@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_comment"])) {
     $postsDAO = new PostsDAO($pdo);
     try {
         $deleteComment = $postsDAO->deleteComments($id);
-        
+
         if ($deleteComment) {
             $_SESSION['message'] = "Comment deleted successfully.";
         } else {

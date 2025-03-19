@@ -101,25 +101,25 @@ $userrole = $user->getrole();
         }
 
         function fetchUnreadCount() {
-    fetch('../övrigt/fetch_unread.php')
-        .then(response => response.json())
-        .then(data => {
-            console.log("Fetched unread count:", data.unread_count); // ✅ Kontrollutskrift
+            fetch('../övrigt/fetch_unread.php')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched unread count:", data.unread_count); // ✅ Kontrollutskrift
 
-            let count = data.unread_count;
-            let unreadElement = document.getElementById("unread-count");
+                    let count = data.unread_count;
+                    let unreadElement = document.getElementById("unread-count");
 
-            if (unreadElement) {
-                unreadElement.textContent = count > 0 ? count : '';
-            } else {
-                console.error("Elementet #unread-count hittades inte i DOM!");
-            }
-        })
-        .catch(error => console.error("Error fetching unread count:", error));
-}
+                    if (unreadElement) {
+                        unreadElement.textContent = count > 0 ? count : '';
+                    } else {
+                        console.error("Elementet #unread-count hittades inte i DOM!");
+                    }
+                })
+                .catch(error => console.error("Error fetching unread count:", error));
+        }
 
-document.addEventListener('DOMContentLoaded', fetchUnreadCount);
-setInterval(fetchUnreadCount, 5000);
+        document.addEventListener('DOMContentLoaded', fetchUnreadCount);
+        setInterval(fetchUnreadCount, 5000);
     </script>
 </body>
 
