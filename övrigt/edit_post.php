@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] && isset($_POST)) {
         $PostDao = new PostsDAO($pdo);
         $image = $PostDao->getPic($id);
     }
+    //Edit posts
     $PostDao = new PostsDAO($pdo);
     $PostDao->updatepost($id, $title, $content, $image);
 

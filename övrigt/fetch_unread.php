@@ -14,7 +14,7 @@ if (isset($_SESSION['user'])) {
 
 // Fetches all messages and checks how many that are marked as unread
 if ($user_id) {
-
+    //Get unread messages for messages
     $dmDao = new DmDAO($pdo);
     $fetchcount = $dmDao->fetchCountDm($user_id);
 
