@@ -8,6 +8,14 @@ class UserDAO{
         $this->pdo = $pdo;
 }
 
+public function DeleteCommentsByID($id)
+{
+    $query = $this->pdo->prepare('DELETE FROM comments WHERE id = :userid');
+    $query->bindParam(':userid', $_POST['delete-comment']);
+}
+
+
+
 public function DeleteBlogPostBy($post_id)
 {
     $stmt = $this->pdo->prepare("DELETE FROM blogposts WHERE id = :post_id ");
