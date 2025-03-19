@@ -29,7 +29,7 @@ class UserDAO
     }
     public function getUserById($user_id)
     {
-        $stmt = $this->pdo->prepare("SELECT first_name, last_name FROM users WHERE id = ?");
+        $stmt = $this->pdo->prepare("SELECT user_name, first_name, last_name, email, profileContent, profile_image FROM users WHERE id = ?");
         $stmt->execute([$user_id]);
         return $user = $stmt->fetch(PDO::FETCH_ASSOC);
     }
