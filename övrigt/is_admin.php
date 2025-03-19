@@ -8,6 +8,7 @@ if ($_SESSION['role'] != 1) {
     die("Unauthorized access!");
 }
 
+// Changes the role of the selected user if the current user is an admin
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $user_id = $_GET['id'];
 

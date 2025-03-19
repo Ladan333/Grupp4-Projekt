@@ -82,11 +82,6 @@ class PostsDao
     $stmt->bindParam(":image_base64", $image, PDO::PARAM_STR);
     $stmt->execute();
     }
-    // public function getlikes($post_id){
-    //     $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM likes WHERE post_id = ?");
-    //     $stmt->execute([$post_id]);
-    //     return $stmt->fetchColumn();
-    // }
 
     public function searchPosts($searchPost){
         $stmt = $this->pdo->prepare("SELECT * FROM blogposts AS bp 

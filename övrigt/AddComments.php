@@ -26,9 +26,6 @@ session_start();
                         $postDao = new PostsDAO($pdo);
                         $addcomment = $postDao->addComment($comment, $userid, $blog_id);
 
-
-
-                        // urlencode($comment);
                         header("Location: " . BASE_URL . $source);
                         exit();
                         };

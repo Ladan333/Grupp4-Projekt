@@ -9,6 +9,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
+// Changes the sessions sorting variable to match the selected sorting option
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["sort_recent"])) {
     $_SESSION['sorting'] = 1;
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST'&& isset($_POST['sort_comment_count'])) {
