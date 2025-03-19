@@ -5,12 +5,15 @@ require '../övrigt/PDO.php';
 require_once '../Controller/UserController.php';
 require_once '../Dao/UserDAO.php';
 require_once '../config.php';
+
+$do = new UserDAO($pdo); // Instans som man kan använda i filen
+
 //Delete post - ligger i blogwall
 //Tar in post-id och kör query från metod i UserDao.php
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
     $post_id = $_POST['post_id'];
 
-    $success = $do->DeleteBlogPostBy($post_id);// returnerar true om query körs
+    $success = $do->DeleteBlogPostBy($post_id);// returnerar true om query körs - används i if success
 
 
 if($success){
@@ -33,8 +36,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
      $user = (int)$_POST['deletes'];
 
      if(!empty($user)){
+        
         //använder metod i UserDao
-          $do = new UserDAO($pdo);
           $do->DeleteUserById($user);
         
 
