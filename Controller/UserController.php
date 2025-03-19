@@ -33,9 +33,9 @@ class UserController
 
         // skicka tillbaks till rätt sida beroende på vart du ändrar någons uppgifter. Ändrar du dig själv i adminpanelen så kommer du till din egen profil
         if (isset($_GET['id']) && !empty($_GET['id']) && $_GET['id'] != $userid) {
-            header("Location: admin_list.php");
+            header("Location: ../Views/admin_list.php");
         } else {
-            header("Location: profile.php");
+            header("Location: ../views/profile.php");
         }
         exit;
 
@@ -46,7 +46,7 @@ class UserController
     {
         if (!isset($_POST['id'])) {
             $_SESSION['message'] = "Ingen användare vald.";
-            header("Location: admin_list.php");
+            header("Location: ../Views/admin_list.php");
             exit;
         }
 
@@ -54,7 +54,7 @@ class UserController
 
         if (!$user) {
             $_SESSION['message'] = "Användaren hittades inte.";
-            header("Location: admin_list.php");
+            header("Location: ../Views/admin_list.php");
             exit;
         }
 
@@ -67,7 +67,7 @@ class UserController
         $_SESSION['message'] = "Användaren $full_name är nu borttagen.";
 
         // Skicka tillbaka till users.php
-        header("Location: admin_list.php");
+        header("Location: ../Views/admin_list.php");
         exit;
     }
 
@@ -83,11 +83,11 @@ class UserController
 
             if ($deleteBlogPost) {
                 $_SESSION['success'] = 'Post deleted successfully!';
-                header("Location: blogwall.php ");
+                header("Location: ../Views/blogwall.php ");
                 exit();
             } else {
                 $_SESSION['error'] = "You dont have permission to delete this post";
-                header("Location: blogwall.php");
+                header("Location: ../Views/blogwall.php");
                 exit();
             }
 
@@ -107,7 +107,7 @@ class UserController
                     unset($_SESSION[""]);
                     session_destroy();
                     setcookie(session_name(), '', time() - 3600, '/');
-                    header("Location: index.php");
+                    header("Location: ../Views/index.php");
 
 
                     exit();
@@ -116,7 +116,7 @@ class UserController
                 }
             } else {
                 $_SESSION["error"] = "Invalid username";
-                header("edituser.php");
+                header("../Views/edituser.php");
                 exit();
             }
 
