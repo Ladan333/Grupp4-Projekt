@@ -2,39 +2,38 @@
 
 class DmDAO
 {
-
     private $pdo;
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
 
     }
-
+    // Get messages from users on who's recieving and who's sending.
     public function getMessages($user_id)
     {
         $stmt = $this->pdo->prepare("
-    SELECT dms.id AS message_id,
+        SELECT dms.id AS message_id,
 
-           dms.message_content,
-           dms.CreatedDate,
-           dms.unread_status,
-           dms.user1_id,
-           dms.user2_id,
-           user1.*,
-           user2.*,
-           CASE 
-               WHEN dms.user1_id = :user_id THEN user2.user_name 
-               ELSE user1.user_name 
-           END AS conversation_partner
-    FROM dms
-    JOIN users user1 ON user1.id = dms.user1_id
-    JOIN users user2 ON user2.id = dms.user2_id
-    WHERE dms.id IN (
-        SELECT MAX(id) FROM dms 
-        WHERE user1_id = :user_id1 OR user2_id = :user_id2
-        GROUP BY LEAST(user1_id, user2_id), GREATEST(user1_id, user2_id)
-    )
-    ORDER BY dms.CreatedDate DESC
+               dms.message_content,
+               dms.CreatedDate,
+               dms.unread_status,
+               dms.user1_id,
+               dms.user2_id,
+               user1.*,
+               user2.*,
+               CASE 
+                   WHEN dms.user1_id = :user_id THEN user2.user_name 
+                   ELSE user1.user_name 
+               END AS conversation_partner
+        FROM dms
+        JOIN users user1 ON user1.id = dms.user1_id
+        JOIN users user2 ON user2.id = dms.user2_id
+        WHERE dms.id IN (
+            SELECT MAX(id) FROM dms 
+            WHERE user1_id = :user_id1 OR user2_id = :user_id2
+            GROUP BY LEAST(user1_id, user2_id), GREATEST(user1_id, user2_id)
+        )
+        ORDER BY dms.CreatedDate DESC
 ");
 
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -43,20 +42,21 @@ class DmDAO
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    // Get unread messages 
     public function unreadMessages($user_id)
     {
         $unreadStmt = $this->pdo->prepare("
-    SELECT COUNT(DISTINCT user1_id) AS unread_count 
-    FROM dms 
-    WHERE unread_status = 1 
-    AND user2_id = :user_id
+        SELECT COUNT(DISTINCT user1_id) AS unread_count 
+        FROM dms 
+        WHERE unread_status = 1 
+        AND user2_id = :user_id
 ");
         $unreadStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $unreadStmt->execute();
         return $unreadStmt->fetch(PDO::FETCH_ASSOC)['unread_count'];
 
     }
-
+    // Get id from the sender who sent messages to you.
     public function idOtherUser($other_user_name)
     {
         $stmt = $this->pdo->prepare("SELECT id FROM users WHERE user_name = :user_name");
@@ -64,15 +64,15 @@ class DmDAO
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
+    // Update unread status from 1 to 0. 
     public function updateStmt($user_id, $other_user_id)
     {
         $updateStmt = $this->pdo->prepare("
-    UPDATE dms 
-    SET unread_status = 0 
-    WHERE unread_status = 1 
-    AND user2_id = :user_id 
-    AND user1_id = :other_user_id
+        UPDATE dms 
+        SET unread_status = 0 
+        WHERE unread_status = 1 
+        AND user2_id = :user_id 
+        AND user1_id = :other_user_id
 ");
 
         $updateStmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -84,6 +84,7 @@ class DmDAO
 
 
     }
+    // Inser new messages in the chat
     public function insertMessages($message_content, $message_image, $user_id, $other_user_id, $true)
     {
 
@@ -104,28 +105,28 @@ class DmDAO
         }
 
     }
-
+    //Get the full conversation between users
     public function getConversation($user_id, $other_user_id)
     {
         $stmt = $this->pdo->prepare("
-SELECT 
-    dms.id AS message_id,
-    dms.message_content,
-    dms.message_image,
-    dms.CreatedDate,
-    dms.unread_status,
-    dms.user1_id,
-    dms.user2_id,
-    user1.user_name AS user1_name,  -- Hämtar användarnamn för user1
-    user2.user_name AS user2_name   -- Hämtar användarnamn för user2
-FROM dms
-JOIN users user1 ON user1.id = dms.user1_id  
-JOIN users user2 ON user2.id = dms.user2_id  
-WHERE 
-    (dms.user1_id = :user_id1 AND dms.user2_id = :other_user_id1)
-    OR (dms.user1_id = :other_user_id2 AND dms.user2_id = :user_id2)
-ORDER BY dms.CreatedDate ASC;
-");
+        SELECT 
+            dms.id AS message_id,
+            dms.message_content,
+            dms.message_image,
+            dms.CreatedDate,
+            dms.unread_status,
+            dms.user1_id,
+            dms.user2_id,
+            user1.user_name AS user1_name,  -- Hämtar användarnamn för user1
+            user2.user_name AS user2_name   -- Hämtar användarnamn för user2
+        FROM dms
+        JOIN users user1 ON user1.id = dms.user1_id  
+        JOIN users user2 ON user2.id = dms.user2_id  
+        WHERE 
+            (dms.user1_id = :user_id1 AND dms.user2_id = :other_user_id1)
+            OR (dms.user1_id = :other_user_id2 AND dms.user2_id = :user_id2)
+        ORDER BY dms.CreatedDate ASC;
+        ");
 
         // Bind parametrarna
         $stmt->bindParam(':user_id1', $user_id, PDO::PARAM_INT);
@@ -137,7 +138,7 @@ ORDER BY dms.CreatedDate ASC;
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }
-
+    //display the count of unread messages
     public function displayDmCount($user_id)
     {
         $stmt = $this->pdo->prepare("
@@ -150,6 +151,7 @@ ORDER BY dms.CreatedDate ASC;
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?? ['unread_count' => 0];
     }
+    // Fetching unread status for messages
     public function fetchCountDm($user_id)
     {
         $stmt = $this->pdo->prepare("

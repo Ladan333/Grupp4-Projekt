@@ -1,6 +1,5 @@
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
+
 // Starta session för att kunna kolla vem som är inloggad
 require_once '../Entity/userEntity.php';
 session_start();
@@ -24,9 +23,6 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 // Hämtar alla användare från databasen (filtrerar om vi söker på något)
 $userDAO = new UserDAO($pdo);
 $users = $userDAO->searchUsersByLikeNameOrEmail($search);
-
-
-
 ?>
 
 <!DOCTYPE html>
