@@ -1,13 +1,12 @@
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
+
 // Starta session för att kunna kolla vem som är inloggad
-require_once 'userEntity.php';
+require_once '../Entity/userEntity.php';
 session_start();
 
 // Inkluderar databaskopplingen
-require 'PDO.php';
-require_once 'UserDAO.php';
+require '../övrigt/PDO.php';
+require_once '../Dao/UserDAO.php';
 
 // Kolla om användaren är inloggad och har rollen "admin"
 if (!isset($_SESSION['role']) || $_SESSION['role'] != '1') {
@@ -24,9 +23,6 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 // Hämtar alla användare från databasen (filtrerar om vi söker på något)
 $userDAO = new UserDAO($pdo);
 $users = $userDAO->searchUsersByLikeNameOrEmail($search);
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -69,22 +65,27 @@ $users = $userDAO->searchUsersByLikeNameOrEmail($search);
                     <td><?= htmlspecialchars($user['first_name']) ?></td>
                     <td><?= htmlspecialchars($user['last_name']) ?></td>
                     <td><?= htmlspecialchars($user['email']) ?></td>
-                    <td><div class="edit-buttons">
-                        <?php if ($user['role'] == 0)  { ?>
-                            <a class="edit_user_admin" href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Make admin</a>
+                    <td>
+                        <div class="edit-buttons">
+                            <?php if ($user['role'] == 0) { ?>
+                                <a class="edit_user_admin"
+                                    href="../övrigt/is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Make admin</a>
 
-                        <?php } else { ?>
-                            <a class="delete_user" href="is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Delete admin</a>
+                            <?php } else { ?>
+                                <a class="delete_user"
+                                    href="../övrigt/is_admin.php?role=<?= $user['role'] ?>&id=<?= $user['id'] ?>">Delete
+                                    admin</a>
 
                             <?php } ?>
-                            </div>
+                        </div>
                     </td>
                     <td>
                         <div class="edit-buttons">
                             <a class="edit_user" href="edituser.php?id=<?= $user['id'] ?>">Edit</a>
-                            <form method="POST" action="admin_delete_user.php">
+                            <form method="POST" action="../övrigt/admin_delete_user.php">
                                 <input type="hidden" name="id" value="<?= $user['id'] ?>">
-                                <button class="delete_user" type="submit" onclick="return confirm('Are you sure you want to delete <?= htmlspecialchars($user['first_name']) . ' ' . htmlspecialchars($user['last_name']) ?>?');">Delete</button>
+                                <button class="delete_user" type="submit"
+                                    onclick="return confirm('Are you sure you want to delete <?= htmlspecialchars($user['first_name']) . ' ' . htmlspecialchars($user['last_name']) ?>?');">Delete</button>
                             </form>
 
                         </div>
@@ -92,7 +93,7 @@ $users = $userDAO->searchUsersByLikeNameOrEmail($search);
                 </tr>
             <?php endforeach; ?>
         </table>
-       
+
         <!-- Länk till en separat sida för att hantera alla inlägg -->
         <a class="link_to_blogwall" href="blogwall.php">To posts</a>
 

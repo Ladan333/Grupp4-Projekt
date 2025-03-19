@@ -10,9 +10,10 @@ setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", false, true);
 
 
 require_once '../Entity/userEntity.php';
-require "../övrigt/PDO.php";
-require "../Dao/UserDAO.php";
+require_once "../övrigt/PDO.php";
+require_once "../Dao/UserDAO.php";
 session_start();
+define('BASE_URL', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . '/');
 
 
 
@@ -20,19 +21,20 @@ if (isset($_SESSION["user"])) {
     header("Location: blogwall.php");
     exit();
 }
-
+// check for username and password
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST["username"];
     $password = $_POST["password"];
-
+    // gett deatails on user
     $userDAO = new UserDAO($pdo);
     $userInfo = $userDAO->getUserByUsername($username);
 
     if (!$userInfo) {
         echo '<h3 style="text-align:center; color:red;">Invalid username or password</h3>';
     } else {
-        $hashed_password = $userInfo->getPassword();
 
+        $hashed_password = $userInfo->getPassword();
+        // verify password and set user if true
         if (password_verify($password, $hashed_password)) {
             $_SESSION['user'] = $userInfo;
             $_SESSION['role'] = $userInfo->getRole();
@@ -59,14 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta http-equiv="refresh" content="20"> -->
-    <link rel="stylesheet" type="text/css" href="CSS.css">
+    <link rel="stylesheet" type="text/css" href="../css/CSS.css">
     <link preload href="./files/Leche_Frita.ttf" as="font" type="font/ttf" crossorigin>
-    <title>Document</title>
+    <title>Login</title>
 </head>
 
 <body>
 
-
+    
     <main class="index">
         <div class="form-container">
             <div class="flip-card" id="flipCard">
@@ -88,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
 
                 <!-- Forgot Password Form -->
-                <form class="form-side forgot-password" action="forgotpassword.php" method="POST">
+                <form class="form-side forgot-password" action="../övrigt/forgotpassword.php" method="POST">
                     <h2>Forgot Password?</h2>
                     <label for="username">Username</label>
                     <input class="email_Input" name="username" id="username" type="text"

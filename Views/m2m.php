@@ -2,16 +2,16 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-require_once "userEntity.php";
-require_once('PDO.php');
-require_once "DmDAO.php";
+require_once "../Entity/userEntity.php";
+require_once('../övrigt/PDO.php');
+require_once "../Dao/DmDAO.php";
 session_start();
 
 
-if(isset($_SESSION['user'])){
+if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user_id = $user->getId();
-}else{
+} else {
     header('Location: index.php');
 }
 $other_user_name = isset($_GET['user_name']) ? trim($_GET['user_name']) : null;
@@ -20,14 +20,14 @@ if (!$other_user_name) {
     die(" ERROR: Missing username.");
 }
 
-
+// get info on sender
 $dmDao = new DmDAO($pdo);
 $other_user = $dmDao->idOtherUser($other_user_name);
 
 if (!$other_user) {
     die(" ERROR: User not found.");
 }
-
+// update messages
 $other_user_id = (int) $other_user['id'];
 $dmDao = new DmDAO($pdo);
 $dmDao->updateStmt($user_id, $other_user_id);
@@ -36,10 +36,10 @@ error_log("User ID: $user_id, Other User ID: $other_user_id");
 
 
 
-
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
     $message_content = !empty($_POST['message']) ? trim($_POST['message']) : NULL;
     $message_image = NULL;
+
 
     if (!empty($_FILES['message_image']['tmp_name'])) {
         $imageData = file_get_contents($_FILES['message_image']['tmp_name']);
@@ -49,14 +49,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save'])) {
     if (!$message_content && !$message_image) {
         die(" ERROR: Cannot send an empty message.");
     }
-    $true = 1; 
+    // insert new message
+    $true = 1;
     $dmDao = new DmDAO($pdo);
     $dmDao->insertMessages($message_content, $message_image, $user_id, $other_user_id, $true);
-
-
 }
 
-
+// load full conversation
 $dmDao = new DmDAO($pdo);
 $messages = $dmDao->getConversation($user_id, $other_user_id);
 ?>
@@ -66,326 +65,8 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        /* Chat Container */
-        .chat-room {
-            overflow: hidden;
-            width: 80%;
-            margin: 0 auto;
-        }
-
-        .chat-messages {
-            max-width: 50%;
-            height: 500px;
-            overflow-y: auto;
-            /* border-radius: 0 10px 10px; */
-            padding: 0 15px 15px;
-            background: #282a36;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            margin: 0 auto;
-        }
-
-        /* Custom Scrollbar */
-        .chat-messages::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: #3b3f5a;
-            border-radius: 10px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: rgb(0, 7, 53);
-            border-radius: 10px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: rgb(113, 118, 134);
-        }
-
-        /* Chat Bubbles */
-        .chat-messages p {
-            max-width: 80%;
-            padding: 10px;
-            border-radius: 15px;
-            margin: 8px 0;
-            font-size: 14px;
-            word-wrap: break-word;
-        }
-
-        .card-header {
-            background-color: rgb(0, 28, 58);
-            max-width: 50%;
-            padding: 5px 15px;
-            border-radius: 10px 10px 0 0;
-            margin: 0 auto;
-            text-align: center;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-            font-weight: bold;
-            color: #cccccc;
-        }
-
-        /* Sender's Messages (Your Messages) */
-        .sent-chat {
-            align-self: flex-end;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-messages #your-message {
-            align-self: flex-end;
-            background-color: rgb(0, 28, 58);
-            color: white;
-            cursor: pointer;
-            margin: 0 0 5px 0;
-        }
-
-        /* Initially hide the message date */
-        .message-date {
-            display: none;
-        }
-
-        #sender-name {
-            align-self: flex-end;
-            margin: 0;
-            color: #cccccc;
-            padding: 0 10px;
-        }
-
-        .chat-messages #your-message-date {
-            align-self: flex-end;
-            padding: 0;
-            margin: 0;
-            color: rgb(206, 206, 206);
-        }
-
-        /* Receiver's Messages */
-        .recieved-chat {
-            align-self: flex-start;
-            display: flex;
-            flex-direction: column;
-            margin: 10px 0 0;
-            cursor: pointer;
-
-        }
-
-        .chat-messages #his-message {
-            align-self: flex-start;
-            background-color: #44475a;
-            color: white;
-            margin: 0 0 5px 0;
-        }
-
-        #reciever-name {
-            align-self: flex-start;
-            margin: 0 5px 0 0;
-            color: #cccccc;
-            padding: 0 8px;
-        }
-
-        .chat-messages #his-message-date {
-            align-self: flex-start;
-            padding: 0;
-            margin: 0;
-            color: rgb(206, 206, 206);
-        }
-
-        /* Image Styling */
-        .message-img {
-            align-self: flex-end;
-            max-width: 20%;
-            height: auto;
-            border-radius: 10px;
-            margin-top: 5px;
-        }
-
-        /* Chat Input Form */
-        .m2m {
-            max-width: 50%;
-            background: #282a36;
-            padding: 15px;
-            border-radius: 0 0 10px 10px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            margin: 0 auto;
-        }
-
-        /* Textarea */
-        textarea {
-            width: 95%;
-            height: 80px;
-            padding: 10px 10px 0;
-            border-radius: 10px;
-            border: none;
-            resize: none;
-            background-color: #3b3f5a;
-            color: #fff;
-            font-size: 14px;
-            margin: 0 auto;
-        }
-
-        /* File Input */
-        .file-input-wrapper {
-            width: 100%;
-            margin: auto;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        /* Custom file upload button */
-        .file-upload-label {
-            background: #3b3f5a;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: inline-block;
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.3s;
-            margin: 10px 0 0;
-        }
-
-        .file-upload-label:hover {
-            background: #50576e;
-        }
-
-        /* Display selected file name */
-        #file-name {
-            color: #ccc;
-            font-size: 14px;
-        }
-
-        /* Buttons */
-        .btn-secondary,
-        .btn-primary {
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-            transition: 0.3s;
-        }
-
-        .btn-primary {
-            background: #007bff;
-        }
-
-        .btn-primary:hover {
-            background: #0056b3;
-        }
-
-        .btn-secondary {
-            background: rgb(113, 113, 113);
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .btn-secondary:hover {
-            background: rgb(71, 71, 71);
-
-        }
-
-        /* Responsive Design */
-        @media screen and (max-width: 968px) {
-            .chat-room {
-                overflow: hidden;
-                width: 90%;
-                margin: 0 auto;
-            }
-
-            .card-header {
-                background-color: rgb(0, 28, 58);
-                max-width: 80%;
-                padding: 5px 15px;
-                border-radius: 10px 10px 0 0;
-                margin: 0 auto;
-                text-align: center;
-                font-family: Verdana, Geneva, Tahoma, sans-serif;
-                font-weight: bold;
-                color: #cccccc;
-            }
-
-            .chat-messages {
-                max-width: 80%;
-                height: 450px;
-                overflow-y: auto;
-                /* border-radius: 0 10px 10px; */
-                padding: 0 15px 15px;
-                background: #282a36;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-                display: flex;
-                flex-direction: column;
-                margin: 0 auto;
-            }
-
-            .m2m {
-                max-width: 80%;
-                background: #282a36;
-                padding: 15px;
-                border-radius: 0 0 10px 10px;
-                display: flex;
-                flex-direction: column;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-                margin: 0 auto;
-            }
-
-        }
-
-        @media screen and (max-width: 768px) {
-            .chat-room {
-                overflow: hidden;
-                width: 90%;
-                margin: 0 auto;
-            }
-
-            .card-header {
-                background-color: rgb(0, 28, 58);
-                max-width: 90%;
-                padding: 5px 15px;
-                border-radius: 10px 10px 0 0;
-                margin: 0 auto;
-                text-align: center;
-                font-family: Verdana, Geneva, Tahoma, sans-serif;
-                font-weight: bold;
-                color: #cccccc;
-            }
-
-            .chat-messages {
-                max-width: 100%;
-                height: 400px;
-                overflow-y: auto;
-                /* border-radius: 0 10px 10px; */
-                padding: 0 15px 15px;
-                background: #282a36;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-                display: flex;
-                flex-direction: column;
-                margin: 0 auto;
-            }
-
-            .m2m {
-                max-width: 100%;
-                background: #282a36;
-                padding: 15px;
-                border-radius: 0 0 10px 10px;
-                display: flex;
-                flex-direction: column;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-                margin: 0 auto;
-            }
-
-
-        }
-    </style>
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Chat</title>
 </head>
 
 <body>
@@ -394,6 +75,7 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
         <div class="card-header">
             <p>Chat with <?php echo htmlspecialchars($other_user_name); ?></p>
         </div>
+        <!-- loop out chat messages -->
         <div class="chat-messages">
             <?php foreach ($messages as $msg): ?>
                 <?php if ($msg['user1_id'] == $user_id): ?>
@@ -406,10 +88,12 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
                             <p id="your-message" onclick="toggleDate(this)">
                                 <?php echo htmlspecialchars($msg['message_content']) ?>
                             </p>
-                            <p id="your-message-date" class="message-date"><?php echo "&nbsp" . htmlspecialchars($msg['CreatedDate']); ?></p>
+                            <p id="your-message-date" class="message-date">
+                                <?php echo "&nbsp" . htmlspecialchars($msg['CreatedDate']); ?></p>
                         <?php endif; ?>
                         <?php if (!empty($msg['message_image'])): ?>
-                            <img class="message-img" src="data:image/jpeg;base64,<?php echo htmlspecialchars($msg['message_image']); ?>" width="400">
+                            <img class="message-img"
+                                src="data:image/jpeg;base64,<?php echo htmlspecialchars($msg['message_image']); ?>" width="400">
                         <?php endif; ?>
                     </div>
                 <?php else: ?>
@@ -421,7 +105,8 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
                             <p id="his-message" onclick="toggleDate(this)">
                                 <?php echo htmlspecialchars($msg['message_content']) ?>
                             </p>
-                            <p id="his-message-date" class="message-date"><?php echo "&nbsp" . htmlspecialchars($msg['CreatedDate']); ?></p>
+                            <p id="his-message-date" class="message-date">
+                                <?php echo "&nbsp" . htmlspecialchars($msg['CreatedDate']); ?></p>
                         <?php endif; ?>
                         <?php if (!empty($msg['message_image'])): ?>
                             <img src="data:image/jpeg;base64,<?php echo htmlspecialchars($msg['message_image']); ?>" width="150">
@@ -431,8 +116,8 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
             <?php endforeach; ?>
         </div>
 
-
-        <form class="m2m" method="POST" enctype="multipart/form-data">
+                            <!-- send messages -->
+        <form class="m2m" onsubmit="sendMessage(); return false;" method="POST" enctype="multipart/form-data">
             <div class="file-input-wrapper">
                 <textarea id="messageContent" name="message" rows="4" placeholder="Skriv ditt inlägg här..."></textarea>
                 <!-- Updated File Input in Form -->
@@ -441,7 +126,7 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
                 <input type="file" id="message_image" name="message_image">
             </div>
             <button type="submit" name="save" class="btn btn-primary">Send</button>
-            <a href="blogwall.php" class="btn btn-secondary">Cancel</a>
+            <a href="../Views/blogwall.php" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 
@@ -460,16 +145,168 @@ $messages = $dmDao->getConversation($user_id, $other_user_id);
             }
         }
 
-        window.onload = function() {
+        window.onload = function () {
             scrollToBottom();
         };
 
-        document.querySelector("form").addEventListener("submit", function() {
+        document.querySelector("form").addEventListener("submit", function () {
             setTimeout(scrollToBottom, 100);
         });
-        document.getElementById("message_image").addEventListener("change", function() {
+        document.getElementById("message_image").addEventListener("change", function () {
             var fileName = this.files[0] ? this.files[0].name : "No file chosen";
             document.getElementById("file-name").textContent = fileName;
+        });
+        const socket = new WebSocket("ws://localhost:8080");
+
+        socket.onopen = function () {
+            console.log("WebSocket connection established.");
+        };
+
+        socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            console.log("Received message:", data);
+
+            // Get the chat message container
+            const chatMessages = document.querySelector(".chat-messages");
+
+            // Create the message element
+            let messageElement;
+
+            // Check if the message was sent by the current user
+            if (data.user_id == <?php echo json_encode($user_id); ?>) {
+                // Sent message
+                messageElement = document.createElement("div");
+                messageElement.classList.add("sent-chat");
+
+                // Add the sender name
+                const senderName = document.createElement("p");
+                senderName.id = "sender-name";
+                senderName.innerHTML = "<strong>You:</strong>";
+                messageElement.appendChild(senderName);
+
+                // Add the message content only if it’s not empty
+                if (data.message && data.message.trim() !== "") {
+                    const messageContent = document.createElement("p");
+                    messageContent.id = "your-message";
+                    messageContent.innerHTML = data.message; // Display message content
+                    messageElement.appendChild(messageContent);
+                }
+
+                // Add the message date (if any)
+                const messageDate = document.createElement("p");
+                messageDate.id = "your-message-date";
+                messageDate.classList.add("message-date");
+                messageDate.innerHTML = `&nbsp;${data.timestamp}`;
+                messageElement.appendChild(messageDate);
+
+                // If the message has an image
+                if (data.message_image) {
+                    const messageImage = document.createElement("img");
+                    messageImage.classList.add("message-img");
+                    messageImage.src = "data:image/jpeg;base64," + data.message_image;
+                    messageImage.width = 400;
+                    messageImage.classList.add("message-img");
+                    messageElement.appendChild(messageImage);
+                }
+            } else {
+                // Received message
+                messageElement = document.createElement("div");
+                messageElement.classList.add("recieved-chat");
+
+                // Add the receiver name
+                const receiverName = document.createElement("p");
+                receiverName.id = "reciever-name";
+                receiverName.innerHTML = `<strong><?php echo htmlspecialchars($other_user_name); ?>:</strong>`;
+                messageElement.appendChild(receiverName);
+
+                // Add the message content only if it’s not empty
+                if (data.message && data.message.trim() !== "") {
+                    const messageContent = document.createElement("p");
+                    messageContent.id = "his-message";
+                    messageContent.innerHTML = data.message; // Display message content
+                    messageElement.appendChild(messageContent);
+                }
+
+                // Add the message date (if any)
+                const messageDate = document.createElement("p");
+                messageDate.id = "his-message-date";
+                messageDate.classList.add("message-date");
+                messageDate.innerHTML = `&nbsp;${data.timestamp}`;
+                messageElement.appendChild(messageDate);
+
+
+                // If the message has an image
+                if (data.message_image) {
+                    const messageImage = document.createElement("img");
+                    messageImage.src = "data:image/jpeg;base64," + data.message_image;
+                    messageImage.width = 150;
+                    messageElement.appendChild(messageImage);
+                }
+            }
+
+            // Append the constructed message element to the chat window
+            chatMessages.appendChild(messageElement);
+
+            // Scroll to the bottom to show the latest message
+            scrollToBottom();
+        };
+
+
+        socket.onerror = function (error) {
+            console.error("WebSocket error:", error);
+        };
+
+        socket.onclose = function () {
+            console.log("WebSocket connection closed.");
+        };
+
+        function sendMessage() {
+            const messageInput = document.getElementById("messageContent");
+            const fileInput = document.getElementById("message_image");
+
+            const message = messageInput.value.trim();
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const base64Image = e.target.result.replace(/^data:image\/[a-zA-Z]+;base64,/, '');
+
+                    socket.send(JSON.stringify({
+                        message: message, // could be empty if only file
+                        message_image: base64Image,
+                        filename: file.name,
+                        user_id: <?php echo json_encode($user_id); ?>,
+                        other_user_id: <?php echo json_encode($other_user_id); ?>
+                    }));
+
+                    // Clear inputs
+                    messageInput.value = "";
+                    fileInput.value = "";
+                    document.getElementById("file-name").textContent = "No file chosen";
+                };
+
+                reader.readAsDataURL(file);
+            } else if (message) {
+                socket.send(JSON.stringify({
+                    message: message,
+                    message_image: null,
+                    user_id: <?php echo json_encode($user_id); ?>,
+                    other_user_id: <?php echo json_encode($other_user_id); ?>
+                }));
+
+                messageInput.value = "";
+            }
+        }
+        // Add an event listener for the 'Enter' key to submit the form
+        document.getElementById("messageContent").addEventListener("keydown", function (event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault(); // Prevent new line in textarea
+                sendMessage(); // Call the sendMessage function
+            } else if (event.key === "Enter" && event.shiftKey) {
+                // Allow new line if Shift key is pressed
+                return;
+            }
         });
     </script>
 </body>

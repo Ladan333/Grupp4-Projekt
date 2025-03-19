@@ -1,140 +1,74 @@
 <?php
-require_once 'userEntity.php';
+require_once '../Entity/userEntity.php';
 session_start();
-require 'PDO.php';
-require_once 'UserController.php';
-require_once 'UserDAO.php';
-
+require '../övrigt/PDO.php';
+require_once '../Controller/UserController.php';
+require_once '../Dao/UserDAO.php';
+require_once '../config.php';
 //Delete post - ligger i blogwall
+//Tar in post-id och kör query från metod i UserDao.php
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
     $post_id = $_POST['post_id'];
 
-$stmt = $pdo->prepare("DELETE FROM blogposts WHERE id = :post_id ");
-$stmt->bindParam(':post_id', $post_id);
+    $success = $do->DeleteBlogPostBy($post_id);// returnerar true om query körs
 
-if($stmt->execute()){
+
+if($success){
     $_SESSION['success'] = 'Post deleted successfully!';
-    header("Location: blogwall.php ");
+    header("Location: ../Views/blogwall.php ");
     exit();
 }
 
 else{
     $_SESSION['error'] = "You dont have permission to delete this post";
-    header("Location: blogwall.php");
+    header("Location: ../Views/blogwall.php");
     exit();
 }
 
 }
 
 //Delete user - ligger i edituser.php
+//Tar in userid från POST i edituser.php kör deletequery som ligger i metod i UserDao
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
      $user = (int)$_POST['deletes'];
 
      if(!empty($user)){
-
-        $stmt = $pdo->prepare("DELETE FROM users WHERE id = :deleteuser");
-        $stmt->bindParam(':deleteuser', $user, PDO::PARAM_INT);
-
-      if($stmt->execute()){
-
-        $_SESSION['success'] = 'User deleted succesful';
-        unset($_SESSION[""]);
-        session_destroy();
-        setcookie(session_name(), '', time() - 3600, '/'); 
-        header("Location: index.php");
+        //använder metod i UserDao
+          $do = new UserDAO($pdo);
+          $do->DeleteUserById($user);
         
-        exit();
-     }
 
-        else{
+            $_SESSION['success'] = 'User deleted succesful';
+            unset($_SESSION[""]);
+            session_destroy();
+            setcookie(session_name(), '', time() - 3600, '/');
+            header("Location: ../Views/index.php");
+
+            exit();
+        } else {
             $_SESSION["error"] = "Failed";
         }
-    }else{
+    } else {
         $_SESSION["error"] = "Invalid username";
         header("edituser.php");
         exit();
     }
-    
 
-}
 
-//Delete comment - ligger i blogwall rad 298
+//Delete comment - ligger i blogwall rad 311
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])){
-    $query = $pdo->prepare('DELETE FROM comments WHERE id = :userid');
-    $query->bindParam(':userid', $_POST['delete-comment']);
-    
+    $deleteComment = $POST['delete-comment'];
 
-    if(!empty($_POST['delete-comment'])){
+    $do->DeleteCommentsByID($deleteComment);
+  
+    
+    $source = $_POST['source'] ?? '/Views/blogwall.php';
+    if (!empty($_POST['delete-comment'])) {
         $query->execute();
-        header('location: blogwall.php');
+        header("Location: " . BASE_URL . $source);
         exit();
+    } else {
+        $_SESSION['error'] = "Failed";
     }
-        else{
-            $_SESSION['error'] ="Failed";
-        }
 
 }
-   
-
-
-    
-
-
-
-
-
-
-
-
-
-// session_start();
-// require 'PDO.php'; 
-
-
-// if (!isset($_SESSION['username'])) {
-//     header("Location: index.php");
-//     exit();
-// }
-
-
-// if (isset($_POST['post_id'])) {
-//     $post_id = $_POST['post_id'];
-//     $user_id = $_SESSION['id']; 
-
-    
-//     $stmt = $pdo->prepare("SELECT user_id FROM blogposts WHERE id = :post_id");
-//     $stmt->bindParam(':post_id', $post_id);
-//     $stmt->execute();
-//     $post = $stmt->fetch(PDO::FETCH_ASSOC);
-
-//     if ($post) {
-        
-//         if ($post['user_id'] == $user_id || $_SESSION['role'] == 'admin') {
-            
-//             $deleteStmt = $pdo->prepare("DELETE FROM blogposts WHERE id = :post_id");
-//             $deleteStmt->bindParam(':post_id', $post_id);
-//             $deleteStmt->execute();
-
-            
-//             $_SESSION['success'] = 'Post deleted successfully!';
-//             header("Location: blogwall.php");
-//             exit();
-//         } else {
-            
-//             $_SESSION['error'] = 'You do not have permission to delete this post.';
-//             header("Location: blogwall.php");
-//             exit();
-//         }
-//     } else {
-        
-//         $_SESSION['error'] = 'Post not found.';
-//         header("Location: blogwall.php");
-//         exit();
-//     }
-// } else {
-    
-//     $_SESSION['error'] = 'Invalid post ID.';
-//     header("Location: blogwall.php");
-//     exit();
-// }
-

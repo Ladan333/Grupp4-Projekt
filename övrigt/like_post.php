@@ -1,10 +1,11 @@
 <?php
+require '../Entity/userEntity.php';
 session_start();
-require 'PDO.php';
+require '../övrigt/PDO.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $post_id = $_POST['post_id'];
-    $user_id = $_SESSION['id'];
+    $user_id = $_SESSION['user']->getId();
 
     // Kontrollera om användaren redan har gillat inlägget
     $stmt = $pdo->prepare("SELECT * FROM likes WHERE user_id = :user_id AND post_id = :post_id");
@@ -25,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM likes WHERE post_id = :post_id");
     $stmt->execute(['post_id' => $post_id]);
     $like_count = $stmt->fetchColumn();
-
+    header('Content-Type: application/json');
     echo json_encode(['success' => true, 'like_count' => $like_count]);
     exit();
 }
