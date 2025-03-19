@@ -60,7 +60,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset( $_POST['deletes'])){
     }
 
 
-}
+
 
 //Delete comment - ligger i blogwall rad 311
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])){
