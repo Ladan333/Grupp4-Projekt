@@ -113,6 +113,7 @@ class UserController
                     setcookie(session_name(), '', time() - 3600, '/');
                     header("Location: index.php");
 
+
                     exit();
                 } else {
                     $_SESSION["error"] = "Failed";
@@ -125,30 +126,6 @@ class UserController
 
 
         }
-
-        //Delete comment - ligger i blogwall rad 298
-// if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete-comment'])){
-//     $query = $pdo->prepare('DELETE FROM comments WHERE id = :userid');
-//     $query->bindParam(':userid', $_POST['delete-comment']);
-//     $this->dao->
-
-
-        //     if(!empty($_POST['delete-comment'])){
-//         $query->execute();
-//         header('location: blogwall.php');
-//         exit();
-//     }
-//         else{
-//             $_SESSION['error'] ="Failed";
-//         }
-
-        // }
-
-
-    }
-
-
-
 
 }
 

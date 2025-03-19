@@ -67,35 +67,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 ?>
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glömt lösen</title>
-</head>
-
-<body>
-
-    <form class="check-email" action="" method="POST">
-        <h2>Welcome to <br>The Wall</h2>
-        <label for="email">Username</label>
-        <input class="email_Input" name="username" id="username" type="text" placeholder="Username" required>
-        <label for="email">Username</label>
-        <input class="email_Input" name="email" id="email" type="text" placeholder="Email" required>
-        <br>
-
-        <button class="button" type="submit" value="skicka">Skicka</button>
-
-    </form>
-
-
-
-</body>
-
-</html> -->

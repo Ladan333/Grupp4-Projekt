@@ -96,9 +96,6 @@ class DmDAO
         $stmt->bindParam(':other_user_id', $other_user_id, PDO::PARAM_INT);
         $stmt->bindParam(':true', $true, PDO::PARAM_INT);
 
-        // var_dump($insertcheck);
-
-
         if (!$stmt->execute()) {
             die("FAILED TO SEND ");
         } else {
