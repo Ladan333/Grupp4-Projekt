@@ -283,7 +283,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="profile.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
-        <form action="edituser.php?id=<?= $user_id ?>" method="POST">
+        <form action="edituser.php?id=<?= $user_id ?>" id="change-pass-form" method="POST">
             <input type="hidden" name="change_password" value="1">
 
             <div class="mb-3">
@@ -303,8 +303,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </form>
         <form action="../övrigt/delete.php" method="post" onsubmit="return confirmDelete()">
-            <input type="hidden" name="deletes" value="<?php echo $user_id ?>">
-            <button type="submit">Delete profile</button>
+            <div class="text-center">
+                <input type="hidden" name="deletes" value="<?php echo $user_id ?>">
+                <button class="btn btn-danger" type="submit">Delete profile</button>
+            </div>
+
         </form>
 
 
@@ -367,6 +370,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 },
                 {
+                    element: "#email",
+                    popover: {
+                        title: "Email",
+                        description: "Update your Email.",
+                        side: "bottom",
+                        align: 'start'
+                    }
+                },
+                {
                     element: "#profileContent",
                     popover: {
                         title: "Bio",
@@ -398,6 +410,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     popover: {
                         title: "Cancel",
                         description: "Click here to return to the profile page.",
+                        side: "right",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: "#change-pass-form",
+                    popover: {
+                        title: "Change Password Section",
+                        description: "You can change your password here.",
+                        side: "right",
+                        align: 'start'
+                    }
+                },
+                {
+                    element: ".btn-danger",
+                    popover: {
+                        title: "Delete Profile",
+                        description: "Delete the profile permanently.",
                         side: "right",
                         align: 'start'
                     }

@@ -524,68 +524,77 @@ if ($_SESSION['blogflow'] == 1 || $_SESSION['blogflow'] == null) {
             const driverObj = driver({
                 showProgress: true,
                 steps: [{
-                    element: ".container",
-                    popover: {
-                        title: "BlogWall page",
-                        description: "Here you can see all the blogs that has been posted by different users.",
-                        side: "left",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".add-post-btn",
-                    popover: {
-                        title: "Add Post",
-                        description: "Add post modal, displays a modal so that the user can add posts.",
-                        side: "bottom",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".sorting",
-                    popover: {
-                        title: "Sorting Posts",
-                        description: "Click here to filter posts based on what you would like.",
-                        side: "bottom",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".post",
-                    popover: {
-                        title: "Post",
-                        description: "Posts added by users displayed here.",
-                        side: "bottom",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: "#addComments-form",
-                    popover: {
-                        title: "Commenting section",
-                        description: "Here you can add comments to each post.",
-                        side: "top",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".update-btn",
-                    popover: {
-                        title: "Edit Post",
-                        description: "Click here to opent the Edit post modal in order to edit your posts.",
-                        side: "top",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: ".delete-btn",
-                    popover: {
-                        title: "Delete Post",
-                        description: "Click here to delete posts.",
-                        side: "left",
-                        align: 'start'
-                    }
-                },
+                        element: ".container",
+                        popover: {
+                            title: "BlogWall page",
+                            description: "Here you can see all the blogs that has been posted by different users.",
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".add-post-btn",
+                        popover: {
+                            title: "Add Post",
+                            description: "Add post modal, displays a modal so that the user can add posts.",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".sorting",
+                        popover: {
+                            title: "Sorting Posts",
+                            description: "Click here to filter posts based on what you would like.",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".post",
+                        popover: {
+                            title: "Post",
+                            description: "Posts added by users displayed here.",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".like-btn",
+                        popover: {
+                            title: "Like Post",
+                            description: "Press here to like the post",
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: "#addComments-form",
+                        popover: {
+                            title: "Commenting section",
+                            description: "Here you can add comments to each post.",
+                            side: "top",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".update-btn",
+                        popover: {
+                            title: "Edit Post",
+                            description: "Click here to opent the Edit post modal in order to edit your posts.",
+                            side: "top",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: ".delete-btn",
+                        popover: {
+                            title: "Delete Post",
+                            description: "Click here to delete posts.",
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
 
                 ]
             });
