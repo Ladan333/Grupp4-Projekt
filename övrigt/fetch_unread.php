@@ -12,6 +12,7 @@ if (isset($_SESSION['user'])) {
 
 }
 
+// Fetches all messages and checks how many that are marked as unread
 if ($user_id) {
 
     $dmDao = new DmDAO($pdo);
