@@ -9,7 +9,8 @@ require_once '../config.php';
 //Tar in post-id och kör query från metod i UserDao.php
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['post_id'])){
     $post_id = $_POST['post_id'];
-
+    
+    $do = new UserDAO($pdo);
     $success = $do->DeleteBlogPostBy($post_id);// returnerar true om query körs
 
 
